@@ -7,5 +7,6 @@ using namespace std;
 
 void printName()
 {
-	cout << "Vananh Vo>;
+	cout << "Vananh Vo ";
+	cout endl;
 }
