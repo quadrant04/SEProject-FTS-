@@ -5,7 +5,7 @@
 #include "fonts.h"
 using namespace std;
 
-void show_ivanC(Rect x, int y)
+void ivanC(Rect x, int y)
 {
     x.bot = y;
     x.left = 10;
