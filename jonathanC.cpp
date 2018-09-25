@@ -1,5 +1,4 @@
 #include <iostream>
-#include "log.h"
 #include "fonts.h"
 
 void jonathanC(Rect x, int y)
