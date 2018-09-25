@@ -9,5 +9,5 @@ using namespace std;
 
 void vananhV(Rect x, int y)
 {	
-	ggprint8b (&x, y, 0x00ff0000, "Vananh Vo ");
+	ggprint8b (&x, y, 0x00a020f0, "Vananh Vo ");
 }
