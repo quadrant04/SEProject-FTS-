@@ -7,7 +7,7 @@
 #include <font.h>
 using namespace std;
 
-void showVananhName()
+void showVananhName(int x, int y)
 {	
 	r.bot =gl.yres - 20;
 	r.left = 10;
