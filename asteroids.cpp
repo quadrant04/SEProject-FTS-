@@ -58,12 +58,13 @@ extern void timeCopy(struct timespec *dest, struct timespec *source);
 
 class Global {
 public:
-	int xres, yres;
+	int xres, yres, showCredits;
 	char keys[65536];
 	Global() {
 		xres = 1250;
 		yres = 900;
 		memset(keys, 0, 65536);
+        showCredits = 0;
 	}
 } gl;
 
@@ -284,6 +285,7 @@ void check_mouse(XEvent *e);
 int check_keys(XEvent *e);
 void physics();
 void render();
+extern void show_credits(Rect x, int y);
 
 //==========================================================================
 // M A I N
@@ -465,6 +467,9 @@ int check_keys(XEvent *e)
 			return 1;
 		case XK_f:
 			break;
+        case XK_c:
+            gl.showCredits ^= 1;
+            break;
 		case XK_s:
 			break;
 		case XK_Down:
@@ -736,12 +741,16 @@ void physics()
 
 void render()
 {
-	Rect r;
-	glClear(GL_COLOR_BUFFER_BIT);
-	//
+    Rect r;
 	r.bot = gl.yres - 20;
 	r.left = 10;
 	r.center = 0;
+    if (gl.showCredits) {
+        glClear(GL_COLOR_BUFFER_BIT);
+        show_credits(r, 16);
+    } else {
+	glClear(GL_COLOR_BUFFER_BIT);
+	//
 	ggprint8b(&r, 16, 0x00ff0000, "3350 - Asteroids");
 	ggprint8b(&r, 16, 0x00ffff00, "n bullets: %i", g.nbullets);
 	ggprint8b(&r, 16, 0x00ffff00, "n asteroids: %i", g.nasteroids);
@@ -787,6 +796,7 @@ void render()
 			}
 		glEnd();
 	}
+
 	//------------------
 	//Draw the asteroids
 	{
@@ -831,6 +841,7 @@ void render()
 		glEnd();
 		++b;
 	}
+    }
 }
 
 
