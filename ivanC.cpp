@@ -2,7 +2,7 @@
 // This file will show my name in the credits for our project
 
 #include <iostream>
-#include <fonts.h>
+#include "fonts.h"
 using namespace std;
 
 void show_credits(int x, int y)
