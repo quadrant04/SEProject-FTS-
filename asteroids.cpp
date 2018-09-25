@@ -742,14 +742,17 @@ void physics()
 void show_credits(Rect x, int y)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	extern jonathanC(React x, int y);
-	extern ivanC(React x, int y);
-	extern ryanW(React x, int y);
-	extern vananhV(React x, int y);
-        jonathanC(r, 16);
-	vananhV(r , 16);
-	ryanW(r, 16);
-	ivanC(r, 16);
+	extern void jonathanC(Rect x, int y);
+	extern void ivanC(Rect x, int y);
+	extern void ryanW(Rect x, int y);
+	extern void vananhV(Rect x, int y);
+    jonathanC(x, 16);
+    x.bot = gl.yres - 40;
+	vananhV(x, 16);
+    x.bot = gl.yres - 60;
+	ryanW(x, 16);
+    x.bot = gl.yres - 80;
+	ivanC(x, 16);
 }
 
 void render()
@@ -759,7 +762,7 @@ void render()
 	r.left = 10;
 	r.center = 0;
     if (gl.showCredits) {
-        show_credits(&r, 16);
+        show_credits(r, 16);
     } else {
 	glClear(GL_COLOR_BUFFER_BIT);
 	//
