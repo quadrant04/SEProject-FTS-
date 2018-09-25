@@ -4,12 +4,12 @@
 //
 
 
-#include <fonts.h>
+#include "fonts.h"
 #include <iostream>
 using namespace std; 
 
-Rect r
 void show_credits(int x, int y) {
+    Rect r;
     r.bot = y;
     r.left = x;
     r.center = 0;
