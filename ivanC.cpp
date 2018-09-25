@@ -7,6 +7,7 @@ using namespace std;
 
 void show_credits(int x, int y)
 {
+    Rect r;
     r.bot = y;
     r.left = x;
     r.center = 0;
