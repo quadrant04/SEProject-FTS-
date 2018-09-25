@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-void printName()
+void showVananhName()
 {
 	cout << "Vananh Vo ";
 	cout endl;
