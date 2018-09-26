@@ -1,3 +1,5 @@
+//Author: Jonathan Crawford
+
 #include <iostream>
 #include "fonts.h"
 
