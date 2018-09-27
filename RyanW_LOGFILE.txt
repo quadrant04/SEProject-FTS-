@@ -1,0 +1,10 @@
+//THIS FILE CONTAINS A LOG OF ALL CODE THAT WAS ADDED OR MODIFIED BY RYAN WALLACE(github ID: AceOnAWall)
+//
+//FORMAT: CODE TITLE(IF APPLICABLE)
+//        DATE CREATED/MODIFIED
+//        PURPOSE OF CODE
+
+# creditsLayout() // RyanW_LOGFILE.txt
+# 27 SEPT 2018
+# created the creditsLayout() function and added it to the programs files// created RyanW_LOGFILE.txt and added it to # the program files// corrected parameter mismatch in ivanC.cpp and ryanW.cpp// placed creditsLayout in asteroids.cpp # within the show_credits() function// adjusted passed parameters into ivanC.cpp, jonathanC.cpp, ryanW.cpp, 
+# vananhV.cpp to center printed output on screen. 
