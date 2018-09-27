@@ -10,7 +10,7 @@ using namespace std;
 
 void ryanW(Rect x, int y) 
 {
-    ggprint8b(&x, 16, 0x00ff0000, "Ryan Wallace");
+    ggprint8b(&x, y, 0x00ff0000, "Ryan Wallace");
 }
 
 
