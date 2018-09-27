@@ -12,5 +12,3 @@ void ryanW(Rect x, int y)
 {
     ggprint8b(&x, y, 0x00ff0000, "Ryan Wallace");
 }
-
-

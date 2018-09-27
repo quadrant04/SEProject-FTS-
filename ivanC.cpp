@@ -7,5 +7,5 @@ using namespace std;
 
 void ivanC(Rect x, int y)
 {
-    ggprint8b(&x, 16, 0x00ff0000, "Ivan Cisneros");
+    ggprint8b(&x, y, 0x00ff0000, "Ivan Cisneros");
 }

@@ -4,6 +4,7 @@
 //
 //program: asteroids.cpp
 //author:  Gordon Griesel
+//modified by: Ryan Wallace, Vananh Vo, Jonathan Crawford, Ivan Cisneros
 //date:    2014 - 2018
 //mod spring 2015: added constructors
 //mod spring 2018: X11 wrapper class
@@ -746,13 +747,16 @@ void show_credits(Rect x, int y)
 	extern void ivanC(Rect x, int y);
 	extern void ryanW(Rect x, int y);
 	extern void vananhV(Rect x, int y);
-    jonathanC(x, 16);
-    x.bot = gl.yres - 40;
-	vananhV(x, 16);
+	extern void creditsLayout(Rect x, int y);
+	creditsLayout(x, 40);
+	x.bot = gl.yres - 40;
+    jonathanC(x, 40);
     x.bot = gl.yres - 60;
-	ryanW(x, 16);
+	vananhV(x, 40);
     x.bot = gl.yres - 80;
-	ivanC(x, 16);
+	ryanW(x, 40);
+    x.bot = gl.yres - 100;
+	ivanC(x, 40);
 }
 
 void render()
