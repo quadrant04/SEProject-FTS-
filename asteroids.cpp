@@ -835,15 +835,15 @@ void show_credits(Rect x, int y)
     showJonathanPicture(imagex, x.bot-30, gl.dogTexture);
     //second
     x.bot = gl.yres - 200;
-    jonathanC(x, 16);
+    ryanW(x, 16);
     showRyanPicture(imagex, x.bot-30, gl.dogTexture);
     //third
     x.bot = gl.yres - 400;
-    jonathanC(x, 16);
+    ivanC(x, 16);
     showIvanPicture(imagex, x.bot-30, gl.dogTexture);
     //fourth
     x.bot = gl.yres - 600;
-    jonathanC(x, 16);
+    vananhV(x, 16);
     showVananhPicture(imagex, x.bot-30, gl.dogTexture);
     /*
     x.bot = gl.yres - 40;
