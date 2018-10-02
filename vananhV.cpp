@@ -33,5 +33,4 @@ void showVananhPicture (int x, int y, GLuint texid)
                    glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
         glEnd();
         glPopMatrix();
-}
-~            
+}            
