@@ -826,6 +826,9 @@ void show_credits(Rect x, int y)
 	extern void ryanW(Rect x, int y);
 	extern void vananhV(Rect x, int y);
 	extern void showJonathanPicture(int x, int y, GLuint textid);
+	extern void showVananhPicture(int x, int y, GLuint textid);
+	extern void showRyanPicture(int x, int y, GLuint textid);
+	extern void showIvanPicture(int x, int y, GLuint textid);
 	int imagex = gl.xres/3;
     //first
     jonathanC(x, 16);
