@@ -110,13 +110,14 @@ public:
 			unlink(ppmname);
 	}
 };
-Image img[1] = {"./dog.jpg"};
+Image img[2] = {"./dog.jpg", "./oblivion.jpg"};
 
 class Global {
 public:
 	int xres, yres, showCredits;
 	char keys[65536];
 	GLuint dogTexture;
+	GLuint oblivionTexture;
 	Global() {
 		xres = 1250;
 		yres = 900;
@@ -374,6 +375,7 @@ void init_opengl()
 {
 	//OpenGL initialization
 	glGenTextures(1, &gl.dogTexture);
+	glGenTextures(1, &gl.oblivionTexture);
     //-------------------------------------------------------------------------
 	//dog texture
     int w = img[0].width;
@@ -396,6 +398,18 @@ void init_opengl()
 		GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
 	//-------------------------------------------------------------------------
 	*/
+
+	//-------------------------------------------------------------------------
+	//Ryan's Picture
+	w = img[1].width;
+	h = img[1].height;
+	glBindTexture(GL_TEXTURE_2D, gl.oblivionTexture);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
+		GL_RGB, GL_UNSIGNED_BYTE, img[1].data);
+	//-------------------------------------------------------------------------
+
 	glViewport(0, 0, gl.xres, gl.yres);
 	//Initialize matrices
 	glMatrixMode(GL_PROJECTION); glLoadIdentity();
@@ -837,7 +851,7 @@ void show_credits(Rect x, int y)
     //second
     x.bot = gl.yres - 200;
     ryanW(x, 16);
-    showRyanPicture(imagex, x.bot-30, gl.dogTexture);
+    showRyanPicture(imagex, x.bot-30, gl.oblivionTexture);
     //third
     x.bot = gl.yres - 400;
     ivanC(x, 16);
