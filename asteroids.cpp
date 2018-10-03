@@ -1,6 +1,7 @@
-//
-//
-//
+//modified by:	Ivan Cisneros
+//		Ryan Wallace
+//		Vananh Vo
+//		Jonathan Crawford
 //
 //program: asteroids.cpp
 //author:  Gordon Griesel
