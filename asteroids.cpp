@@ -1,10 +1,10 @@
-//
-//
-//
+//modified by:	Ivan Cisneros
+//		Ryan Wallace
+//		Vananh Vo
+//		Jonathan Crawford
 //
 //program: asteroids.cpp
 //author:  Gordon Griesel
-//modified by: Ryan Wallace, Vananh Vo, Jonathan Crawford, Ivan Cisneros
 //date:    2014 - 2018
 //mod spring 2015: added constructors
 //mod spring 2018: X11 wrapper class
@@ -57,10 +57,67 @@ extern double timeDiff(struct timespec *start, struct timespec *end);
 extern void timeCopy(struct timespec *dest, struct timespec *source);
 //-----------------------------------------------------------------------------
 
+class Image {
+public:
+	int width, height;
+	unsigned char *data;
+	~Image() { delete [] data; }
+	Image(const char *fname) {
+		if (fname[0] == '\0')
+			return;
+		//printf("fname **%s**\n", fname);
+		int ppmFlag = 0;
+		char name[40];
+		strcpy(name, fname);
+		int slen = strlen(name);
+		char ppmname[80];
+		if (strncmp(name+(slen-4), ".ppm", 4) == 0)
+			ppmFlag = 1;
+		if (ppmFlag) {
+			strcpy(ppmname, name);
+		} else {
+			name[slen-4] = '\0';
+			//printf("name **%s**\n", name);
+			sprintf(ppmname,"%s.ppm", name);
+			//printf("ppmname **%s**\n", ppmname);
+			char ts[100];
+			//system("convert eball.jpg eball.ppm");
+			sprintf(ts, "convert %s %s", fname, ppmname);
+			system(ts);
+		}
+		//sprintf(ts, "%s", name);
+		FILE *fpi = fopen(ppmname, "r");
+		if (fpi) {
+			char line[200];
+			fgets(line, 200, fpi);
+			fgets(line, 200, fpi);
+			//skip comments and blank lines
+			while (line[0] == '#' || strlen(line) < 2)
+				fgets(line, 200, fpi);
+			sscanf(line, "%i %i", &width, &height);
+			fgets(line, 200, fpi);
+			//get pixel data
+			int n = width * height * 3;			
+			data = new unsigned char[n];			
+			for (int i=0; i<n; i++)
+				data[i] = fgetc(fpi);
+			fclose(fpi);
+		} else {
+			printf("ERROR opening image: %s\n",ppmname);
+			exit(0);
+		}
+		if (!ppmFlag)
+			unlink(ppmname);
+	}
+};
+Image img[2] = {"./dog.jpg", "./oblivion.jpg"};
+
 class Global {
 public:
 	int xres, yres, showCredits;
 	char keys[65536];
+	GLuint dogTexture;
+	GLuint oblivionTexture;
 	Global() {
 		xres = 1250;
 		yres = 900;
@@ -317,6 +374,42 @@ int main()
 void init_opengl()
 {
 	//OpenGL initialization
+	glGenTextures(1, &gl.dogTexture);
+	glGenTextures(1, &gl.oblivionTexture);
+    //-------------------------------------------------------------------------
+	//dog texture
+    int w = img[0].width;
+	int h = img[0].height;
+	glBindTexture(GL_TEXTURE_2D, gl.dogTexture);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
+		GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
+	//-------------------------------------------------------------------------
+	
+	//-------------------------------------------------------------------------
+	/*Vananh
+    int w = img[0].width;
+	int h = img[0].height;
+	glBindTexture(GL_TEXTURE_2D, gl.dogTexture);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
+		GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
+	//-------------------------------------------------------------------------
+	*/
+
+	//-------------------------------------------------------------------------
+	//Ryan's Picture
+	w = img[1].width;
+	h = img[1].height;
+	glBindTexture(GL_TEXTURE_2D, gl.oblivionTexture);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
+		GL_RGB, GL_UNSIGNED_BYTE, img[1].data);
+	//-------------------------------------------------------------------------
+
 	glViewport(0, 0, gl.xres, gl.yres);
 	//Initialize matrices
 	glMatrixMode(GL_PROJECTION); glLoadIdentity();
@@ -747,26 +840,59 @@ void show_credits(Rect x, int y)
 	extern void ivanC(Rect x, int y);
 	extern void ryanW(Rect x, int y);
 	extern void vananhV(Rect x, int y);
-	extern void creditsLayout(Rect x, int y);
-	creditsLayout(x, 40);
-	x.bot = gl.yres - 40;
-    jonathanC(x, 40);
+	extern void showJonathanPicture(int x, int y, GLuint textid);
+	extern void showVananhPicture(int x, int y, GLuint textid);
+	extern void showRyanPicture(int x, int y, GLuint textid);
+	extern void showIvanPicture(int x, int y, GLuint textid);
+	int imagex = gl.xres/3;
+    //first
+    jonathanC(x, 16);
+    showJonathanPicture(imagex, x.bot-30, gl.dogTexture);
+    //second
+    x.bot = gl.yres - 200;
+    ryanW(x, 16);
+    showRyanPicture(imagex, x.bot-30, gl.oblivionTexture);
+    //third
+    x.bot = gl.yres - 400;
+    ivanC(x, 16);
+    showIvanPicture(imagex, x.bot-30, gl.dogTexture);
+    //fourth
+    x.bot = gl.yres - 600;
+    vananhV(x, 16);
+    showVananhPicture(imagex, x.bot-30, gl.dogTexture);
+    /*
+    x.bot = gl.yres - 40;
+	vananhV(x, 16);
     x.bot = gl.yres - 60;
-	vananhV(x, 40);
+	ryanW(x, 16);
     x.bot = gl.yres - 80;
-	ryanW(x, 40);
-    x.bot = gl.yres - 100;
-	ivanC(x, 40);
+	ivanC(x, 16);
+	*/
 }
 
 void render()
 {
     Rect r;
+    //y value
 	r.bot = gl.yres - 20;
 	r.left = 10;
 	r.center = 0;
     if (gl.showCredits) {
         show_credits(r, 16);
+        /*
+        glColor3ub(255,255,255);
+        int wid=40;
+        glPushMatrix();
+        glTranslatef(400,400,0);
+        glBindTexture(GL_TEXTURE_2D, gl.dogTexture);
+        glBegin(GL_QUADS);
+				glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
+				glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
+				glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
+				glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
+		glEnd();
+		glPopMatrix();
+		*/
     } else {
 	glClear(GL_COLOR_BUFFER_BIT);
 	//
