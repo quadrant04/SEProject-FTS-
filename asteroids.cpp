@@ -110,7 +110,7 @@ public:
 			unlink(ppmname);
 	}
 };
-Image img[2] = {"./dog.jpg", "./oblivion.jpg"};
+Image img[3] = {"./dog.jpg", "./oblivion.jpg", "./ic.jpg"};
 
 class Global {
 public:
@@ -118,6 +118,7 @@ public:
 	char keys[65536];
 	GLuint dogTexture;
 	GLuint oblivionTexture;
+	GLuint ivanPicTexture;
 	Global() {
 		xres = 1250;
 		yres = 900;
@@ -376,6 +377,7 @@ void init_opengl()
 	//OpenGL initialization
 	glGenTextures(1, &gl.dogTexture);
 	glGenTextures(1, &gl.oblivionTexture);
+	glGenTextures(1, &gl.ivanPicTexture);
     //-------------------------------------------------------------------------
 	//dog texture
     int w = img[0].width;
@@ -409,8 +411,20 @@ void init_opengl()
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
 		GL_RGB, GL_UNSIGNED_BYTE, img[1].data);
 	//-------------------------------------------------------------------------
-
+	
+	//-------------------------------------------------------------------------
+	//Ivan's Picture
+	w = img[2].width;
+	h = img[2].height;
+	glBindTexture(GL_TEXTURE_2D, gl.ivanPicTexture);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
+		GL_RGB, GL_UNSIGNED_BYTE, img[2].data);
+	//-------------------------------------------------------------------------
+	
 	glViewport(0, 0, gl.xres, gl.yres);
+	
 	//Initialize matrices
 	glMatrixMode(GL_PROJECTION); glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW); glLoadIdentity();
@@ -855,7 +869,7 @@ void show_credits(Rect x, int y)
     //third
     x.bot = gl.yres - 400;
     ivanC(x, 16);
-    showIvanPicture(imagex, x.bot-30, gl.dogTexture);
+    showIvanPicture(imagex, x.bot-30, gl.ivanPicTexture);
     //fourth
     x.bot = gl.yres - 600;
     vananhV(x, 16);
