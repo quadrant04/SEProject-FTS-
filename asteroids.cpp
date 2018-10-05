@@ -110,7 +110,8 @@ public:
 			unlink(ppmname);
 	}
 };
-Image img[3] = {"./GIR.jpeg", "./ob.jpg", "./ic.jpg"};
+Image img[4] = {"./GIR.jpeg", "./ob.jpg", "./ic.jpg", "./vv.jpg"};
+
 
 
 class Global {
@@ -120,6 +121,7 @@ public:
 	GLuint girTexture;
 	GLuint obTexture;
 	GLuint ivanPicTexture;
+    GLuint vvTexture;
 	Global() {
 		xres = 1250;
 		yres = 900;
@@ -391,16 +393,15 @@ void init_opengl()
 	//-------------------------------------------------------------------------
 	
 	//-------------------------------------------------------------------------
-	/*Vananh
-    int w = img[0].width;
-	int h = img[0].height;
-	glBindTexture(GL_TEXTURE_2D, gl.dogTexture);
+    // Vananh's Picture
+    w = img[3].width;
+	h = img[3].height;
+	glBindTexture(GL_TEXTURE_2D, gl.vvTexture);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-		GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
+		GL_RGB, GL_UNSIGNED_BYTE, img[3].data);
 	//-------------------------------------------------------------------------
-	*/
 
 	//-------------------------------------------------------------------------
 	//Ryan's Picture
@@ -876,9 +877,9 @@ void show_credits(Rect x, int y)
     -----------------------------------------------------
     x.bot = gl.yres - 600;
     vananhV(x, 16);
-    showVananhPicture(imagex, x.bot-30, gl.dogTexture);
-    -----------------------------------------------------
-    */
+    showVananhPicture(imagex, x.bot-30, gl.vvTexture);
+
+
 }
 
 void render()

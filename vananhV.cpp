@@ -9,22 +9,24 @@ using namespace std;
 
 void vananhV(Rect x, int y)
 {
-        ggprint8b (&x, y, 0x00ff0000, "Vananh Vo ");
+        ggprint8b (&x, y, 0x00a020f0, "Vananh Vo ");
 }
 
 void showVananhPicture (int x, int y, GLuint texid)
 {
         //show vv picture
-        static float angle = 2.0f;
+        static float angle = 0.0f;
         float fx = (float)x;
         float fy = (float)y;
-        fx += sin(angle) * 100.0f;
-        fy += sin(angle) * 100.0f;
+        double g = 0.0;
+        g += sin(angle) * 10.0f;
+        fx += g; 
+        fy += g + 2.0;
         angle += 0.5f;
         glColor3ub(250, 250, 250);
-        int wid=40;
+        int wid=50;
         glPushMatrix();
-        glTranslatef(x,y,0);
+        glTranslatef(fx,fy,0);
         glBindTexture(GL_TEXTURE_2D, texid);
         glBegin(GL_QUADS);
                    glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
