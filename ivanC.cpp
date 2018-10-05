@@ -14,7 +14,7 @@ void ivanC(Rect x, int y)
 
 void showIvanPicture(int x, int y, GLuint textid)
 {
-  //show dog picture
+  //show bat picture
   static float angle = 0.0f;
   float fx = (float)x;
   float fy = (float)y;
