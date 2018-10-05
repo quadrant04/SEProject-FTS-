@@ -110,16 +110,16 @@ public:
 			unlink(ppmname);
 	}
 };
-Image img[4] = {"./dog.jpg", "./oblivion.jpg", "./ic.jpg", "./vv.png"};
+Image img[4] = {"./GIR.jpeg", "./oblivion.jpg", "./ic.jpg", "./vv.jpg"};
 
 class Global {
 public:
 	int xres, yres, showCredits;
 	char keys[65536];
-	GLuint dogTexture;
-    GLuint vVPicTexture;
+	GLuint girTexture;
 	GLuint oblivionTexture;
 	GLuint ivanPicTexture;
+    GLuint vvTexture;
 	Global() {
 		xres = 1250;
 		yres = 900;
@@ -376,14 +376,14 @@ int main()
 void init_opengl()
 {
 	//OpenGL initialization
-	glGenTextures(1, &gl.dogTexture);
+	glGenTextures(1, &gl.girTexture);
 	glGenTextures(1, &gl.oblivionTexture);
 	glGenTextures(1, &gl.ivanPicTexture);
     //-------------------------------------------------------------------------
-	//dog texture
+	//Jonathan's dog
     int w = img[0].width;
 	int h = img[0].height;
-	glBindTexture(GL_TEXTURE_2D, gl.dogTexture);
+	glBindTexture(GL_TEXTURE_2D, gl.girTexture);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
@@ -391,16 +391,14 @@ void init_opengl()
 	//-------------------------------------------------------------------------
 	
 	//-------------------------------------------------------------------------
-	/*Vananh
-    int w = img[0].width;
-	int h = img[0].height;
-	glBindTexture(GL_TEXTURE_2D, gl.dogTexture);
+    w = img[3].width;
+	h = img[3].height;
+	glBindTexture(GL_TEXTURE_2D, gl.vvTexture);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-		GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
+		GL_RGB, GL_UNSIGNED_BYTE, img[3].data);
 	//-------------------------------------------------------------------------
-	*/
 
 	//-------------------------------------------------------------------------
 	//Ryan's Picture
@@ -862,7 +860,7 @@ void show_credits(Rect x, int y)
 	int imagex = gl.xres/3;
     //first
     jonathanC(x, 16);
-    showJonathanPicture(imagex, x.bot-30, gl.dogTexture);
+    showJonathanPicture(imagex, x.bot-30, gl.girTexture);
     //second
     x.bot = gl.yres - 200;
     ryanW(x, 16);
@@ -874,15 +872,8 @@ void show_credits(Rect x, int y)
     //fourth
     x.bot = gl.yres - 600;
     vananhV(x, 16);
-    showVananhPicture(imagex, x.bot-30, gl.vVPicTexture);
-    /*
-    x.bot = gl.yres - 40;
-	vananhV(x, 16);
-    x.bot = gl.yres - 60;
-	ryanW(x, 16);
-    x.bot = gl.yres - 80;
-	ivanC(x, 16);
-	*/
+    showVananhPicture(imagex, x.bot-30, gl.vvTexture);
+
 }
 
 void render()

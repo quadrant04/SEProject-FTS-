@@ -21,10 +21,10 @@ void showVananhPicture (int x, int y, GLuint texid)
         double g = 0.0;
         g += sin(angle) * 10.0f;
         fx += g; 
-        fy += g * 2.0;
+        fy += g + 2.0;
         angle += 0.5f;
         glColor3ub(250, 250, 250);
-        int wid=60;
+        int wid=50;
         glPushMatrix();
         glTranslatef(fx,fy,0);
         glBindTexture(GL_TEXTURE_2D, texid);
