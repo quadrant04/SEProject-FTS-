@@ -381,7 +381,7 @@ void init_opengl()
 	glGenTextures(1, &gl.girTexture);
 	glGenTextures(1, &gl.obTexture);
 	glGenTextures(1, &gl.ivanPicTexture);
-	glGenTextures(1. &gl.vvTexture);
+	glGenTextures(1, &gl.vvTexture);
     //-------------------------------------------------------------------------
 	//Jonathan's dog
     int w = img[0].width;
