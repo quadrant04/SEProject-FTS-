@@ -121,7 +121,7 @@ public:
 	GLuint girTexture;
 	GLuint obTexture;
 	GLuint ivanPicTexture;
-    GLuint vvTexture;
+    	GLuint vvTexture;
 	Global() {
 		xres = 1250;
 		yres = 900;
@@ -381,6 +381,7 @@ void init_opengl()
 	glGenTextures(1, &gl.girTexture);
 	glGenTextures(1, &gl.obTexture);
 	glGenTextures(1, &gl.ivanPicTexture);
+	glGenTextures(1, &gl.vvTexture);
     //-------------------------------------------------------------------------
 	//Jonathan's dog
     int w = img[0].width;
@@ -873,8 +874,6 @@ void show_credits(Rect x, int y)
     ivanC(x, 16);
     showIvanPicture(imagex, x.bot-30, gl.ivanPicTexture);
     //fourth
-    /* This needs to be fixed by VV
-    -----------------------------------------------------
     x.bot = gl.yres - 600;
     vananhV(x, 16);
     showVananhPicture(imagex, x.bot-30, gl.vvTexture);
