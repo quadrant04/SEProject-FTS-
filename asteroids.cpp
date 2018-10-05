@@ -110,13 +110,14 @@ public:
 			unlink(ppmname);
 	}
 };
-Image img[3] = {"./dog.jpg", "./oblivion.jpg", "./ic.jpg"};
+Image img[4] = {"./dog.jpg", "./oblivion.jpg", "./ic.jpg", "./vv.png"};
 
 class Global {
 public:
 	int xres, yres, showCredits;
 	char keys[65536];
 	GLuint dogTexture;
+    GLuint vVPicTexture;
 	GLuint oblivionTexture;
 	GLuint ivanPicTexture;
 	Global() {
@@ -873,7 +874,7 @@ void show_credits(Rect x, int y)
     //fourth
     x.bot = gl.yres - 600;
     vananhV(x, 16);
-    showVananhPicture(imagex, x.bot-30, gl.dogTexture);
+    showVananhPicture(imagex, x.bot-30, gl.vVPicTexture);
     /*
     x.bot = gl.yres - 40;
 	vananhV(x, 16);
