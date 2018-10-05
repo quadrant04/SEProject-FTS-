@@ -113,6 +113,7 @@ public:
 Image img[4] = {"./GIR.jpeg", "./ob.jpg", "./ic.jpg", "./vv.jpg"};
 
 
+
 class Global {
 public:
 	int xres, yres, showCredits;
@@ -872,9 +873,12 @@ void show_credits(Rect x, int y)
     ivanC(x, 16);
     showIvanPicture(imagex, x.bot-30, gl.ivanPicTexture);
     //fourth
+    /* This needs to be fixed by VV
+    -----------------------------------------------------
     x.bot = gl.yres - 600;
     vananhV(x, 16);
     showVananhPicture(imagex, x.bot-30, gl.vvTexture);
+
 
 }
 
