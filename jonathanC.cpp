@@ -2,6 +2,12 @@
 //
 //two functions. One displays the authors name when called using openGl.
 //the second, displays a picture representing the author when called.
+//
+//Recent: Added global variables and functions calls to from main to this file
+//to display level one. In the future, going to create "game states" so the 
+//actual game pauses in the background when credits is shown.
+//
+//current bug, level one displays red intially.
 
 
 #include "fonts.h"
@@ -37,5 +43,22 @@ void showJonathanPicture(int x, int y, GLuint textid)
     glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
 
     glEnd();
-glPopMatrix();
+    glPopMatrix();
+}
+
+void showLevelOne(int x, int y, GLuint textid)
+{
+    glColor3ub(255,255,255);
+    glPushMatrix();
+    //glTranslatef(fx,fy,0);
+    glBindTexture(GL_TEXTURE_2D, textid);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, y);
+    glTexCoord2f(1.0f, 0.0f); glVertex2i(x, y);
+    glTexCoord2f(1.0f, 1.0f); glVertex2i(x, 0);
+
+    glEnd();
+    glPopMatrix();
 }

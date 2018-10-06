@@ -110,23 +110,26 @@ public:
 			unlink(ppmname);
 	}
 };
-Image img[4] = {"./GIR.jpeg", "./ob.jpg", "./ic.jpg", "./vv.jpg"};
+Image credits[4] = {"./GIR.jpeg", "./ob.jpg", "./ic.jpg", "./vv.jpg"};
+Image maps[1] = {"./demomap.png"};
 
 
 
 class Global {
 public:
-	int xres, yres, showCredits;
+	int xres, yres, showCredits, levelOne;
 	char keys[65536];
 	GLuint girTexture;
 	GLuint obTexture;
 	GLuint ivanPicTexture;
-    	GLuint vvTexture;
+    GLuint vvTexture;
+    GLuint mapOne;
 	Global() {
 		xres = 1250;
 		yres = 900;
 		memset(keys, 0, 65536);
         showCredits = 0;
+        levelOne = 0;
 	}
 } gl;
 
@@ -382,50 +385,52 @@ void init_opengl()
 	glGenTextures(1, &gl.obTexture);
 	glGenTextures(1, &gl.ivanPicTexture);
 	glGenTextures(1, &gl.vvTexture);
-    //-------------------------------------------------------------------------
-	//Jonathan's dog
-    int w = img[0].width;
-	int h = img[0].height;
+	//start of credits----------------------------------------------------------
+	//Jonathan's Picture
+    int w = credits[0].width;
+	int h = credits[0].height;
 	glBindTexture(GL_TEXTURE_2D, gl.girTexture);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-		GL_RGB, GL_UNSIGNED_BYTE, img[0].data);
-	//-------------------------------------------------------------------------
-	
-	//-------------------------------------------------------------------------
-    // Vananh's Picture
-    w = img[3].width;
-	h = img[3].height;
-	glBindTexture(GL_TEXTURE_2D, gl.vvTexture);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-		GL_RGB, GL_UNSIGNED_BYTE, img[3].data);
-	//-------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------
+		GL_RGB, GL_UNSIGNED_BYTE, credits[0].data);
 	//Ryan's Picture
-	w = img[1].width;
-	h = img[1].height;
+	w = credits[1].width;
+	h = credits[1].height;
 	glBindTexture(GL_TEXTURE_2D, gl.obTexture);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-		GL_RGB, GL_UNSIGNED_BYTE, img[1].data);
-	//-------------------------------------------------------------------------
-	
-	//-------------------------------------------------------------------------
+		GL_RGB, GL_UNSIGNED_BYTE, credits[1].data);
 	//Ivan's Picture
-	w = img[2].width;
-	h = img[2].height;
+	w = credits[2].width;
+	h = credits[2].height;
 	glBindTexture(GL_TEXTURE_2D, gl.ivanPicTexture);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-		GL_RGB, GL_UNSIGNED_BYTE, img[2].data);
-	//-------------------------------------------------------------------------
+		GL_RGB, GL_UNSIGNED_BYTE, credits[2].data);
+	// Vananh's Picture
+    w = credits[3].width;
+	h = credits[3].height;
+	glBindTexture(GL_TEXTURE_2D, gl.vvTexture);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
+		GL_RGB, GL_UNSIGNED_BYTE, credits[3].data);
+	//end of credits------------------------------------------------------------
 	
+	//start of maps-------------------------------------------------------------
+	//level 1
+	w = maps[0].width;
+	h = maps[0].height;
+	glBindTexture(GL_TEXTURE_2D, gl.mapOne);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
+		GL_RGB, GL_UNSIGNED_BYTE, maps[0].data);
+	//end of maps---------------------------------------------------------------
+
 	glViewport(0, 0, gl.xres, gl.yres);
 	
 	//Initialize matrices
@@ -509,6 +514,7 @@ void check_mouse(XEvent *e)
 		}
 	}
 	if (e->type == MotionNotify) {
+		/*
 		if (savex != e->xbutton.x || savey != e->xbutton.y) {
 			//Mouse moved
 			int xdiff = savex - e->xbutton.x;
@@ -550,6 +556,7 @@ void check_mouse(XEvent *e)
 			x11.set_mouse_position(100, 100);
 			savex = savey = 100;
 		}
+		*/
 	}
 }
 
@@ -582,6 +589,8 @@ int check_keys(XEvent *e)
             gl.showCredits ^= 1;
             break;
 		case XK_s:
+			gl.levelOne ^= 1;
+			gl.showCredits = 0;
 			break;
 		case XK_Down:
 			break;
@@ -877,7 +886,19 @@ void show_credits(Rect x, int y)
     x.bot = gl.yres - 600;
     vananhV(x, 16);
     showVananhPicture(imagex, x.bot-30, gl.vvTexture);
+}
 
+void showMap() {
+	int x = gl.xres;
+	int y = gl.yres;
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	extern void showLevelOne(int x, int y, GLuint textid);
+
+	if (gl.levelOne)
+	{
+		showLevelOne(x, y, gl.mapOne);
+	}
 
 }
 
@@ -904,6 +925,8 @@ void render()
 		glEnd();
 		glPopMatrix();
 		*/
+    } else if (gl.levelOne) { 
+    	showMap();
     } else {
 	glClear(GL_COLOR_BUFFER_BIT);
 	//
