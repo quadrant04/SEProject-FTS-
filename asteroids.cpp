@@ -514,7 +514,6 @@ void check_mouse(XEvent *e)
 		}
 	}
 	if (e->type == MotionNotify) {
-		/*
 		if (savex != e->xbutton.x || savey != e->xbutton.y) {
 			//Mouse moved
 			int xdiff = savex - e->xbutton.x;
@@ -556,7 +555,6 @@ void check_mouse(XEvent *e)
 			x11.set_mouse_position(100, 100);
 			savex = savey = 100;
 		}
-		*/
 	}
 }
 
@@ -935,7 +933,6 @@ void render()
 	ggprint8b(&r, 16, 0x00ffff00, "n asteroids: %i", g.nasteroids);
 	ggprint8b(&r, 16, 0x00ffff00, "n asteroids destroyed: ");
 	ggprint8b(&r, 16, 0x00ffff00, "press 'c' to show credits");
-	//
 	//-------------
 	//Draw the ship
 	glColor3fv(g.ship.color);
@@ -950,7 +947,7 @@ void render()
 		glVertex2f(  0.0f, 20.0f);
 		glVertex2f( 12.0f, -10.0f);
 	glEnd();
-	glColor3f(1.0f, 0.0f, 0.0f);
+	//glColor3f(1.0f, 0.0f, 0.0f);
 	glBegin(GL_POINTS);
 		glVertex2f(0.0f, 0.0f);
 	glEnd();
@@ -979,12 +976,13 @@ void render()
 
 	//------------------
 	//Draw the asteroids
+
 	{
 		Asteroid *a = g.ahead;
 		while (a) {
 			//Log("draw asteroid...\n");
-			glColor3fv(a->color);
 			glPushMatrix();
+			//glColor3fv(a->color);
 			glTranslatef(a->pos[0], a->pos[1], a->pos[2]);
 			glRotatef(a->angle, 0.0f, 0.0f, 1.0f);
 			glBegin(GL_LINE_LOOP);
@@ -994,7 +992,6 @@ void render()
 				}
 			glEnd();
 			glPopMatrix();
-			glColor3f(1.0f, 0.0f, 0.0f);
 			glBegin(GL_POINTS);
 				glVertex2f(a->pos[0], a->pos[1]);
 			glEnd();

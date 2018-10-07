@@ -48,6 +48,8 @@ void showJonathanPicture(int x, int y, GLuint textid)
 
 void showLevelOne(int x, int y, GLuint textid)
 {
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
     glColor3ub(255,255,255);
     glPushMatrix();
     //glTranslatef(fx,fy,0);
