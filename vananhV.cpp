@@ -1,11 +1,11 @@
 //Author: Vananh Vo
 //Date: 09/25/2018
-//Description: This file will include how to display backgrounds and sprites into the game
+//Description: This file will include how to 
+//              display backgrounds and sprites into the game
 
 #include "math.h"
 #include <GL/glx.h>
 #include "fonts.h"
-using namespace std;
 
 void vananhV(Rect x, int y)
 {
