@@ -114,8 +114,8 @@ public:
 	}
 };
 */
-Image credits[4] = {"./GIR.jpeg", "./ob.jpg", "./ic.jpg", "./vv.jpg"};
-Image maps[1] = {"./demomap.png"};
+Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", "./images/vv.jpg"};
+Image maps[1] = {"./images/firstMap.jpg"};
 
 
 

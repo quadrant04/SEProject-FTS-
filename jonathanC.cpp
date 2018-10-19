@@ -18,7 +18,7 @@
 typedef float Flt;
 typedef float Vec[3];
 
-Image unitList[1] = {"./GIR.jpeg"};
+Image unitList[1] = {"./images/GIR.jpeg"};
 
 
 /*
