@@ -16,7 +16,7 @@
 #include <ctime>
 #include <cmath>
 using namespace std;
-#include <unistd.h>
+//#include <unistd.h>
 #include <X11/Xlib.h>
 //#include <X11/Xutil.h>
 //#include <GL/gl.h>
@@ -25,6 +25,7 @@ using namespace std;
 #include <GL/glx.h>
 #include "log.h"
 #include "fonts.h"
+#include "image.h"
 
 //defined types
 typedef float Flt;
@@ -47,6 +48,7 @@ const float GRAVITY = -0.2f;
 #define PI 3.141592653589793
 #define ALPHA 1
 const int MAX_BULLETS = 11;
+const int MAX_SLIME = 100;
 const Flt MINIMUM_ASTEROID_SIZE = 60.0;
 
 //-----------------------------------------------------------------------------
@@ -56,7 +58,8 @@ extern struct timespec timeStart, timeCurrent;
 extern double timeDiff(struct timespec *start, struct timespec *end);
 extern void timeCopy(struct timespec *dest, struct timespec *source);
 //-----------------------------------------------------------------------------
-
+/*
+modified by jwc
 class Image {
 public:
 	int width, height;
@@ -110,6 +113,7 @@ public:
 			unlink(ppmname);
 	}
 };
+*/
 Image credits[4] = {"./GIR.jpeg", "./ob.jpg", "./ic.jpg", "./vv.jpg"};
 Image maps[1] = {"./demomap.png"};
 
@@ -117,7 +121,7 @@ Image maps[1] = {"./demomap.png"};
 
 class Global {
 public:
-	int xres, yres, showCredits, levelOne;
+	int xres, yres, showCredits, levelOne, spawnSlimeTest;
 	char keys[65536];
 	GLuint girTexture;
 	GLuint obTexture;
@@ -130,6 +134,8 @@ public:
 		memset(keys, 0, 65536);
         showCredits = 0;
         levelOne = 0;
+        //jwc
+        spawnSlimeTest = 0;
 	}
 } gl;
 
@@ -188,8 +194,14 @@ public:
 	Bullet *barr;
 	int nasteroids;
 	int nbullets;
+	//jwc
+	struct timespec slimeTimer;
+	int nslimes;
+	Unit *sarr;
+
 	struct timespec bulletTimer;
 	struct timespec mouseThrustTimer;
+
 	bool mouseThrustOn;
 public:
 	Game() {
@@ -197,6 +209,10 @@ public:
 		barr = new Bullet[MAX_BULLETS];
 		nasteroids = 0;
 		nbullets = 0;
+		//jwc
+		nslimes = 0;
+		sarr = new Unit[MAX_SLIME];
+
 		mouseThrustOn = false;
 		//build 10 asteroids...
 		for (int j=0; j<10; j++) {
@@ -230,9 +246,12 @@ public:
 			++nasteroids;
 		}
 		clock_gettime(CLOCK_REALTIME, &bulletTimer);
+		//jwc
+		clock_gettime(CLOCK_REALTIME, &slimeTimer);
 	}
 	~Game() {
 		delete [] barr;
+		delete [] sarr;
 	}
 } g;
 
@@ -581,11 +600,13 @@ int check_keys(XEvent *e)
 	switch (key) {
 		case XK_Escape:
 			return 1;
-		case XK_f:
+		case XK_u:
+			//jwc
+			gl.spawnSlimeTest ^= 1;
 			break;
-        case XK_c:
-            gl.showCredits ^= 1;
-            break;
+		case XK_c:
+			gl.showCredits ^= 1;
+			break;
 		case XK_s:
 			gl.levelOne ^= 1;
 			gl.showCredits = 0;
@@ -897,7 +918,6 @@ void showMap() {
 	{
 		showLevelOne(x, y, gl.mapOne);
 	}
-
 }
 
 void render()
@@ -909,22 +929,22 @@ void render()
 	r.center = 0;
     if (gl.showCredits) {
         show_credits(r, 16);
-        /*
-        glColor3ub(255,255,255);
-        int wid=40;
-        glPushMatrix();
-        glTranslatef(400,400,0);
-        glBindTexture(GL_TEXTURE_2D, gl.dogTexture);
-        glBegin(GL_QUADS);
-				glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
-				glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
-				glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
-				glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
-		glEnd();
-		glPopMatrix();
-		*/
     } else if (gl.levelOne) { 
     	showMap();
+    	//jwc
+    	if (gl.spawnSlimeTest) {
+    		struct timespec st;
+			clock_gettime(CLOCK_REALTIME, &st);
+			double ts = timeDiff(&g.slimeTimer, &st);
+				if (ts > 6.0) {
+					timeCopy(&g.slimeTimer, &st);
+					extern Unit createUnit(int);
+					extern void showSlime(Unit, int, int);
+					Unit s = createUnit(0);
+					showSlime(s, gl.xres, gl.yres);
+					g.nslimes++;
+				}
+    	}
     } else {
 	glClear(GL_COLOR_BUFFER_BIT);
 	//
@@ -1020,9 +1040,3 @@ void render()
 	}
     }
 }
-
-
-
-
-
-
