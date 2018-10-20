@@ -10,6 +10,14 @@
 //mod spring 2018: X11 wrapper class
 //This program is a game starting point for a 3350 project.
 //
+
+//----------------------------------------------------------------------------//
+//				Do not remove stuff from this file. 						  //
+//				only use this file for reference							  //
+//				and to copy/paste older code								  //
+//----------------------------------------------------------------------------//
+
+
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
@@ -114,7 +122,8 @@ public:
 	}
 };
 */
-Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", "./images/vv.jpg"};
+Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", 
+					"./images/vv.jpg"};
 Image maps[1] = {"./images/firstMap.jpg"};
 
 

@@ -1,24 +1,25 @@
-#
-# Makefile for asteroids game
+# modified by: Jonathan Crawford
+# author: Gordon Griesel
+# Makefile for free the slime game
 #
 # Enter one of the following
 #
 # make
 # make all
-# make asteroids
+# make ftsgame
 # make clean
 #
 CFLAGS = -I ./include
 #LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm
 LFLAGS = -lrt -lX11 -lGL
 
-all: asteroids
+all: ftsgame
 
-asteroids: asteroids.cpp log.cpp timers.cpp ryanW.cpp ivanC.cpp vananhV.cpp jonathanC.cpp
-	g++ $(CFLAGS) asteroids.cpp log.cpp timers.cpp ryanW.cpp ivanC.cpp vananhV.cpp jonathanC.cpp \
-	libggfonts.a -Wall $(LFLAGS) -o asteroids
+ftsgame: ftsgame.cpp log.cpp timers.cpp ryanW.cpp ivanC.cpp vananhV.cpp jonathanC.cpp
+	g++ $(CFLAGS) ftsgame.cpp log.cpp timers.cpp ryanW.cpp ivanC.cpp vananhV.cpp jonathanC.cpp \
+	libggfonts.a -Wall $(LFLAGS) -o ftsgame
 
 clean:
-	rm -f asteroids
+	rm -f ftsgame
 	rm -f *.o
 
