@@ -147,6 +147,7 @@ Unit createUnit(int i)
 	return temp;
 }
 
+
 void showSlime(Unit s, int x, int y) {
 
 	static int wid = 40;
@@ -165,3 +166,4 @@ void showSlime(Unit s, int x, int y) {
 	glPopMatrix();
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+
