@@ -13,7 +13,7 @@ reads an image and converts it into a ppm if it isn't already.
 #include <iostream>
 #include <cstring>
 #include <unistd.h>
-
+#include <GL/glx.h>
 typedef float Flt;
 typedef float Vec[3];
 

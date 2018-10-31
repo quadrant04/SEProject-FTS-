@@ -26,6 +26,7 @@ using namespace std;
 #include "log.h"
 #include "fonts.h"
 #include "image.h"
+#include "stdlib.h" /* malloc in VV file */
 
 //defined types
 typedef float Flt;
@@ -61,7 +62,7 @@ extern void timeCopy(struct timespec *dest, struct timespec *source);
 
 Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", "./images/vv.jpg"};
 Image maps[1] = {"./images/firstMap.jpg"};
-
+/* Image units[1] = {"./images/greenslimesprites.gif"}; */
 class Global {
 public:
 	int xres, yres, showCredits, levelOne, spawnSlimeTest;
@@ -69,8 +70,9 @@ public:
 	GLuint girTexture;
 	GLuint obTexture;
 	GLuint ivanPicTexture;
-    GLuint vvTexture;
-    GLuint mapOne;
+	GLuint vvTexture;
+	GLuint mapOne;
+	GLuint greenSlime;
 	Global() {
 		xres = 1250;
 		yres = 900;
@@ -217,7 +219,7 @@ int check_keys(XEvent *e);
 void physics();
 void render();
 extern void show_credits(Rect x, int y);
-
+extern void animatedSprites(void);
 //==========================================================================
 // M A I N
 //==========================================================================
@@ -253,7 +255,7 @@ void init_opengl()
 	glGenTextures(1, &gl.vvTexture);
 	//start of credits----------------------------------------------------------
 	//Jonathan's Picture
-    int w = credits[0].width;
+	int w = credits[0].width;
 	int h = credits[0].height;
 	glBindTexture(GL_TEXTURE_2D, gl.girTexture);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
@@ -277,7 +279,7 @@ void init_opengl()
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
 		GL_RGB, GL_UNSIGNED_BYTE, credits[2].data);
 	// Vananh's Picture
-    w = credits[3].width;
+   	w = credits[3].width;
 	h = credits[3].height;
 	glBindTexture(GL_TEXTURE_2D, gl.vvTexture);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
@@ -297,6 +299,12 @@ void init_opengl()
 		GL_RGB, GL_UNSIGNED_BYTE, maps[0].data);
 	//end of maps---------------------------------------------------------------
 
+	//Start of sprites animation - VV --------------------------------------
+	
+	void animatedSprites(void);
+	
+	//End of sprites animation --------------------------------------------
+	//
 	glViewport(0, 0, gl.xres, gl.yres);
 	
 	//Initialize matrices
@@ -452,14 +460,14 @@ void showMap()
 
 void render()
 {
-    Rect r;
-    //y value
+	Rect r;
+	//y value
 	r.bot = gl.yres - 20;
 	r.left = 10;
 	r.center = 0;
-    if (gl.showCredits) {
+	if (gl.showCredits) {
         show_credits(r, 16);
-    } else { 
+	} else { 
     	showMap();
     	//jwc
     	if (gl.spawnSlimeTest) {
