@@ -73,6 +73,122 @@ public:
 	}
 };
 
+class X11_wrapper {
+private:
+	Display *dpy;
+	Window win;
+	GLXContext glc;
+	int xres, yres;
+	GC gc;
+public:
+	X11_wrapper(int x, int y) {
+		xres = x;
+		yres = y;
+		GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
+		//GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, None };
+		XSetWindowAttributes swa;
+		setup_screen_res(xres, yres);
+		dpy = XOpenDisplay(NULL);
+		if (dpy == NULL) {
+			std::cout << "\n\tcannot connect to X server" << std::endl;
+			exit(EXIT_FAILURE);
+		}
+		Window root = DefaultRootWindow(dpy);
+		XVisualInfo *vi = glXChooseVisual(dpy, 0, att);
+		if (vi == NULL) {
+			std::cout << "\n\tno appropriate visual found\n" << std::endl;
+			exit(EXIT_FAILURE);
+		} 
+		Colormap cmap = XCreateColormap(dpy, root, vi->visual, AllocNone);
+		swa.colormap = cmap;
+		swa.event_mask = ExposureMask | KeyPressMask | KeyReleaseMask |
+			PointerMotionMask | MotionNotify | ButtonPress | ButtonRelease |
+			StructureNotifyMask | SubstructureNotifyMask;
+		win = XCreateWindow(dpy, root, 0, 0, xres, yres, 0,
+				vi->depth, InputOutput, vi->visual,
+				CWColormap | CWEventMask, &swa);
+		set_title();
+		glc = glXCreateContext(dpy, vi, NULL, GL_TRUE);
+		glXMakeCurrent(dpy, win, glc);
+	}
+	~X11_wrapper() {
+		XDestroyWindow(dpy, win);
+		XCloseDisplay(dpy);
+	}
+	void set_title() {
+		//Set the window title bar.
+		XMapWindow(dpy, win);
+		XStoreName(dpy, win, "Free The Slime");
+	}
+	void check_resize(XEvent *e) {
+		//The ConfigureNotify is sent by the
+		//server if the window is resized.
+		if (e->type != ConfigureNotify)
+			return;
+		XConfigureEvent xce = e->xconfigure;
+		if (xce.width != xres || xce.height != yres) {
+			//Window size did change.
+			reshape_window(xce.width, xce.height);
+		}
+	}
+	void reshape_window(int width, int height) {
+		//window has been resized.
+		setup_screen_res(width, height);
+		glViewport(0, 0, (GLint)width, (GLint)height);
+		glMatrixMode(GL_PROJECTION); glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW); glLoadIdentity();
+		glOrtho(0, xres, 0, yres, -1, 1);
+		set_title();
+	}
+	void setup_screen_res(const int w, const int h) {
+		xres = w;
+		yres = h;
+	}
+	void swapBuffers() {
+		glXSwapBuffers(dpy, win);
+	}
+	bool getXPending() {
+		return XPending(dpy);
+	}
+	XEvent getXNextEvent() {
+		XEvent e;
+		XNextEvent(dpy, &e);
+		return e;
+	}
+
+	void set_color_3i(int r, int g, int b) {
+		unsigned long cref = 0L;
+		cref += r;
+		cref <<= 8;
+		cref += g;
+		cref <<= 8;
+		cref += b;
+		XSetForeground(dpy, gc, cref);
+	}
+	void clear_screen() {
+		XClearWindow(dpy, win);
+	}
+	void drawString(int x, int y, const char *message) {
+		XDrawString(dpy, win, gc, x, y, message, strlen(message));
+	}
+
+	void drawPoint(int x, int y) {
+		XDrawPoint(dpy, win, gc, x, y);
+	}
+	void drawLine(int x0, int y0, int x1, int y1) {
+		XDrawLine(dpy, win, gc, x0, y0, x1, y1);
+	}
+	void drawRectangle(int x, int y, int w, int h) {
+		//x,y is upper-left corner
+		XDrawRectangle(dpy, win, gc, x, y, w, h);
+	}
+	void fillRectangle(int x, int y, int w, int h) {
+		//x,y is upper-left corner
+		XFillRectangle(dpy, win, gc, x, y, w, h);
+	}
+
+};
+/*
 class Unit {
 public:
 	int onoff;
@@ -90,5 +206,5 @@ public:
 		delay = 0.1;
 	}
 };
-
+*/
 #endif //_IMAGE_H_
