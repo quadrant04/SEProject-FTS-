@@ -65,7 +65,7 @@ Image maps[1] = {"./images/firstMap.jpg"};
 /* Image units[1] = {"./images/greenslimesprites.gif"}; */
 class Global {
 public:
-	int xres, yres, showCredits, levelOne, spawnSlimeTest;
+	int xres, yres, showCredits, levelOne, spawnSlimeTest, pathingMode;
 	char keys[65536];
 	GLuint girTexture;
 	GLuint obTexture;
@@ -81,6 +81,7 @@ public:
         levelOne = 0;
         //jwc
         spawnSlimeTest = 0;
+        pathingMode = 0;
 	}
 } gl;
 
@@ -89,128 +90,21 @@ public:
 	//jwc
 	struct timespec slimeTimer;
 	int nslimes;
-	Unit *sarr;
 	struct timespec bulletTimer;
 public:
 	Game() {
-
 		//jwc
-		nslimes = 0;
-		sarr = new Unit[MAX_SLIME];
 		clock_gettime(CLOCK_REALTIME, &slimeTimer);
 	}
 	~Game() {
-		delete [] sarr;
+		extern void resetSlime();
 	}
 } g;
 
-//X Windows variables
-class X11_wrapper {
-private:
-	Display *dpy;
-	Window win;
-	GLXContext glc;
-public:
-	X11_wrapper() {
-		GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, GLX_DOUBLEBUFFER, None };
-		//GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, None };
-		XSetWindowAttributes swa;
-		setup_screen_res(gl.xres, gl.yres);
-		dpy = XOpenDisplay(NULL);
-		if (dpy == NULL) {
-			std::cout << "\n\tcannot connect to X server" << std::endl;
-			exit(EXIT_FAILURE);
-		}
-		Window root = DefaultRootWindow(dpy);
-		XVisualInfo *vi = glXChooseVisual(dpy, 0, att);
-		if (vi == NULL) {
-			std::cout << "\n\tno appropriate visual found\n" << std::endl;
-			exit(EXIT_FAILURE);
-		} 
-		Colormap cmap = XCreateColormap(dpy, root, vi->visual, AllocNone);
-		swa.colormap = cmap;
-		swa.event_mask = ExposureMask | KeyPressMask | KeyReleaseMask |
-			PointerMotionMask | MotionNotify | ButtonPress | ButtonRelease |
-			StructureNotifyMask | SubstructureNotifyMask;
-		win = XCreateWindow(dpy, root, 0, 0, gl.xres, gl.yres, 0,
-				vi->depth, InputOutput, vi->visual,
-				CWColormap | CWEventMask, &swa);
-		set_title();
-		glc = glXCreateContext(dpy, vi, NULL, GL_TRUE);
-		glXMakeCurrent(dpy, win, glc);
-		show_mouse_cursor(0);
-	}
-	~X11_wrapper() {
-		XDestroyWindow(dpy, win);
-		XCloseDisplay(dpy);
-	}
-	void set_title() {
-		//Set the window title bar.
-		XMapWindow(dpy, win);
-		XStoreName(dpy, win, "Asteroids template");
-	}
-	void check_resize(XEvent *e) {
-		//The ConfigureNotify is sent by the
-		//server if the window is resized.
-		if (e->type != ConfigureNotify)
-			return;
-		XConfigureEvent xce = e->xconfigure;
-		if (xce.width != gl.xres || xce.height != gl.yres) {
-			//Window size did change.
-			reshape_window(xce.width, xce.height);
-		}
-	}
-	void reshape_window(int width, int height) {
-		//window has been resized.
-		setup_screen_res(width, height);
-		glViewport(0, 0, (GLint)width, (GLint)height);
-		glMatrixMode(GL_PROJECTION); glLoadIdentity();
-		glMatrixMode(GL_MODELVIEW); glLoadIdentity();
-		glOrtho(0, gl.xres, 0, gl.yres, -1, 1);
-		set_title();
-	}
-	void setup_screen_res(const int w, const int h) {
-		gl.xres = w;
-		gl.yres = h;
-	}
-	void swapBuffers() {
-		glXSwapBuffers(dpy, win);
-	}
-	bool getXPending() {
-		return XPending(dpy);
-	}
-	XEvent getXNextEvent() {
-		XEvent e;
-		XNextEvent(dpy, &e);
-		return e;
-	}
-	void set_mouse_position(int x, int y) {
-		XWarpPointer(dpy, None, win, 0, 0, 0, 0, x, y);
-	}
-	void show_mouse_cursor(const int onoff) {
-		if (onoff) {
-			//this removes our own blank cursor.
-			XUndefineCursor(dpy, win);
-			return;
-		}
-		//vars to make blank cursor
-		Pixmap blank;
-		XColor dummy;
-		char data[1] = {0};
-		Cursor cursor;
-		//make a blank cursor
-		blank = XCreateBitmapFromData (dpy, win, data, 1, 1);
-		if (blank == None)
-			std::cout << "error: out of memory." << std::endl;
-		cursor = XCreatePixmapCursor(dpy, blank, blank, &dummy, &dummy, 0, 0);
-		XFreePixmap(dpy, blank);
-		//this makes you the cursor. then set it using this function
-		XDefineCursor(dpy, win, cursor);
-		//after you do not need the cursor anymore use this function.
-		//it will undo the last change done by XDefineCursor
-		//(thus do only use ONCE XDefineCursor and then XUndefineCursor):
-	}
-} x11;
+//X Windows variables. Class has moved to the header file.
+//this should be the only instialized instance of this object
+//all others should be "extern" to reference this object.
+X11_wrapper x11(gl.xres, gl.yres);
 
 //function prototypes
 void init_opengl();
@@ -218,8 +112,27 @@ void check_mouse(XEvent *e);
 int check_keys(XEvent *e);
 void physics();
 void render();
-extern void show_credits(Rect x, int y);
+
+//----VV-----------------------------------
 extern void animatedSprites(void);
+
+//----Jonathan-----------------------------
+//slime functions
+extern void createSlime(int, int, int, int);
+extern void showSlime();
+extern void moveSlime(int);
+extern void resetSlime();
+//pathing functions
+extern void getCords(int x, int y, int yres);
+extern void showCords();
+extern void resetPath();
+
+//----Ivan---------------------------------
+//----Ryan---------------------------------
+
+//----All----------------------------------
+void show_credits(Rect x, int y); 	
+
 //==========================================================================
 // M A I N
 //==========================================================================
@@ -228,7 +141,6 @@ int main()
 	logOpen();
 	init_opengl();
 	srand(time(NULL));
-	x11.set_mouse_position(100, 100);
 	int done=0;
 	while (!done) {
 		while (x11.getXPending()) {
@@ -343,6 +255,8 @@ void check_mouse(XEvent *e)
 	//Was a mouse button clicked?
 	static int savex = 0;
 	static int savey = 0;
+	int mx = e->xbutton.x;
+	int my = e->xbutton.y;
 	if (e->type != ButtonPress &&
 			e->type != ButtonRelease &&
 			e->type != MotionNotify)
@@ -356,15 +270,15 @@ void check_mouse(XEvent *e)
 			//Left button is down
 		}
 		if (e->xbutton.button==3) {
-			//Right button is down
+			if (gl.pathingMode)
+				getCords(mx , my, gl.yres);
 		}
 	}
 
 	if (e->type == MotionNotify) {
 		if (savex != e->xbutton.x || savey != e->xbutton.y) {
-			//Mouse moved
-			int xdiff = savex - e->xbutton.x;
-			int ydiff = savey - e->xbutton.y;	
+			savex = mx; 
+			savey = my;
 		}
 	}
 }
@@ -392,10 +306,6 @@ int check_keys(XEvent *e)
 	switch (key) {
 		case XK_Escape:
 			return 1;
-		case XK_u:
-			//jwc
-			gl.spawnSlimeTest ^= 1;
-			break;
 		case XK_c:
 			gl.showCredits ^= 1;
 			break;
@@ -403,11 +313,24 @@ int check_keys(XEvent *e)
 			gl.levelOne ^= 1;
 			gl.showCredits = 0;
 			break;
+
 		case XK_Down:
 			break;
 		case XK_equal:
 			break;
 		case XK_minus:
+			break;
+
+		//jwc
+		case XK_p:
+			gl.pathingMode ^= 1;
+			break;
+		case XK_u:
+			gl.spawnSlimeTest ^= 1;
+			break;
+		case XK_r:
+			resetSlime();
+			resetPath();
 			break;
 	}
 	return 0;
@@ -460,6 +383,7 @@ void showMap()
 
 void render()
 {
+
 	Rect r;
 	//y value
 	r.bot = gl.yres - 20;
@@ -476,12 +400,14 @@ void render()
 			double ts = timeDiff(&g.slimeTimer, &st);
 				if (ts > 6.0) {
 					timeCopy(&g.slimeTimer, &st);
-					extern Unit createUnit(int);
-					extern void showSlime(Unit, int, int);
-					Unit s = createUnit(0);
-					showSlime(s, gl.xres, gl.yres);
-					g.nslimes++;
+					createSlime(0, gl.xres, gl.yres, gl.pathingMode);
 				}
+			showSlime();
+			moveSlime(gl.pathingMode);
     	}
-    } 
+    }
+    
+    if (gl.pathingMode) {
+    	showCords();
+    }
 }
