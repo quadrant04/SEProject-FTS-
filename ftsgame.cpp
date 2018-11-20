@@ -120,7 +120,7 @@ extern void animatedSprites(void);
 //slime functions
 extern void createSlime(int, int, int, int);
 extern void showSlime();
-extern void moveSlime(int);
+extern void moveSlime(int, int, int);
 extern void resetSlime();
 //pathing functions
 extern void getCords(int x, int y, int yres);
@@ -403,7 +403,7 @@ void render()
 					createSlime(0, gl.xres, gl.yres, gl.pathingMode);
 				}
 			showSlime();
-			moveSlime(gl.pathingMode);
+			moveSlime(gl.pathingMode, gl.xres, gl.yres);
     	}
     }
     

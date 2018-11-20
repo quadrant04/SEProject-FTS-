@@ -168,24 +168,6 @@ public:
 	void clear_screen() {
 		XClearWindow(dpy, win);
 	}
-	void drawString(int x, int y, const char *message) {
-		XDrawString(dpy, win, gc, x, y, message, strlen(message));
-	}
-
-	void drawPoint(int x, int y) {
-		XDrawPoint(dpy, win, gc, x, y);
-	}
-	void drawLine(int x0, int y0, int x1, int y1) {
-		XDrawLine(dpy, win, gc, x0, y0, x1, y1);
-	}
-	void drawRectangle(int x, int y, int w, int h) {
-		//x,y is upper-left corner
-		XDrawRectangle(dpy, win, gc, x, y, w, h);
-	}
-	void fillRectangle(int x, int y, int w, int h) {
-		//x,y is upper-left corner
-		XFillRectangle(dpy, win, gc, x, y, w, h);
-	}
 
 };
 /*

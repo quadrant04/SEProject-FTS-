@@ -37,6 +37,7 @@ public:
 #include <math.h>
 #include "image.h"
 #include <iostream>
+#include "jonathanC.h"
 using namespace std;
 
 typedef float Flt;
@@ -46,6 +47,9 @@ void vecCopy(Vec a, Vec b);
 void vecSub(Vec a, Vec b, Vec c);
 void vecNormalize(Vec a);
 float getDistance(Vec a, Vec b);
+int getPointCount();
+int getSlimeCount();
+void deleteSlime(int);
 
 struct Point {
 	float x, y, dist;
@@ -53,6 +57,8 @@ struct Point {
 
 Image unitList[1] = {"./images/GIR.jpeg"};
 extern X11_wrapper x11;
+
+/*------------All of my classes can be found in my header file jonathanC.h----------
 
 class Unit {
 public:
@@ -73,7 +79,7 @@ public:
 		checkpoint = 1;
 	}
 };
-
+-----------------------------------------------------------------------------------*/
 //-----slime variables-----
 const int MAX_SLIME = 20;
 static int nslime = 0 ;
@@ -213,16 +219,18 @@ void createSlime(int i, int x, int y, int pathing)
 		p->pos[1] = pt[0].y;
 		cout << "start x = " << p->pos[0] << endl;
 		cout << "start y = " << p->pos[1] << endl;
+        p->checkpoint++;
 	} else {
 		p->pos[0] = x/2;
 		p->pos[1] = y/2;
 		cout << "Pathing: OFF " << endl;
 		cout << "start x = " << p->pos[0] << endl;
 		cout << "start y = " << p->pos[1] << endl;
+		p->vel[0] = 4;
+	    p->vel[1] = 0;
 	}
 
-	p->vel[0] = 4;
-	p->vel[1] = 0;
+
 
 	return;
 }
@@ -259,26 +267,29 @@ void showSlime() {
 //adds velocity to slimes for movement. 
 //current position = intial position+velocity.
 //might add a timer element later(pos=pos+(time*vel))
-void moveSlime(int pathing)
+void moveSlime(int pathing, int xres, int yres)
 {
-	if (nslime < 1)
+	if (nslime == 0 || npoint < 2)
 		return;
 
 	for (int i = 0; i < nslime; i++) {
+	
+		Unit *s;
+        s = &slime[i];
 		//Check 1:pathing on 
 		//check 2: number of checkpoints has to be less then total number of 
 		//points in the path.
 		//check 3: only move to the next point if the slime is close enough to
 		//the point it is currently moving to. 
 		if (pathing && 
-			(slime[i].checkpoint < npoint) && 
-			(slime[i].pos[2] < 20)) {
-
+			(s->checkpoint != npoint) && 
+			(s->pos[2] < 20)) {
+			
 			Vec v, p = {0};
-
-			p[0] = pt[i+1].x;
-			p[1] = pt[i+1].y;
-			vecSub(p, slime[i].pos, v);
+				             
+			p[0] = pt[s->checkpoint].x;
+			p[1] = pt[s->checkpoint].y;
+			vecSub(p, s->pos, v);
 			cout << "Before normalized" << endl;
 			cout << "v.x = " << v[0] << endl;
 			cout << "v.y = " << v[1] << endl;
@@ -286,16 +297,31 @@ void moveSlime(int pathing)
 			cout << "After normalized" << endl;
 			cout << "v.x = " << v[0] << endl;
 			cout << "v.y = " << v[1] << endl;
-			vecCopy(v, slime[i].vel);
-			slime[i].pos[2] = getDistance(slime[i].pos, p);
-			slime[i].checkpoint += 1;
+			vecCopy(v, s->vel);
+			s->pos[2] = getDistance(s->pos, p);
+			s->checkpoint += 1;
 		}
-		slime[i].pos[0] += slime[i].vel[0];
-		slime[i].pos[1] += slime[i].vel[1];
-		slime[i].pos[2] -= 1;
-
+		s->pos[0] += s->vel[0];
+		s->pos[1] += s->vel[1];
+		s->pos[2] -= 1;		
 	}
+    
+    for (int i = 0; i < nslime; i++) {
+    	Unit *s;
+        s = &slime[i];
+        if (s->pos[0] < 0 || s->pos[0] > xres ||
+		    s->pos[1] < 0 || s->pos[1] > yres) {
+		    deleteSlime(i);
+		}
+    }
 
+}
+
+void deleteSlime(int s)
+{
+    slime[s] = slime[nslime-1];
+    nslime--;
+    
 }
 
 //deletes all the slimes in current array.
@@ -307,41 +333,10 @@ void resetSlime()
 	nslime = 0;
 }
 
-//-------------------Menu------------------------------------------
-//mostly for devlopment purposes, this just adds a simple menu 
-//to the game showing what options are available and current state.
-/*
-void show_menu() {
-	char pKey[] = "Press key: ";
-	char pathing[100];
-	char spawns[100];
-	char controlPoints[100];
-	char curveMode[100];
-
-	sprintf(controlPoints, "n control points: %d", n);
-
-	if (rigid)
-		sprintf(rigid, "(R) RIGID");
-	else
-		sprintf(rigid, "(R) RUBBERBAND");
-
-	if (pathing)
-		sprintf(pathing, "(L) Pathing Mode: ON");
-	else
-		sprintf(lineType, "(L) Pathing Mode: OFF");
-
-	if (spawns)
-		sprintf(spawns, "(C) Spawner: Active");
-	else
-		sprintf(curveMode, "(C) Spawner: Active");
-
-	x11.set_color_3i(255, 255, 255);
-	x11.drawString(10, 20, pKey);
-	x11.drawString(10, 40, lineType);
-	x11.drawString(10, 60, rigid);
-	x11.drawString(10, 80, curveMode);
-};
-*/
+int getSlimeCount()
+{
+    return nslime;
+}
 
 //------------------Pathing Mode------------------------------------
 //this functionality is designed to be able to create a path by 
@@ -388,6 +383,11 @@ void showCords()
 	}
 	//controls when cords have been updated to display them.
 	seen = 1;
+}
+
+int getPointCount()
+{
+    return npoint;
 }
 
 
