@@ -11,6 +11,7 @@
 // Date found: 10/20/2018
 // --------------------------------------------------------------------
 #include "image.h" /* image header file */
+#include "jonathanC.h" /* J.C. header */
 
 #include "math.h"
 #include <GL/glx.h>
@@ -21,6 +22,7 @@
 #include <X11/Xlib.h>
 
 Image units[1] = {"./images/greenslimesprites.gif"};
+Image maps[1] = {"./images/firstMap.jpg"};
 
 void vananhV(Rect x, int y)
 {
@@ -51,6 +53,76 @@ void showVananhPicture (int x, int y, GLuint texid)
         glEnd();
         glPopMatrix();
 }
+
+/* Initialize background */
+//======================================================//
+void init_background(int w, int h, GLuint texid)
+{
+	w = maps[0].width;
+	h = maps[0].height;
+	glBindTexture(GL_TEXTURE_2D, texid);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
+                GL_RGB, GL_UNSIGNED_BYTE, maps[0].data);
+}
+//======================================================//
+/* Show map */
+
+void show_bg(int x, int y, GLuint texid) {
+	//map setup.
+        glClearColor(0.0, 0.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glColor3ub(255,255,255);
+        glPushMatrix();
+        //glTranslatef(fx,fy,0);
+        glBindTexture(GL_TEXTURE_2D, texid);
+
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+        glTexCoord2f(0.0f, 0.0f); glVertex2i(0, y);
+        glTexCoord2f(1.0f, 0.0f); glVertex2i(x, y);
+        glTexCoord2f(1.0f, 1.0f); glVertex2i(x, 0);
+
+        glEnd();
+        glPopMatrix();
+}
+
+// ========= Initialize Unit ==============
+void init_unit(int w, int h, GLuint texid)
+{
+    w = units[0].width;
+    h = units[0].height;
+    //Set up image for the unit.
+    glGenTextures(1, &texid); 
+    glBindTexture(GL_TEXTURE_2D, texid);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
+                         GL_RGB, GL_UNSIGNED_BYTE, units[0].data);
+
+}
+// ========================================
+
+// =============== Show Unit ==============
+void show_slime(float x, float y, GLuint texid)
+{
+        static int wid = 40;
+        glColor3ub(255,255,255);
+        glPushMatrix();
+	//glBindTexture(GL_TEXTURE_2D, texid);
+        glTranslated(x/2, y/2, 0);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
+        glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
+        glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
+        glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
+
+        glEnd();
+        glPopMatrix();
+        //glBindTexture(GL_TEXTURE_2D, 0);
+}
+// =========================================================
 
 /* Convert .gif images into multiple frames
  *  in order to display animated 2D sprites. */
@@ -94,25 +166,4 @@ int animatedSprites(int width, int height)
 	
 	return 0;
 }
-/*
-// Borrow from JC to test.
-void showSlime(Unit s, int x, int y) 
-{
 
-        static int wid = 40;
-        glColor3ub(255,255,255);
-
-        glPushMatrix();
-        glBindTexture(GL_TEXTURE_2D, s.tex);
-        glTranslated(x/2, y/2, 0);
-        glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
-        glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
-        glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
-        glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
-
-        glEnd();
-        glPopMatrix();
-        glBindTexture(GL_TEXTURE_2D, 0);
-}
-*/

@@ -61,7 +61,7 @@ extern void timeCopy(struct timespec *dest, struct timespec *source);
 //-----------------------------------------------------------------------------
 
 Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", "./images/vv.jpg"};
-Image maps[1] = {"./images/firstMap.jpg"};
+//Image maps[1] = {"./images/firstMap.jpg"};
 /* Image units[1] = {"./images/greenslimesprites.gif"}; */
 class Global {
 public:
@@ -115,7 +115,8 @@ void render();
 
 //----VV-----------------------------------
 extern void animatedSprites(void);
-
+extern void init_background(int w, int h, GLuint texid);
+extern void show_bg(int x, int y, GLuint textid);
 //----Jonathan-----------------------------
 //slime functions
 extern void createSlime(int, int, int, int);
@@ -200,17 +201,9 @@ void init_opengl()
 		GL_RGB, GL_UNSIGNED_BYTE, credits[3].data);
 	//end of credits------------------------------------------------------------
 	
-	//start of maps-------------------------------------------------------------
-	//level 1
-	w = maps[0].width;
-	h = maps[0].height;
-	glBindTexture(GL_TEXTURE_2D, gl.mapOne);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-		GL_RGB, GL_UNSIGNED_BYTE, maps[0].data);
-	//end of maps---------------------------------------------------------------
-
+	// Initializing background of each status
+	//Level 1
+	init_background(w, h, gl.mapOne);
 	//Start of sprites animation - VV --------------------------------------
 	
 	void animatedSprites(void);
@@ -376,9 +369,7 @@ void showMap()
 	int x = gl.xres;
 	int y = gl.yres;
 	glClear(GL_COLOR_BUFFER_BIT);
-	extern void showLevelOne(int x, int y, GLuint textid);
-
-	showLevelOne(x, y, gl.mapOne);
+	show_bg(x, y, gl.mapOne);
 }
 
 void render()
@@ -392,22 +383,22 @@ void render()
 	if (gl.showCredits) {
         show_credits(r, 16);
 	} else { 
-    	showMap();
-    	//jwc
-    	if (gl.spawnSlimeTest) {
-    		struct timespec st;
-			clock_gettime(CLOCK_REALTIME, &st);
-			double ts = timeDiff(&g.slimeTimer, &st);
-				if (ts > 6.0) {
-					timeCopy(&g.slimeTimer, &st);
-					createSlime(0, gl.xres, gl.yres, gl.pathingMode);
-				}
-			showSlime();
-			moveSlime(gl.pathingMode, gl.xres, gl.yres);
-    	}
-    }
+    		showMap();
+    		//jwc
+    			if (gl.spawnSlimeTest) {
+    				struct timespec st;
+				clock_gettime(CLOCK_REALTIME, &st);
+				double ts = timeDiff(&g.slimeTimer, &st);
+					if (ts > 6.0) {
+						timeCopy(&g.slimeTimer, &st);
+						createSlime(0, gl.xres, gl.yres, gl.pathingMode);
+					}
+				showSlime();
+				moveSlime(gl.pathingMode, gl.xres, gl.yres);
+    			}
     
-    if (gl.pathingMode) {
-    	showCords();
-    }
-}
+    	if (gl.pathingMode) {
+    			showCords();
+    	}
+	}
+}	

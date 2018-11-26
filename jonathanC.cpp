@@ -173,6 +173,7 @@ void showJonathanPicture(int x, int y, GLuint textid)
 
 //Displays the first map of the game using the current resolution (x, y), as 
 //well as the map image with the gluint texture id.
+/*
 void showLevelOne(int x, int y, GLuint textid)
 {
 	//map setup.
@@ -192,10 +193,11 @@ void showLevelOne(int x, int y, GLuint textid)
 	glEnd();
 	glPopMatrix();
 }
-
+*/
 //----------------------------slime functions----------------------------
 //adds a slime to the array of slimes. 
 //An int is given dictating which image to load.
+extern void init_unit(int w, int h, GLuint texid); // From V.V.
 void createSlime(int i, int x, int y, int pathing)
 {	
 	Unit *p; 
@@ -203,6 +205,7 @@ void createSlime(int i, int x, int y, int pathing)
 	int w, h;
 	w = unitList[i].width;
 	h = unitList[i].height;
+	/*
 	//setup image for the unit.
 	glGenTextures(1, &p->tex);
 	glBindTexture(GL_TEXTURE_2D, p->tex);
@@ -211,6 +214,8 @@ void createSlime(int i, int x, int y, int pathing)
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
 		         GL_RGB, GL_UNSIGNED_BYTE, unitList[i].data);
 
+	*/
+	init_unit(w, h, p->tex); // call V.V. function
 	nslime++;
 
 	if (pathing && npoint > 0) {
@@ -234,7 +239,7 @@ void createSlime(int i, int x, int y, int pathing)
 
 	return;
 }
-
+extern void show_slime(float x, float y, GLuint texid); // From V.V.
 //Steps through an array to display all currently generated slimes.
 void showSlime() {
     //check to see if slimes present.
@@ -246,7 +251,8 @@ void showSlime() {
         p = &slime[i];
         float x = p->pos[0];
         float y = p->pos[1];
-	    static int wid = 40;
+	/*
+    	static int wid = 40;
 	    glColor3ub(255,255,255);
         glPushMatrix();
 	    
@@ -260,6 +266,8 @@ void showSlime() {
         glEnd();
         
 	    glPopMatrix();
+	*/
+	show_slime(x, y, p->tex);
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -389,7 +397,5 @@ int getPointCount()
 {
     return npoint;
 }
-
-
 
 
