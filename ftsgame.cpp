@@ -121,7 +121,7 @@ extern void show_background(int x, int y, GLuint texid);
 
 //----Jonathan-----------------------------
 //slime functions
-extern void createSlime(int, int, int, int);
+extern void createSlime(int, int, int);
 extern void showSlime();
 extern void moveSlime(int, int, int);
 extern void resetSlime();
@@ -389,7 +389,7 @@ void render()
 			double ts = timeDiff(&g.slimeTimer, &st);
 				if (ts > 6.0) {
 					timeCopy(&g.slimeTimer, &st);
-					createSlime(0, gl.xres, gl.yres, gl.pathingMode);
+					createSlime(gl.xres, gl.yres, gl.pathingMode);
 				}
 			showSlime();
 			moveSlime(gl.pathingMode, gl.xres, gl.yres);
