@@ -6,7 +6,6 @@
 //
 
 //+++++++++++++START OF STANDARD ITEMS++++++++++++++//
-	
 #include "fonts.h"
 #include <GL/glx.h>
 #include <math.h>
@@ -17,12 +16,17 @@ using namespace std;
 typedef float Flt;
 typedef float Vec[3];
 
+const int MAX_BULLETS = 11;
+
 Image TowerList[1] = {"./images/ob.jpg"};
 extern X11_wrapper x11;
 extern void displayTowers(float x, float y, GLuint texid);
-	
+//Setup timers
+const double OOBILLION = 1.0 / 1e9;
+extern struct timespec timeStart, timeCurrent;
+extern double timeDiff(struct timespec *start, struct timespec *end);
+extern void timeCopy(struct timespec *dest, struct timespec *source);
 //+++++++++++++END OF STANDARD ITEMS++++++++++++++//
-
 
 //+++++++++++++START OF CREDIT DISPLAY++++++++++++++//
 void ryanW(Rect x, int y) 
@@ -119,7 +123,52 @@ void displayTowers() {
      }
      glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+//+++++++++++++BULLET CLASS CREATION++++++++++++++//
+class Bullet {
+public:
+	Vec pos;
+	Vec vel;
+	float color[3];
+	struct timespec time;
+public:
+	Bullet() { }
+};
+
+
 //+++++++++++++END OF TOWER CLASS ITEMS++++++++++++++//
+
+//+++++++++++++START OF CODE SANDBOX++++++++++++++//
+/*
+Barr = new Bullet[MAX_BULLETS];
+numBullets = 0;
+
+///////start of tower shooting code////////
+struct timespec bt;
+clock_gettime(CLOCK_REALTIME, &bt);
+double ts = timeDiff(&g.bulletTimer, &bt);
+if (ts > 0.3) {
+	timeCopy(&g.bulletTimer, &bt);
+	//shoot bullets
+	if (g.numBullets < MAX_BULLETS) {
+		Bullet *b = &g.barr[g.numBullets];
+		timeCopy(&b->time, &bt);
+		b->pos[0] = g.tower.pos[0];
+		b->pos[1] = g.tower.pos[1];
+		b->pos[0] += xdir*20.0f;
+		b->pos[1] += ydir*20.0f;
+		b->vel[0] += xdir*6.0f + rnd()*0.1;
+		b->vel[1] += ydir*6.0f + rnd()*0.1;
+		b->color[0] = 1.0f;
+		b->color[1] = 1.0f;
+		b->color[2] = 1.0f;
+		++g.numBullets;
+	}
+}
+////////end of tower shooting code/////////
+
+*/
+//+++++++++++++END OF CODE SANDBOX++++++++++++++//
 
 
 
