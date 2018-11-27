@@ -26,6 +26,7 @@ using namespace std;
 #include "log.h"
 #include "fonts.h"
 #include "image.h"
+#include "jonathanC.h"
 #include "stdlib.h" /* malloc in VV file */
 
 //defined types
@@ -114,9 +115,10 @@ void physics();
 void render();
 
 //----VV-----------------------------------
-extern void animatedSprites(void);
-extern void init_background(int w, int h, GLuint texid);
-extern void show_bg(int x, int y, GLuint textid);
+//extern void animatedSprites(void);
+extern void init_background(GLuint texid);
+extern void show_background(int x, int y, GLuint texid);
+
 //----Jonathan-----------------------------
 //slime functions
 extern void createSlime(int, int, int, int);
@@ -201,15 +203,11 @@ void init_opengl()
 		GL_RGB, GL_UNSIGNED_BYTE, credits[3].data);
 	//end of credits------------------------------------------------------------
 	
-	// Initializing background of each status
-	//Level 1
-	init_background(w, h, gl.mapOne);
-	//Start of sprites animation - VV --------------------------------------
-	
-	void animatedSprites(void);
-	
-	//End of sprites animation --------------------------------------------
-	//
+	//start of maps-------------------------------------------------------------
+	//level 1
+	init_background(gl.mapOne);
+	//end of maps---------------------------------------------------------------
+
 	glViewport(0, 0, gl.xres, gl.yres);
 	
 	//Initialize matrices
@@ -369,7 +367,7 @@ void showMap()
 	int x = gl.xres;
 	int y = gl.yres;
 	glClear(GL_COLOR_BUFFER_BIT);
-	show_bg(x, y, gl.mapOne);
+	show_background(x, y, gl.mapOne); 
 }
 
 void render()
@@ -383,22 +381,22 @@ void render()
 	if (gl.showCredits) {
         show_credits(r, 16);
 	} else { 
-    		showMap();
-    		//jwc
-    			if (gl.spawnSlimeTest) {
-    				struct timespec st;
-				clock_gettime(CLOCK_REALTIME, &st);
-				double ts = timeDiff(&g.slimeTimer, &st);
-					if (ts > 6.0) {
-						timeCopy(&g.slimeTimer, &st);
-						createSlime(0, gl.xres, gl.yres, gl.pathingMode);
-					}
-				showSlime();
-				moveSlime(gl.pathingMode, gl.xres, gl.yres);
-    			}
-    
-    	if (gl.pathingMode) {
-    			showCords();
+    	showMap();
+    	//jwc
+    	if (gl.spawnSlimeTest) {
+    		struct timespec st;
+			clock_gettime(CLOCK_REALTIME, &st);
+			double ts = timeDiff(&g.slimeTimer, &st);
+				if (ts > 6.0) {
+					timeCopy(&g.slimeTimer, &st);
+					createSlime(0, gl.xres, gl.yres, gl.pathingMode);
+				}
+			showSlime();
+			moveSlime(gl.pathingMode, gl.xres, gl.yres);
     	}
-	}
-}	
+    }
+    
+    if (gl.pathingMode) {
+    	showCords();
+    }
+}
