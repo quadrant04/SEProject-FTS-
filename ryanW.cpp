@@ -3,6 +3,37 @@
 //Prints out the names of one member
 //
 
+// added junk 
+	
+#include "fonts.h"
+#include <GL/glx.h>
+#include <math.h>
+#include "image.h"
+#include <iostream>
+using namespace std;
+
+typedef float Flt;
+typedef float Vec[3];
+
+void vecCopy(Vec a, Vec b);
+void vecSub(Vec a, Vec b, Vec c);
+void vecNormalize(Vec a);
+float getDistance(Vec a, Vec b);
+int getPointCount();
+int getSlimeCount();
+void deleteSlime(int);
+
+struct Point {
+	float x, y, dist;
+};
+
+Image unitList[1] = {"./images/ob.jpeg"};
+extern X11_wrapper x11;
+extern void init_unit(Unit*);
+extern void show_unit(float x, float y, GLuint texid);
+	
+// end of junk
+
 // Start of all standardized items
 #include "fonts.h"
 #include <iostream>
@@ -10,7 +41,6 @@
 #include <math.h>
 using namespace std; 
 
-Image towerList[1] = {"./images/ob.jpg"};
 
 // End of all standardized items
 
@@ -61,6 +91,7 @@ public:
 const int MAX_TOWERS = 10;
 static int numTowers = 0;
 static Tower basicTower[MAX_TOWERS];
+Image towerList[1] = {"./images/ob.jpg"};
 
 /* 
 class level {
@@ -122,37 +153,6 @@ void displayTowers() {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-
-
-// added junk 
-	
-#include "fonts.h"
-#include <GL/glx.h>
-#include <math.h>
-#include "image.h"
-#include <iostream>
-#include "jonathanC.h"
-using namespace std;
-
-typedef float Flt;
-typedef float Vec[3];
-
-void vecCopy(Vec a, Vec b);
-void vecSub(Vec a, Vec b, Vec c);
-void vecNormalize(Vec a);
-float getDistance(Vec a, Vec b);
-int getPointCount();
-int getSlimeCount();
-void deleteSlime(int);
-
-struct Point {
-	float x, y, dist;
-};
-
-Image unitList[1] = {"./images/ob.jpeg"};
-extern X11_wrapper x11;
-extern void init_unit(Unit*);
-extern void show_unit(float x, float y, GLuint texid);
 
 
 
