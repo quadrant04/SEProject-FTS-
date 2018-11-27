@@ -198,25 +198,20 @@ void showJonathanPicture(int x, int y, GLuint textid)
 //----------------------------slime functions----------------------------
 //adds a slime to the array of slimes. 
 //An int is given dictating which image to load.
-void createSlime(int i, int x, int y, int pathing)
+void createSlime(int x, int y, int pathing)
 {	
 	Unit *p; 
 	p = &slime[nslime];
 	init_unit(p);
 
 	if (pathing && npoint > 0) {
-		cout << "Pathing: ON " << endl;
 		p->pos[0] = pt[0].x;
 		p->pos[1] = pt[0].y;
-		cout << "start x = " << p->pos[0] << endl;
-		cout << "start y = " << p->pos[1] << endl;
-        p->checkpoint++;
+		p->pos[2] = 0;
+        p->checkpoint = 1;
 	} else {
 		p->pos[0] = x/2;
 		p->pos[1] = y/2;
-		cout << "Pathing: OFF " << endl;
-		cout << "start x = " << p->pos[0] << endl;
-		cout << "start y = " << p->pos[1] << endl;
 		p->vel[0] = 4;
 	    p->vel[1] = 0;
 	}
@@ -266,20 +261,14 @@ void moveSlime(int pathing, int xres, int yres)
 			p[0] = pt[s->checkpoint].x;
 			p[1] = pt[s->checkpoint].y;
 			vecSub(p, s->pos, v);
-			cout << "Before normalized" << endl;
-			cout << "v.x = " << v[0] << endl;
-			cout << "v.y = " << v[1] << endl;
 			vecNormalize(v);
-			cout << "After normalized" << endl;
-			cout << "v.x = " << v[0] << endl;
-			cout << "v.y = " << v[1] << endl;
 			vecCopy(v, s->vel);
 			s->pos[2] = getDistance(s->pos, p);
 			s->checkpoint += 1;
 		}
 		s->pos[0] += s->vel[0];
 		s->pos[1] += s->vel[1];
-		s->pos[2] -= 1;		
+		s->pos[2] -= 1;	
 	}
     
     for (int i = 0; i < nslime; i++) {
@@ -293,10 +282,19 @@ void moveSlime(int pathing, int xres, int yres)
 
 }
 
+//deletes a single slime. if the slime is NOT the last one, overrites the slime that needs to
+//be deleted with the last slime in the array and decreases total slimes by 1.
+//NOTE: the data in the array is not reset, so needs to be overritten next time a slime is created.
+//if the slime is the last slime in the array, simply decreases total slimes by 1, so it will not render.
 void deleteSlime(int s)
 {
+
+    if (s == (nslime-1)) {
+        nslime -= 1;
+        return;
+    }
     slime[s] = slime[nslime-1];
-    nslime--;
+    nslime -= 1;
     
 }
 
@@ -340,9 +338,6 @@ void getCords(int x, int y, int yres)
 	pt[npoint].x = x;
 	pt[npoint].y = yres - y;
 	++npoint;
-	cout << "n = " << npoint << endl;
-	cout << "mx = " << x << endl;
-	cout << "my = " << y << endl;	
 }
 
 //show cords currently saved in the pt[] array.
