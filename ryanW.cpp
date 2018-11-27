@@ -15,31 +15,31 @@ using namespace std;
 typedef float Flt;
 typedef float Vec[3];
 
-void vecCopy(Vec a, Vec b);
-void vecSub(Vec a, Vec b, Vec c);
-void vecNormalize(Vec a);
-float getDistance(Vec a, Vec b);
-int getPointCount();
-int getSlimeCount();
-void deleteSlime(int);
+//void vecCopy(Vec a, Vec b);
+//void vecSub(Vec a, Vec b, Vec c);
+//void vecNormalize(Vec a);
+//float getDistance(Vec a, Vec b);
+//int getPointCount();
+//int getSlimeCount();
+//void deleteSlime(int);
 
-struct Point {
-	float x, y, dist;
-};
+//struct Point {
+//	float x, y, dist;
+//};
 
 Image unitList[1] = {"./images/ob.jpeg"};
 extern X11_wrapper x11;
 //extern void init_unit(Unit*);
-extern void show_unit(float x, float y, GLuint texid);
+extern void displayTowers(float x, float y, GLuint texid);
 	
 // end of junk
 
 // Start of all standardized items
-#include "fonts.h"
-#include <iostream>
-#include <GL/glx.h>
-#include <math.h>
-using namespace std; 
+//#include "fonts.h"
+//#include <iostream>
+//#include <GL/glx.h>
+//#include <math.h>
+//using namespace std; 
 
 
 // End of all standardized items
