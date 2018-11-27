@@ -29,7 +29,7 @@ struct Point {
 
 Image unitList[1] = {"./images/ob.jpeg"};
 extern X11_wrapper x11;
-extern void init_unit(Unit*);
+//extern void init_unit(Unit*);
 extern void show_unit(float x, float y, GLuint texid);
 	
 // end of junk
@@ -125,6 +125,7 @@ void createTower(int i, int x, int y)
 		         GL_RGB, GL_UNSIGNED_BYTE, towerList[i].data);
 
 numTowers++;
+}
 
 // Displays Towers onto the screen
 void displayTowers() {
@@ -149,8 +150,8 @@ void displayTowers() {
         glEnd();
         
 	    glPopMatrix();
-	}
-	glBindTexture(GL_TEXTURE_2D, 0);
+     }
+     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 
