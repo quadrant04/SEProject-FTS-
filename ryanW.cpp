@@ -1,6 +1,8 @@
 //Author: Ryan Wallace
+//updated: NOV 27 2018
 //
-//Prints out the names of one member
+//contains code for Ryan's Credit Display
+//This file holds the code for all tower items and anything that has to do with tower interactions and placement. 
 //
 
 //+++++++++++++START OF STANDARD ITEMS++++++++++++++//
