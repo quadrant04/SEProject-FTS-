@@ -3,7 +3,7 @@
 //Prints out the names of one member
 //
 
-// added junk 
+//+++++++++++++START OF STANDARD ITEMS++++++++++++++//
 	
 #include "fonts.h"
 #include <GL/glx.h>
@@ -15,35 +15,14 @@ using namespace std;
 typedef float Flt;
 typedef float Vec[3];
 
-//void vecCopy(Vec a, Vec b);
-//void vecSub(Vec a, Vec b, Vec c);
-//void vecNormalize(Vec a);
-//float getDistance(Vec a, Vec b);
-//int getPointCount();
-//int getSlimeCount();
-//void deleteSlime(int);
-
-//struct Point {
-//	float x, y, dist;
-//};
-
 Image TowerList[1] = {"./images/ob.jpg"};
 extern X11_wrapper x11;
-//extern void init_unit(Unit*);
 extern void displayTowers(float x, float y, GLuint texid);
 	
-// end of junk
-
-// Start of all standardized items
-//#include "fonts.h"
-//#include <iostream>
-//#include <GL/glx.h>
-//#include <math.h>
-//using namespace std; 
+//+++++++++++++END OF STANDARD ITEMS++++++++++++++//
 
 
-// End of all standardized items
-
+//+++++++++++++START OF CREDIT DISPLAY++++++++++++++//
 void ryanW(Rect x, int y) 
 {
     ggprint8b(&x, y, 0x00ff0000, "Ryan Wallace");
@@ -69,9 +48,9 @@ void showRyanPicture(int x, int y, GLuint texid)
      glEnd();
      glPopMatrix();
 }
+//+++++++++++++END OF CREDIT DISPLAY++++++++++++++//
 
-// Tower Object creation
-
+///+++++++++++++START OF TOWER CLASS++++++++++++++//
 class Tower {
 public:
 	int onoff;
@@ -87,28 +66,13 @@ public:
 	}
 };
 
-// Tower Items
+//+++++++++++++TOWER ATTRIBUTES++++++++++++++//
 const int MAX_TOWERS = 10;
 static int numTowers = 0;
 static Tower basicTower[MAX_TOWERS];
 Image towerList[1] = {"./images/ob.jpg"};
 
-/* 
-class level {
-public:
-	Vec spawn[1];
-	level() {
-		spawn = {0};
-	}
-}level;
-
-void setSpawn(Flt x, Flt y, Flt z) 
-{
-	level.spawn = {{x}, {y}, {z}};
-};
-*/
-
-// Basic Tower Creation
+//+++++++++++++TOWER CREATION++++++++++++++//
 void createTower(int i, int x, int y)
 {	
 	Tower *p; 
@@ -127,7 +91,7 @@ void createTower(int i, int x, int y)
 numTowers++;
 }
 
-// Displays Towers onto the screen
+//+++++++++++++TOWER DISPLAY TO SCREEN++++++++++++++//
 void displayTowers() {
     if (numTowers < 1)
         return;
@@ -153,6 +117,7 @@ void displayTowers() {
      }
      glBindTexture(GL_TEXTURE_2D, 0);
 }
+//+++++++++++++END OF TOWER CLASS ITEMS++++++++++++++//
 
 
 
