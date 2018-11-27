@@ -57,6 +57,8 @@ struct Point {
 
 Image unitList[1] = {"./images/GIR.jpeg"};
 extern X11_wrapper x11;
+extern void init_unit(Unit*);
+extern void show_unit(float x, float y, GLuint texid);
 
 /*------------All of my classes can be found in my header file jonathanC.h----------
 
@@ -173,7 +175,7 @@ void showJonathanPicture(int x, int y, GLuint textid)
 
 //Displays the first map of the game using the current resolution (x, y), as 
 //well as the map image with the gluint texture id.
-void showLevelOne(int x, int y, GLuint textid)
+/*void showLevelOne(int x, int y, GLuint textid)
 {
 	//map setup.
 	glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -192,7 +194,7 @@ void showLevelOne(int x, int y, GLuint textid)
 	glEnd();
 	glPopMatrix();
 }
-
+*/
 //----------------------------slime functions----------------------------
 //adds a slime to the array of slimes. 
 //An int is given dictating which image to load.
@@ -200,18 +202,7 @@ void createSlime(int i, int x, int y, int pathing)
 {	
 	Unit *p; 
 	p = &slime[nslime];
-	int w, h;
-	w = unitList[i].width;
-	h = unitList[i].height;
-	//setup image for the unit.
-	glGenTextures(1, &p->tex);
-	glBindTexture(GL_TEXTURE_2D, p->tex);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-		         GL_RGB, GL_UNSIGNED_BYTE, unitList[i].data);
-
-	nslime++;
+	init_unit(p);
 
 	if (pathing && npoint > 0) {
 		cout << "Pathing: ON " << endl;
@@ -229,9 +220,7 @@ void createSlime(int i, int x, int y, int pathing)
 		p->vel[0] = 4;
 	    p->vel[1] = 0;
 	}
-
-
-
+	nslime++;
 	return;
 }
 
@@ -246,20 +235,7 @@ void showSlime() {
         p = &slime[i];
         float x = p->pos[0];
         float y = p->pos[1];
-	    static int wid = 40;
-	    glColor3ub(255,255,255);
-        glPushMatrix();
-	    
-	    glBindTexture(GL_TEXTURE_2D, p->tex);
-	    glTranslated(x, y, 0);
-	    glBegin(GL_QUADS);
-	    glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
-	    glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
-	    glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
-	    glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
-        glEnd();
-        
-	    glPopMatrix();
+        show_unit(x,y,p->tex);
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -389,7 +365,3 @@ int getPointCount()
 {
     return npoint;
 }
-
-
-
-

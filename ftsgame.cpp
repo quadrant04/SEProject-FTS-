@@ -26,6 +26,7 @@ using namespace std;
 #include "log.h"
 #include "fonts.h"
 #include "image.h"
+#include "jonathanC.h"
 #include "stdlib.h" /* malloc in VV file */
 
 //defined types
@@ -61,7 +62,7 @@ extern void timeCopy(struct timespec *dest, struct timespec *source);
 //-----------------------------------------------------------------------------
 
 Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", "./images/vv.jpg"};
-Image maps[1] = {"./images/firstMap.jpg"};
+//Image maps[1] = {"./images/firstMap.jpg"};
 /* Image units[1] = {"./images/greenslimesprites.gif"}; */
 class Global {
 public:
@@ -114,7 +115,9 @@ void physics();
 void render();
 
 //----VV-----------------------------------
-extern void animatedSprites(void);
+//extern void animatedSprites(void);
+extern void init_background(GLuint texid);
+extern void show_background(int x, int y, GLuint texid);
 
 //----Jonathan-----------------------------
 //slime functions
@@ -202,21 +205,9 @@ void init_opengl()
 	
 	//start of maps-------------------------------------------------------------
 	//level 1
-	w = maps[0].width;
-	h = maps[0].height;
-	glBindTexture(GL_TEXTURE_2D, gl.mapOne);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-		GL_RGB, GL_UNSIGNED_BYTE, maps[0].data);
+	init_background(gl.mapOne);
 	//end of maps---------------------------------------------------------------
 
-	//Start of sprites animation - VV --------------------------------------
-	
-	void animatedSprites(void);
-	
-	//End of sprites animation --------------------------------------------
-	//
 	glViewport(0, 0, gl.xres, gl.yres);
 	
 	//Initialize matrices
@@ -376,9 +367,7 @@ void showMap()
 	int x = gl.xres;
 	int y = gl.yres;
 	glClear(GL_COLOR_BUFFER_BIT);
-	extern void showLevelOne(int x, int y, GLuint textid);
-
-	showLevelOne(x, y, gl.mapOne);
+	show_background(x, y, gl.mapOne); 
 }
 
 void render()
