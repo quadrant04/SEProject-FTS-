@@ -16,7 +16,7 @@ using namespace std;
 typedef float Flt;
 typedef float Vec[3];
 
-const int MAX_BULLETS = 11;
+const int MAX_BULLETS = 30;
 
 Image TowerList[1] = {"./images/ob.jpg"};
 extern X11_wrapper x11;
