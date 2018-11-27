@@ -113,7 +113,7 @@ void show_unit(float x, float y, GLuint texid)
         glColor3ub(255,255,255);
         glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, texid);
-        glTranslated(x/2, y/2, 0);
+        glTranslated(x, y, 0);
         glBegin(GL_QUADS);
         glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
         glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
