@@ -62,6 +62,7 @@ const int MAX_TOWERS = 10;
 static int numTowers = 0;
 static Tower basicTower[MAX_TOWERS];
 
+/* 
 class level {
 public:
 	Vec spawn[1];
@@ -74,7 +75,7 @@ void setSpawn(Flt x, Flt y, Flt z)
 {
 	level.spawn = {{x}, {y}, {z}};
 };
-
+*/
 
 // Basic Tower Creation
 void createTower(int i, int x, int y)
@@ -123,7 +124,35 @@ void displayTowers() {
 
 
 
+// added junk 
+	
+#include "fonts.h"
+#include <GL/glx.h>
+#include <math.h>
+#include "image.h"
+#include <iostream>
+#include "jonathanC.h"
+using namespace std;
 
+typedef float Flt;
+typedef float Vec[3];
+
+void vecCopy(Vec a, Vec b);
+void vecSub(Vec a, Vec b, Vec c);
+void vecNormalize(Vec a);
+float getDistance(Vec a, Vec b);
+int getPointCount();
+int getSlimeCount();
+void deleteSlime(int);
+
+struct Point {
+	float x, y, dist;
+};
+
+Image unitList[1] = {"./images/ob.jpeg"};
+extern X11_wrapper x11;
+extern void init_unit(Unit*);
+extern void show_unit(float x, float y, GLuint texid);
 
 
 
