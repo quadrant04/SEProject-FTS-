@@ -66,7 +66,7 @@ Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", "
 /* Image units[1] = {"./images/greenslimesprites.gif"}; */
 class Global {
 public:
-	int xres, yres, showCredits, levelOne, spawnSlimeTest, pathingMode;
+	int xres, yres, showCredits, levelOne, spawnSlimeTest, pathingMode, showButtons, showPoints;
 	char keys[65536];
 	GLuint girTexture;
 	GLuint obTexture;
@@ -83,6 +83,9 @@ public:
         //jwc
         spawnSlimeTest = 0;
         pathingMode = 0;
+	//ic
+	showButtons = 0;
+	showPoints = 0;
 	}
 } gl;
 
@@ -131,6 +134,9 @@ extern void showCords();
 extern void resetPath();
 
 //----Ivan---------------------------------
+extern void showButtonOptions(Rect x, int y);
+extern void showCount(Rect x, int y);
+
 //----Ryan---------------------------------
 
 //----All----------------------------------
@@ -278,6 +284,7 @@ int check_keys(XEvent *e)
 {
 	//keyboard input?
 	static int shift=0;
+	static char msg[25];	//ic
 	if (e->type != KeyPress && e->type != KeyRelease)
 		return 0;
 	int key = (XLookupKeysym(&e->xkey, 0) & 0x0000ffff);
@@ -304,7 +311,9 @@ int check_keys(XEvent *e)
 			gl.levelOne ^= 1;
 			gl.showCredits = 0;
 			break;
-
+		case XK_m:
+			gl.showButtons ^=1;
+			break;
 		case XK_Down:
 			break;
 		case XK_equal:
@@ -315,6 +324,7 @@ int check_keys(XEvent *e)
 		//jwc
 		case XK_p:
 			gl.pathingMode ^= 1;
+			sprintf(msg, "Pathing on"); //ic
 			break;
 		case XK_u:
 			gl.spawnSlimeTest ^= 1;
@@ -374,14 +384,16 @@ void render()
 {
 
 	Rect r;
+	static char msg[25];
 	//y value
 	r.bot = gl.yres - 20;
 	r.left = 10;
 	r.center = 0;
 	if (gl.showCredits) {
-        show_credits(r, 16);
+            show_credits(r, 16);
 	} else { 
     	showMap();
+	showCount(r, 16);
     	//jwc
     	if (gl.spawnSlimeTest) {
     		struct timespec st;
@@ -396,7 +408,12 @@ void render()
     	}
     }
     
+    if (gl.showButtons && !(gl.showCredits)) {
+    showButtonOptions(r, 16);
+    }
+
     if (gl.pathingMode) {
     	showCords();
+	sprintf(msg, "Pathing On");    //ic
     }
 }
