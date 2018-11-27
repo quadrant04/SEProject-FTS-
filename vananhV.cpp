@@ -22,7 +22,7 @@
 #include <X11/Xlib.h>
 
 //Image units[1] = {"./images/gslime.gif"};
-Image units[1] = {"./images/greenslime.gif"};
+Image units[1] = {"./images/greenslimesprites.gif"};
 Image maps[1] = {"./images/firstMap.jpg"};
 
 void vananhV(Rect x, int y)
