@@ -27,7 +27,7 @@ typedef float Vec[3];
 //	float x, y, dist;
 //};
 
-Image unitList[1] = {"./images/ob.jpeg"};
+Image TowerList[1] = {"./images/ob.jpeg"};
 extern X11_wrapper x11;
 //extern void init_unit(Unit*);
 extern void displayTowers(float x, float y, GLuint texid);
