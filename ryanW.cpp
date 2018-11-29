@@ -76,7 +76,7 @@ public:
 const int MAX_TOWERS = 10;
 static int numTowers = 0;
 static Tower basicTower[MAX_TOWERS];
-Image towerList[1] = {"./images/ob.jpg"};
+Image towerList[1] = {"./images/cannonanitmated1kms.gif"};
 
 //+++++++++++++TOWER CREATION++++++++++++++//
 void createTower(int i, int x, int y)
@@ -86,13 +86,13 @@ void createTower(int i, int x, int y)
 	int w, h;
 	w = towerList[i].width;
 	h = towerList[i].height;
-	//setup image for the unit.
+	//create tower image
 	glGenTextures(1, &p->tex);
 	glBindTexture(GL_TEXTURE_2D, p->tex);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-		         GL_RGB, GL_UNSIGNED_BYTE, towerList[i].data);
+		     GL_RGB, GL_UNSIGNED_BYTE, towerList[i].data);
 
 numTowers++;
 }
@@ -108,8 +108,7 @@ void displayTowers() {
         float y = p->pos[1];
 	    static int wid = 30;
 	    glColor3ub(255,255,255);
-        glPushMatrix();
-	    
+            glPushMatrix();
 	    glBindTexture(GL_TEXTURE_2D, p->tex);
 	    glTranslated(x, y, 0);
 	    glBegin(GL_QUADS);
@@ -117,8 +116,8 @@ void displayTowers() {
 	    glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
 	    glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
 	    glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
-        glEnd();
-        
+           
+	    glEnd();
 	    glPopMatrix();
      }
      glBindTexture(GL_TEXTURE_2D, 0);
