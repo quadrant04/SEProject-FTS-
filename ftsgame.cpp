@@ -320,6 +320,12 @@ int check_keys(XEvent *e)
 			break;
 		case XK_minus:
 			break;
+			
+		//RyanW
+		case XK_t:
+			gl.createTower(4, 1, 1);
+			gl.displayTowers();
+			break;
 
 		//jwc
 		case XK_p:
