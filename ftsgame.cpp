@@ -138,7 +138,8 @@ extern void showButtonOptions(Rect x, int y);
 extern void showCount(Rect x, int y);
 
 //----Ryan---------------------------------
-
+extern void createTower(int i, int x, int y);
+extern void displayTowers();
 //----All----------------------------------
 void show_credits(Rect x, int y); 	
 
