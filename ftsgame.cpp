@@ -324,8 +324,8 @@ int check_keys(XEvent *e)
 			
 		//RyanW
 		case XK_t:
-			gl.createTower(4, 1, 1);
-			gl.displayTowers();
+			createTower(4, 1, 1);
+			displayTowers();
 			break;
 
 		//jwc
