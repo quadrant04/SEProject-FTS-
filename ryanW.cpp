@@ -74,7 +74,7 @@ public:
 };
 
 //+++++++++++++TOWER ATTRIBUTES++++++++++++++//
-const int MAX_TOWERS = 4;
+const int MAX_TOWERS = 5;
 static int numTowers = 0;
 static Tower basicTower[MAX_TOWERS];
 Image towerList[1] = {"./images/cannonanimated1kms.gif"};
