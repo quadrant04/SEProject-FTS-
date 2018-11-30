@@ -51,6 +51,7 @@ const float GRAVITY = -0.2f;
 #define ALPHA 1
 const int MAX_BULLETS = 11;
 const int MAX_SLIME = 100;
+const int MAX_TOWERS = 4;
 const Flt MINIMUM_ASTEROID_SIZE = 60.0;
 
 //-----------------------------------------------------------------------------
@@ -140,7 +141,7 @@ extern void showButtonOptions(Rect x, int y);
 extern void showCount(Rect x, int y);
 
 //----Ryan---------------------------------
-extern void createTower(int i, int x, int y);
+extern void createTower(int x, int y);
 extern void displayTowers();
 //----All----------------------------------
 void show_credits(Rect x, int y); 	
@@ -326,7 +327,7 @@ int check_keys(XEvent *e)
 			
 		//RyanW
 		case XK_t:
-			spawnTowers ^= 1;
+			gl.spawnTowers ^= 1;
 			createTower(gl.xres/2, gl.yres/2);
 			createTower(gl.xres/3, gl.yres/2);
 			createTower(gl.xres/2, gl.yres/3);
@@ -421,7 +422,6 @@ void render()
     }
 	
 	if (gl.spawnTowers) {
-		extern MAX_TOWERS;
 		displayTowers();
 	}
 		
