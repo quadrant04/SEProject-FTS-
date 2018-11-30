@@ -328,10 +328,10 @@ int check_keys(XEvent *e)
 		//RyanW
 		case XK_t:
 			gl.spawnTowers ^= 1;
-			createTower(gl.xres/2, gl.yres/2);
-			createTower(gl.xres/3, gl.yres/2);
-			createTower(gl.xres/2, gl.yres/3);
-			createTower(gl.xres/5, gl.yres/3);
+			createTower(gl.xres/2, gl.yres/3.8);
+			createTower(gl.xres/0.3, gl.yres/3);
+			createTower(gl.xres/1.9, gl.yres/2.9);
+			createTower(gl.xres/0.3, gl.yres/0.3);
 			break;
 
 		//jwc
