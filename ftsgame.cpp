@@ -66,7 +66,7 @@ Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", "
 /* Image units[1] = {"./images/greenslimesprites.gif"}; */
 class Global {
 public:
-	int xres, yres, showCredits, levelOne, spawnSlimeTest, pathingMode, showButtons, showPoints;
+	int xres, yres, showCredits, levelOne, spawnSlimeTest, pathingMode, showButtons, showPoints, spawnTowers;
 	char keys[65536];
 	GLuint girTexture;
 	GLuint obTexture;
@@ -86,6 +86,8 @@ public:
 	//ic
 	showButtons = 0;
 	showPoints = 0;
+	//RyanW
+	spawnTowers =0;
 	}
 } gl;
 
@@ -324,8 +326,11 @@ int check_keys(XEvent *e)
 			
 		//RyanW
 		case XK_t:
-			createTower(4, 1, 1);
-			displayTowers();
+			spawnTowers ^= 1;
+			createTower(gl.xres/2, gl.yres/2);
+			createTower(gl.xres/3, gl.yres/2);
+			createTower(gl.xres/2, gl.yres/3);
+			createTower(gl.xres/5, gl.yres/3);
 			break;
 
 		//jwc
@@ -414,6 +419,13 @@ void render()
 			moveSlime(gl.pathingMode, gl.xres, gl.yres);
     	}
     }
+	
+	if (gl.spawnTowers) {
+		extern MAX_TOWERS;
+		displayTowers();
+	}
+		
+		
     
     if (gl.showButtons && !(gl.showCredits)) {
     showButtonOptions(r, 16);
