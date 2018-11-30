@@ -107,13 +107,11 @@ void displayTowers() {
     Tower *p;
     for (int i = 0; i < numTowers; i++) {
         p = &basicTower[i];
-        //float x = p->pos[0];
-        //float y = p->pos[1];
 	    static int wid = 30;
 	    glColor3ub(255,255,255);
             glPushMatrix();
 	    glBindTexture(GL_TEXTURE_2D, p->tex);
-	    //glTranslated(x, y, 0);
+	    glTranslated(p->pos[0], p->pos[1], 0);
 	    glBegin(GL_QUADS);
 	    glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
 	    glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
