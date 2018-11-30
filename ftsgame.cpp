@@ -51,7 +51,7 @@ const float GRAVITY = -0.2f;
 #define ALPHA 1
 const int MAX_BULLETS = 11;
 const int MAX_SLIME = 100;
-const int MAX_TOWERS = 4;
+const int MAX_TOWERS = 5;
 const Flt MINIMUM_ASTEROID_SIZE = 60.0;
 
 //-----------------------------------------------------------------------------
@@ -332,6 +332,7 @@ int check_keys(XEvent *e)
 			createTower(603, 722); 
 			createTower(1026, 635); 
 			createTower(1026, 198); 
+			createTower(177, 644);
 			break;
 
 		//jwc
