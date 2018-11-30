@@ -68,7 +68,6 @@ void showVananhPicture (int x, int y, GLuint texid)
 
 unsigned char *buildAlphaData(Image *img)
 {
-    cout << "Build Alpha Data";
     //add 4th component to RGB stream...
     int i;
     unsigned char *newdata, *ptr;
@@ -91,7 +90,6 @@ unsigned char *buildAlphaData(Image *img)
         *(ptr+3) = 1;
         if (a==t0 && b==t1 && c==t2) {
             *(ptr+3) = 0;
-            cout << "Color found.";
         }
         //-----------------------------------------------
         ptr += 4;
@@ -104,11 +102,6 @@ unsigned char *buildAlphaData(Image *img)
 //======================================================//
 void init_background(GLuint texid)
 {
-    if (!show) {
-        cout << "\n init_background.\n";
-        show = 1;
-    }
-
     int w = maps[0].width;
     int h = maps[0].height;
     glBindTexture(GL_TEXTURE_2D, texid);
@@ -121,10 +114,6 @@ void init_background(GLuint texid)
 // Show Background
 void show_background(int x, int y, GLuint textid)
 {
-    if (!show) {
-        cout << "\nshow_background.\n";
-        show = 1;
-    }
     //map setup.
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -143,7 +132,6 @@ void show_background(int x, int y, GLuint textid)
     glPopMatrix();
 }
 // ====================================================//
-
 
 // ========== Initializing Unit =======================//
 void init_unit(Unit* p)
@@ -165,10 +153,6 @@ void init_unit(Unit* p)
 
 void init_animatedUnit(Unit* p)
 {
-    if (!show) {
-        cout << "\ninit_animated unit.\n";
-        show = 1;
-    }
     int w = units[0].width;
     int h = units[0].height;
     //setup image for the unit.
@@ -186,10 +170,6 @@ void init_animatedUnit(Unit* p)
 // =============== Show Unit ==============
 void show_unit(float x, float y, GLuint texid)
 {
-    if (!show) {
-        cout << "\nshow_unit.\n";
-        show = 1;
-    }
     static int wid = 40;
     glColor3ub(255,255,255);
     glPushMatrix();
@@ -226,10 +206,6 @@ void physics_animation()
 
 void show_animatedUnit(float x, float y, GLuint texid)
  {
-    if (!show) {
-        cout << "show_animated unit.";
-        show = 1;
-    }
     //static int wid = 40;
     static int wid = 30; // Make the slimes smaller.
     glColor3ub(255,255,255);
