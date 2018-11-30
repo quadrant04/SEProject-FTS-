@@ -51,6 +51,7 @@ const float GRAVITY = -0.2f;
 #define ALPHA 1
 const int MAX_BULLETS = 11;
 const int MAX_SLIME = 100;
+const int MAX_TOWERS = 5;
 const Flt MINIMUM_ASTEROID_SIZE = 60.0;
 
 //-----------------------------------------------------------------------------
@@ -66,7 +67,7 @@ Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", "
 /* Image units[1] = {"./images/greenslimesprites.gif"}; */
 class Global {
 public:
-	int xres, yres, showCredits, levelOne, spawnSlimeTest, pathingMode, showButtons, showPoints;
+	int xres, yres, showCredits, levelOne, spawnSlimeTest, pathingMode, showButtons, showPoints, spawnTowers;
 	char keys[65536];
 	GLuint girTexture;
 	GLuint obTexture;
@@ -86,6 +87,8 @@ public:
 	//ic
 	showButtons = 0;
 	showPoints = 0;
+	//RyanW
+	spawnTowers =0;
 	}
 } gl;
 
@@ -138,7 +141,8 @@ extern void showButtonOptions(Rect x, int y);
 extern void showCount(Rect x, int y);
 
 //----Ryan---------------------------------
-
+extern void createTower(int x, int y);
+extern void displayTowers();
 //----All----------------------------------
 void show_credits(Rect x, int y); 	
 
@@ -320,6 +324,16 @@ int check_keys(XEvent *e)
 			break;
 		case XK_minus:
 			break;
+			
+		//RyanW
+		case XK_t:
+			gl.spawnTowers ^= 1;
+			createTower(610, 315); 
+			createTower(610, 722); 
+			createTower(1080, 630); 
+			createTower(1026, 198); 
+			createTower(177, 630);
+			break;
 
 		//jwc
 		case XK_p:
@@ -407,6 +421,12 @@ void render()
 			moveSlime(gl.pathingMode, gl.xres, gl.yres);
     	}
     }
+	
+	if (gl.spawnTowers) {
+		displayTowers();
+	}
+		
+		
     
     if (gl.showButtons && !(gl.showCredits)) {
     showButtonOptions(r, 16);

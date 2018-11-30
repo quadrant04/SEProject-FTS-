@@ -18,6 +18,7 @@ typedef float Vec[3];
 
 const int MAX_BULLETS = 30;
 
+
 Image TowerList[1] = {"./images/ob.jpg"};
 extern X11_wrapper x11;
 extern void displayTowers(float x, float y, GLuint texid);
@@ -73,26 +74,28 @@ public:
 };
 
 //+++++++++++++TOWER ATTRIBUTES++++++++++++++//
-const int MAX_TOWERS = 10;
+const int MAX_TOWERS = 5;
 static int numTowers = 0;
 static Tower basicTower[MAX_TOWERS];
-Image towerList[1] = {"./images/ob.jpg"};
+Image towerList[1] = {"./images/cannonanimated1kms.gif"};
 
 //+++++++++++++TOWER CREATION++++++++++++++//
-void createTower(int i, int x, int y)
+void createTower(int x, int y)
 {	
 	Tower *p; 
 	p = &basicTower[numTowers];
 	int w, h;
-	w = towerList[i].width;
-	h = towerList[i].height;
-	//setup image for the unit.
+	w = towerList[0].width;
+	h = towerList[0].height;
+	p->pos[0] = x;
+	p->pos[1] = y;
+	//create tower image
 	glGenTextures(1, &p->tex);
 	glBindTexture(GL_TEXTURE_2D, p->tex);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-		         GL_RGB, GL_UNSIGNED_BYTE, towerList[i].data);
+		     GL_RGB, GL_UNSIGNED_BYTE, towerList[0].data);
 
 numTowers++;
 }
@@ -104,21 +107,18 @@ void displayTowers() {
     Tower *p;
     for (int i = 0; i < numTowers; i++) {
         p = &basicTower[i];
-        float x = p->pos[0];
-        float y = p->pos[1];
 	    static int wid = 30;
 	    glColor3ub(255,255,255);
-        glPushMatrix();
-	    
+            glPushMatrix();
 	    glBindTexture(GL_TEXTURE_2D, p->tex);
-	    glTranslated(x, y, 0);
+	    glTranslated(p->pos[0], p->pos[1], 0);
 	    glBegin(GL_QUADS);
 	    glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
 	    glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
 	    glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
 	    glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
-        glEnd();
-        
+           
+	    glEnd();
 	    glPopMatrix();
      }
      glBindTexture(GL_TEXTURE_2D, 0);
@@ -153,8 +153,8 @@ if (ts > 0.3) {
 	if (g.numBullets < MAX_BULLETS) {
 		Bullet *b = &g.barr[g.numBullets];
 		timeCopy(&b->time, &bt);
-		b->pos[0] = g.tower.pos[0];
-		b->pos[1] = g.tower.pos[1];
+		b->pos[0] = tower.pos[0];
+		b->pos[1] = tower.pos[1];
 		b->pos[0] += xdir*20.0f;
 		b->pos[1] += ydir*20.0f;
 		b->vel[0] += xdir*6.0f + rnd()*0.1;
