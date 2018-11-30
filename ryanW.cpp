@@ -87,15 +87,15 @@ void createTower(int x, int y)
 	int w, h;
 	w = towerList[0].width;
 	h = towerList[0].height;
-	p.pos[0] = x;
-	p.pos[1] = y;
+	p->pos[0] = x;
+	p->pos[1] = y;
 	//create tower image
 	glGenTextures(1, &p->tex);
 	glBindTexture(GL_TEXTURE_2D, p->tex);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-		     GL_RGB, GL_UNSIGNED_BYTE, towerList[i].data);
+		     GL_RGB, GL_UNSIGNED_BYTE, towerList[0].data);
 
 numTowers++;
 }
@@ -113,7 +113,7 @@ void displayTowers() {
 	    glColor3ub(255,255,255);
             glPushMatrix();
 	    glBindTexture(GL_TEXTURE_2D, p->tex);
-	    glTranslated(x, y, 0);
+	    //glTranslated(x, y, 0);
 	    glBegin(GL_QUADS);
 	    glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
 	    glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
