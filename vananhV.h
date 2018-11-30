@@ -5,7 +5,7 @@ public:
 
     Frame() {
         frameSlime = 0;
-        delay = 0.3;
+        delay = 0.5;
     }
 };
 
