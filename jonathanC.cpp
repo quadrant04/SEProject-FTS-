@@ -57,8 +57,10 @@ struct Point {
 
 Image unitList[1] = {"./images/GIR.jpeg"};
 extern X11_wrapper x11;
-extern void init_unit(Unit*);
-extern void show_unit(float x, float y, GLuint texid);
+//extern void init_unit(Unit*);
+//extern void show_unit(float x, float y, GLuint texid);
+extern void show_animatedUnit(float x, float y, GLuint texid);
+extern void init_animatedUnit(Unit* p);
 
 /*------------All of my classes can be found in my header file jonathanC.h----------
 
@@ -202,7 +204,8 @@ void createSlime(int x, int y, int pathing)
 {	
 	Unit *p; 
 	p = &slime[nslime];
-	init_unit(p);
+	//init_unit(p);
+	init_animatedUnit(p);
 
 	if (pathing && npoint > 0) {
 		p->pos[0] = pt[0].x;
@@ -230,7 +233,8 @@ void showSlime() {
         p = &slime[i];
         float x = p->pos[0];
         float y = p->pos[1];
-        show_unit(x,y,p->tex);
+        //show_unit(x,y,p->tex);
+        show_animatedUnit(x,y,p->tex);
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

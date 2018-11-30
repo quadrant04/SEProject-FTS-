@@ -11,7 +11,8 @@
 // Date found: 10/20/2018
 // --------------------------------------------------------------------
 #include "image.h" /* image header file */
-#include "jonathanC.h" /* For unit stuff */
+#include "jonathanC.h"
+#include "vananhV.h"
 
 #include "math.h"
 #include <GL/glx.h>
@@ -20,10 +21,18 @@
 #include <stdlib.h> /* malloc */
 #include <X11/keysym.h>
 #include <X11/Xlib.h>
+#include <iostream>
+
+using namespace std;
 
 //Image units[1] = {"./images/gslime.gif"};
 Image units[1] = {"./images/greenslimesprites.gif"};
 Image maps[1] = {"./images/firstMap.jpg"};
+
+Frame frame;
+Frame fdelay;
+
+int show = 0;
 
 void vananhV(Rect x, int y)
 {
@@ -55,10 +64,51 @@ void showVananhPicture (int x, int y, GLuint texid)
         glPopMatrix();
 }
 
+// Making background of the sprite sheets transparent
+
+unsigned char *buildAlphaData(Image *img)
+{
+    cout << "Build Alpha Data";
+    //add 4th component to RGB stream...
+    int i;
+    unsigned char *newdata, *ptr;
+    unsigned char *data = (unsigned char *)img->data;
+    newdata = (unsigned char *)malloc(img->width * img->height * 4);
+    ptr = newdata;
+    unsigned char a,b,c;
+    //use the first pixel in the image as the transparent color.
+    unsigned char t0 = *(data+0);
+    unsigned char t1 = *(data+1);
+    unsigned char t2 = *(data+2);
+    cout << t1;
+    for (i=0; i<img->width * img->height * 3; i+=3) {
+        a = *(data+0);
+        b = *(data+1);
+        c = *(data+2);
+        *(ptr+0) = a;
+        *(ptr+1) = b;
+        *(ptr+2) = c;
+        *(ptr+3) = 1;
+        if (a==t0 && b==t1 && c==t2) {
+            *(ptr+3) = 0;
+            cout << "Color found.";
+        }
+        //-----------------------------------------------
+        ptr += 4;
+        data += 3;
+    }
+    return newdata;
+}
+
 // Initialize background
 //======================================================//
 void init_background(GLuint texid)
 {
+    if (!show) {
+        cout << "\n init_background.\n";
+        show = 1;
+    }
+
     int w = maps[0].width;
     int h = maps[0].height;
     glBindTexture(GL_TEXTURE_2D, texid);
@@ -71,6 +121,10 @@ void init_background(GLuint texid)
 // Show Background
 void show_background(int x, int y, GLuint textid)
 {
+    if (!show) {
+        cout << "\nshow_background.\n";
+        show = 1;
+    }
     //map setup.
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -106,21 +160,100 @@ void init_unit(Unit* p)
 }
 
 // ==================================================//
+
+// ================ Initializing Animated Unit ==========//
+
+void init_animatedUnit(Unit* p)
+{
+    if (!show) {
+        cout << "\ninit_animated unit.\n";
+        show = 1;
+    }
+    int w = units[0].width;
+    int h = units[0].height;
+    //setup image for the unit.
+    unsigned char *slimeData = buildAlphaData(&units[0]);
+
+    glGenTextures(1, &p->tex);
+    glBindTexture(GL_TEXTURE_2D, p->tex);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);  
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+                 GL_RGBA, GL_UNSIGNED_BYTE, slimeData);
+    free(slimeData);
+}
+// ========================================================
 // =============== Show Unit ==============
 void show_unit(float x, float y, GLuint texid)
 {
-        static int wid = 40;
-        glColor3ub(255,255,255);
-        glPushMatrix();
-        glBindTexture(GL_TEXTURE_2D, texid);
-        glTranslated(x, y, 0);
-        glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
-        glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
-        glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
-        glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
+    if (!show) {
+        cout << "\nshow_unit.\n";
+        show = 1;
+    }
+    static int wid = 40;
+    glColor3ub(255,255,255);
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, texid);
+    glTranslated(x, y, 0);
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
+    glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
+    glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
+    glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
 
-        glEnd();
-        glPopMatrix();
-        //glBindTexture(GL_TEXTURE_2D, 0);
+    glEnd();
+    glPopMatrix();
+    //glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+// =========================================================
+
+// ============ Show Animated Units ========================
+
+void physics_animation()
+{
+    //double delay = 0.1;
+    timers.recordTime(&timers.timeCurrent);
+    double timeSpan = timers.timeDiff(&timers.slimeTimer, &timers.timeCurrent);
+    if (timeSpan > frame.delay) {
+    //advance
+        ++frame.frameSlime;
+        if (frame.frameSlime >= 4)
+            frame.frameSlime -= 4;
+        timers.recordTime(&timers.slimeTimer);
+    }
+}
+
+void show_animatedUnit(float x, float y, GLuint texid)
+ {
+    if (!show) {
+        cout << "show_animated unit.";
+        show = 1;
+    }
+    //static int wid = 40;
+    static int wid = 30; // Make the slimes smaller.
+    glColor3ub(255,255,255);
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, texid);
+
+    // changing frames
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.0f);
+    glColor4ub(255,255,255,255);
+    glTranslated(x, y, 0); // For JC Pathing
+    glBegin(GL_QUADS);
+    float ix = frame.frameSlime % 2;
+    //float fy;
+    float fx = ix / 4.0;
+    glTexCoord2f(fx, 1.0f); glVertex2i(-wid,-wid);
+    glTexCoord2f(fx, 0.0f); glVertex2i(-wid, wid);
+    glTexCoord2f(fx+0.25, 0.0f); glVertex2i( wid, wid);
+    glTexCoord2f(fx+0.25, 1.0f); glVertex2i( wid,-wid);
+    
+    // end of changing frames
+    glEnd();
+    glPopMatrix();
+      
+ }
+
+ // ======================================================

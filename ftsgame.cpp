@@ -124,6 +124,7 @@ void render();
 //extern void animatedSprites(void);
 extern void init_background(GLuint texid);
 extern void show_background(int x, int y, GLuint texid);
+extern void physics_animation();
 
 //----Jonathan-----------------------------
 //slime functions
@@ -419,6 +420,7 @@ void render()
 				}
 			showSlime();
 			moveSlime(gl.pathingMode, gl.xres, gl.yres);
+			physics_animation();
     	}
     }
 	
