@@ -328,8 +328,8 @@ int check_keys(XEvent *e)
 		//RyanW
 		case XK_t:
 			gl.spawnTowers ^= 1;
-			createTower(610, 329); 
-			createTower(610, 740); 
+			createTower(610, 315); 
+			createTower(610, 722); 
 			createTower(1080, 635); 
 			createTower(1026, 198); 
 			createTower(177, 644);
