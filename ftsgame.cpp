@@ -330,7 +330,7 @@ int check_keys(XEvent *e)
 			gl.spawnTowers ^= 1;
 			createTower(603, 329); 
 			createTower(603, 722); 
-			createTower(1011, 641); 
+			createTower(1026, 635); 
 			createTower(1026, 198); 
 			break;
 
