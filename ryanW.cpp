@@ -76,7 +76,7 @@ public:
 const int MAX_TOWERS = 10;
 static int numTowers = 0;
 static Tower basicTower[MAX_TOWERS];
-Image towerList[1] = {"./images/cannonanitmated1kms.gif"};
+Image towerList[1] = {"./images/cannonanimated1kms.gif"};
 
 //+++++++++++++TOWER CREATION++++++++++++++//
 void createTower(int i, int x, int y)
