@@ -67,13 +67,14 @@ Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", "
 /* Image units[1] = {"./images/greenslimesprites.gif"}; */
 class Global {
 public:
-	int xres, yres, showCredits, levelOne, spawnSlimeTest, pathingMode, 
+	int xres, yres, showCredits, showTitle, levelOne, spawnSlimeTest, pathingMode, 
 	showButtons, showPoints, spawnTowers;
 	char keys[65536];
 	GLuint girTexture;
 	GLuint obTexture;
 	GLuint ivanPicTexture;
 	GLuint vvTexture;
+	GLuint title;
 	GLuint mapOne;
 	GLuint greenSlime;
 	Global() {
@@ -82,6 +83,7 @@ public:
 		memset(keys, 0, 65536);
         showCredits = 0;
         levelOne = 0;
+	showTitle = 1;
         //jwc
         spawnSlimeTest = 0;
         pathingMode = 0;
@@ -123,7 +125,7 @@ void render();
 
 //----VV-----------------------------------
 //extern void animatedSprites(void);
-extern void init_background(GLuint texid);
+extern void init_background(int i, GLuint texid);
 extern void show_background(int x, int y, GLuint texid);
 extern void physics_animation();
 
@@ -144,7 +146,6 @@ extern void setPath(int pathID);
 //----Ivan---------------------------------
 extern void showButtonOptions(Rect x, int y);
 extern void showCount(Rect x, int y);
-
 //----Ryan---------------------------------
 extern void createTower(int x, int y);
 extern void displayTowers();
@@ -183,6 +184,8 @@ void init_opengl()
 	glGenTextures(1, &gl.obTexture);
 	glGenTextures(1, &gl.ivanPicTexture);
 	glGenTextures(1, &gl.vvTexture);
+	
+	
 	//start of credits----------------------------------------------------------
 	//Jonathan's Picture
 	int w = credits[0].width;
@@ -217,11 +220,15 @@ void init_opengl()
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
 		GL_RGB, GL_UNSIGNED_BYTE, credits[3].data);
 	//end of credits------------------------------------------------------------
+
+	/* ================= Initialize background ================== */
+	// Init Title Screen
+	init_background(0, gl.title);
+	// Init Level 1 background
+	init_background(1, gl.mapOne);
+
+	/* ================= End of Background Inits ================= */
 	
-	//start of maps-------------------------------------------------------------
-	//level 1
-	init_background(gl.mapOne);
-	//end of maps---------------------------------------------------------------
 
 	glViewport(0, 0, gl.xres, gl.yres);
 	
@@ -316,9 +323,13 @@ int check_keys(XEvent *e)
 		case XK_c:
 			gl.showCredits ^= 1;
 			break;
-		case XK_s:
-			gl.levelOne ^= 1;
-			gl.showCredits = 0;
+		// vv: temporary button to switch between state until we can click on the menu options.
+		case XK_n:
+			if (gl.showTitle ^= 1) {
+				init_background(0, gl.title);
+			} else {
+			    init_background(1, gl.mapOne);
+			}
 			break;
 		case XK_m:
 			gl.showButtons ^=1;
@@ -365,7 +376,6 @@ void physics()
 {
 
 }
-
 void show_credits(Rect x, int y)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -395,56 +405,61 @@ void show_credits(Rect x, int y)
     showVananhPicture(imagex, x.bot-30, gl.vvTexture);
 }
 
-void showMap() 
+void showMap(int i) 
 {
 	int x = gl.xres;
 	int y = gl.yres;
 	glClear(GL_COLOR_BUFFER_BIT);
-	show_background(x, y, gl.mapOne); 
+	if (i >= 1) {
+		init_background(i, gl.mapOne);
+		show_background(x, y, gl.mapOne); 
+	} else {
+		init_background(0, gl.title);
+		show_background(x, y, gl.title);
+	}
 }
 
 void render()
 {
 
 	Rect r;
-	static char msg[25];
 	//y value
 	r.bot = gl.yres - 20;
 	r.left = 10;
 	r.center = 0;
 	if (gl.showCredits) {
-            show_credits(r, 16);
-	} else { 
-    	showMap();
+		show_credits(r, 16);
+	} else if (!(gl.showTitle)) { 
+		showMap(1);
 		showCount(r, 16);
     	//jwc
     	if (gl.spawnSlimeTest) {
     		struct timespec st;
-			clock_gettime(CLOCK_REALTIME, &st);
-			double ts = timeDiff(&g.slimeTimer, &st);
-				if (ts > 3.0) {
-					timeCopy(&g.slimeTimer, &st);
-					createSlime();
-				}
-			showSlime();
-			moveSlime(gl.xres, gl.yres);
-			physics_animation();
-    	}
-    }
-	
-	if (gl.spawnTowers) {
-		displayTowers();
-	}
-		
-		
-    
-    if (gl.showButtons && !(gl.showCredits)) {
-    showButtonOptions(r, 16);
-    }
+	    	clock_gettime(CLOCK_REALTIME, &st);
+	    	double ts = timeDiff(&g.slimeTimer, &st);
+	    	if (ts > 3.0) {
+	    		timeCopy(&g.slimeTimer, &st);
+	    		createSlime();
+	    	}
+	  		showSlime();
+	  		moveSlime(gl.xres, gl.yres);
+	  		physics_animation();
+        } 
 
-    if (gl.pathingMode) {
-    	//showCords();
-	sprintf(msg, "Pathing On");    //ic
+		if (gl.spawnTowers) {
+			displayTowers();
+		}
+				
+        if (gl.showButtons && !(gl.showCredits)) {
+          showButtonOptions(r, 16);
+        }
+
+        if (gl.pathingMode) {
+        	//showCords();
+        	//sprintf(msg, "Pathing On");    //ic
+        }
+    } else {
+	  showMap(0);
     }
 }
 

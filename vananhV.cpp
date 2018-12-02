@@ -25,14 +25,13 @@
 
 using namespace std;
 
-//Image units[1] = {"./images/gslime.gif"};
 Image units[1] = {"./images/greenslimesprites.gif"};
-Image maps[1] = {"./images/firstMap.jpg"};
+Image towers[1] = {"./images/cannonanimated1kms.gif"};
+Image maps[2] = {"./images/FTSTitle.jpg", "./images/firstMap.jpg"};
 
 Frame frame;
-Frame fdelay;
 
-int show = 0;
+static int show = 0;
 
 void vananhV(Rect x, int y)
 {
@@ -100,15 +99,15 @@ unsigned char *buildAlphaData(Image *img)
 
 // Initialize background
 //======================================================//
-void init_background(GLuint texid)
+void init_background(int i, GLuint texid)
 {
-    int w = maps[0].width;
-    int h = maps[0].height;
+    int w = maps[i].width;
+    int h = maps[i].height;
     glBindTexture(GL_TEXTURE_2D, texid);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-                GL_RGB, GL_UNSIGNED_BYTE, maps[0].data);
+                GL_RGB, GL_UNSIGNED_BYTE, maps[i].data);
 }
 //======================================================//
 // Show Background
@@ -192,15 +191,26 @@ void show_unit(float x, float y, GLuint texid)
 
 void physics_animation()
 {
-    //double delay = 0.1;
-    timers.recordTime(&timers.timeCurrent);
-    double timeSpan = timers.timeDiff(&timers.slimeTimer, &timers.timeCurrent);
-    if (timeSpan > frame.delay) {
-    //advance
-        ++frame.frameSlime;
-        if (frame.frameSlime >= 4)
-            frame.frameSlime -= 4;
+    if (show == 0) { // For J.C.'s units
+        timers.recordTime(&timers.timeCurrent);
+        double timeSpan = timers.timeDiff(&timers.slimeTimer, &timers.timeCurrent);
+        if (timeSpan > frame.delay) {
+        //advance
+            ++frame.fSlime;
+            if (frame.fSlime >= 4)
+                frame.fSlime -= 4;
         timers.recordTime(&timers.slimeTimer);
+        }
+    } else { // For Ryan's tower
+        timers.recordTime(&timers.timeCurrent);
+        double timeSpan = timers.timeDiff(&timers.towerTimer, &timers.timeCurrent);
+        if (timeSpan > frame.delay) {
+        //advance
+            ++frame.fTower;
+            if (frame.fTower >= 4)
+                frame.fTower -= 4;
+        timers.recordTime(&timers.towerTimer);
+        }
     }
 }
 
@@ -218,7 +228,7 @@ void show_animatedUnit(float x, float y, GLuint texid)
     glColor4ub(255,255,255,255);
     glTranslated(x, y, 0); // For JC Pathing
     glBegin(GL_QUADS);
-    float ix = frame.frameSlime % 2;
+    float ix = frame.fSlime % 2;
     //float fy;
     float fx = ix / 4.0;
     glTexCoord2f(fx, 1.0f); glVertex2i(-wid,-wid);
@@ -231,5 +241,53 @@ void show_animatedUnit(float x, float y, GLuint texid)
     glPopMatrix();
       
  }
-
  // ======================================================
+/*
+// ============ Display Tower ====================
+// Initialization & Building Alpha Image for Tower
+void init_animatedTower(Tower* p)
+{
+    int w = units[0].width;
+    int h = units[0].height;
+    //setup image for the unit.
+    unsigned char *towerData = buildAlphaData(&towers[0]);
+
+    glGenTextures(1, &p->tex);
+    glBindTexture(GL_TEXTURE_2D, p->tex);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);  
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+                 GL_RGBA, GL_UNSIGNED_BYTE, towerData);
+    free(towerData);
+}
+// Display Tower Animation
+
+void show_animatedTower(float x, float y, GLuint texid)
+ {
+    show = 1;
+    //static int wid = 40;
+    static int wid = 30; // Make the slimes smaller.
+    glColor3ub(255,255,255);
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, texid);
+
+    // changing frames
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.0f);
+    glColor4ub(255,255,255,255);
+    glTranslated(x, y, 0); // For JC Pathing
+    glBegin(GL_QUADS);
+    float ix = frame.fTower % 2;
+    //float fy;
+    float fx = ix / 4.0;
+    glTexCoord2f(fx, 1.0f); glVertex2i(-wid,-wid);
+    glTexCoord2f(fx, 0.0f); glVertex2i(-wid, wid);
+    glTexCoord2f(fx+0.25, 0.0f); glVertex2i( wid, wid);
+    glTexCoord2f(fx+0.25, 1.0f); glVertex2i( wid,-wid);
+    
+    // end of changing frames
+    glEnd();
+    glPopMatrix();
+      
+ }
+*/
