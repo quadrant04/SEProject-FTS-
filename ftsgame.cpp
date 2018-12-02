@@ -100,7 +100,10 @@ public:
 	//jwc
 	struct timespec slimeTimer;
 	int nslimes;
+	//ryanW
 	struct timespec bulletTimer;
+	Barr = new Bullet[MAX_BULLETS];
+	int numBullets;
 public:
 	Game() {
 		//jwc
