@@ -67,7 +67,8 @@ Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", "
 /* Image units[1] = {"./images/greenslimesprites.gif"}; */
 class Global {
 public:
-	int xres, yres, showCredits, levelOne, spawnSlimeTest, pathingMode, showButtons, showPoints, spawnTowers;
+	int xres, yres, showCredits, levelOne, spawnSlimeTest, pathingMode, 
+	showButtons, showPoints, spawnTowers;
 	char keys[65536];
 	GLuint girTexture;
 	GLuint obTexture;
@@ -128,14 +129,17 @@ extern void physics_animation();
 
 //----Jonathan-----------------------------
 //slime functions
-extern void createSlime(int, int, int);
+extern void createSlime();
 extern void showSlime();
-extern void moveSlime(int, int, int);
+extern void moveSlime(int xres, int yres);
 extern void resetSlime();
-//pathing functions
+extern void increseSpeed();
+//pathing functions/variables
 extern void getCords(int x, int y, int yres);
 extern void showCords();
 extern void resetPath();
+extern void toggleCustomPathing(int onOff);
+extern void setPath(int pathID);
 
 //----Ivan---------------------------------
 extern void showButtonOptions(Rect x, int y);
@@ -319,6 +323,9 @@ int check_keys(XEvent *e)
 		case XK_m:
 			gl.showButtons ^=1;
 			break;
+		case XK_Up:
+			increseSpeed();
+			break;
 		case XK_Down:
 			break;
 		case XK_equal:
@@ -339,6 +346,7 @@ int check_keys(XEvent *e)
 		//jwc
 		case XK_p:
 			gl.pathingMode ^= 1;
+			toggleCustomPathing(gl.pathingMode);
 			sprintf(msg, "Pathing on"); //ic
 			break;
 		case XK_u:
@@ -347,11 +355,11 @@ int check_keys(XEvent *e)
 		case XK_r:
 			resetSlime();
 			resetPath();
+			setPath(1);
 			break;
 	}
 	return 0;
 }
-
 
 void physics()
 {
@@ -408,18 +416,18 @@ void render()
             show_credits(r, 16);
 	} else { 
     	showMap();
-	showCount(r, 16);
+		showCount(r, 16);
     	//jwc
     	if (gl.spawnSlimeTest) {
     		struct timespec st;
 			clock_gettime(CLOCK_REALTIME, &st);
 			double ts = timeDiff(&g.slimeTimer, &st);
-				if (ts > 6.0) {
+				if (ts > 3.0) {
 					timeCopy(&g.slimeTimer, &st);
-					createSlime(gl.xres, gl.yres, gl.pathingMode);
+					createSlime();
 				}
 			showSlime();
-			moveSlime(gl.pathingMode, gl.xres, gl.yres);
+			moveSlime(gl.xres, gl.yres);
 			physics_animation();
     	}
     }
@@ -435,7 +443,9 @@ void render()
     }
 
     if (gl.pathingMode) {
-    	showCords();
+    	//showCords();
 	sprintf(msg, "Pathing On");    //ic
     }
 }
+
+

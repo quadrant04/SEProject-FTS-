@@ -43,27 +43,16 @@ using namespace std;
 typedef float Flt;
 typedef float Vec[3];
 
-void vecCopy(Vec a, Vec b);
-void vecSub(Vec a, Vec b, Vec c);
-void vecNormalize(Vec a);
-float getDistance(Vec a, Vec b);
-int getPointCount();
-int getSlimeCount();
-void deleteSlime(int);
-
 struct Point {
 	float x, y, dist;
 };
 
-Image unitList[1] = {"./images/GIR.jpeg"};
 extern X11_wrapper x11;
-//extern void init_unit(Unit*);
-//extern void show_unit(float x, float y, GLuint texid);
 extern void show_animatedUnit(float x, float y, GLuint texid);
 extern void init_animatedUnit(Unit* p);
+extern void initPaths(int ID);
 
-/*------------All of my classes can be found in my header file jonathanC.h----------
-
+/*
 class Unit {
 public:
 	int onoff;
@@ -83,17 +72,64 @@ public:
 		checkpoint = 1;
 	}
 };
------------------------------------------------------------------------------------*/
+
+class Path {
+public:
+	int npathPoints;
+	Vec pathPoints[15];
+	int pathID;
+	Path(int p) {
+		pathID = p;
+		initPaths(pathID);
+	}
+	
+};
+*/
+
+Path waterway(1);
+
+
+//----vector functions----
+void vecCopy(Vec a, Vec b);
+void vecSub(Vec a, Vec b, Vec c);
+void vecNormalize(Vec a);
+float getDistance(Vec a, Vec b);
+
 //-----slime variables-----
 const int MAX_SLIME = 20;
-static int nslime = 0 ;
+static int nslime = -1;
 static Unit slime[MAX_SLIME];
+static int speed = 1;
+static Path *currentPath = &waterway;
+
+//-----slime functions-----
+void createSlime();
+void moveSlime(int xres, int yres);
+void deleteSlime(int);
+void resetSlime();
+void showSlime();
+int getSlimeCount();
+void increseSpeed();
 
 //-----pathing variables---
 const int MAX_POINTS = 100;
 static Point pt[MAX_POINTS];
-static int npoint = 0;
+static int npoint = -1;
 static int seen = 0;
+static int customPathing = 0;
+
+//-----pathing functions---
+int getPointCount();
+void initPaths(int ID);
+void toggleCustomPathing(int onOff);
+void setPath(int pathID);
+float next_x(Path *path, int index); 
+float next_y(Path *path, int index);
+int get_totalPathPoints(Path *path);
+void resetPath();
+void getCords(int x, int y, int yres);
+void showCords();
+
 //----------------vector functions-------------------------------------
 
 //normalizes a given vector. vector components devided by
@@ -198,26 +234,40 @@ void showJonathanPicture(int x, int y, GLuint textid)
 }
 */
 //----------------------------slime functions----------------------------
+
+//this modifier will be multipled by velocity when moving the slimes.
+void increseSpeed()
+{
+	speed += 1;
+}
+
 //adds a slime to the array of slimes. 
 //An int is given dictating which image to load.
-void createSlime(int x, int y, int pathing)
+void createSlime()
 {	
-	Unit *p; 
-	p = &slime[nslime];
+	Unit *s; 
+	s = &slime[nslime];
 	//init_unit(p);
-	init_animatedUnit(p);
+	init_animatedUnit(s);
 
-	if (pathing && npoint > 0) {
-		p->pos[0] = pt[0].x;
-		p->pos[1] = pt[0].y;
-		p->pos[2] = 0;
-        p->checkpoint = 1;
+	if (customPathing) {
+		if (npoint > 0) {
+			s->path = NULL;
+			s->pos[0] = pt[0].x;
+			s->pos[1] = pt[0].y;
+			s->pos[2] = 0;
+			s->pathPoints = 0;
+		}   
 	} else {
-		p->pos[0] = x/2;
-		p->pos[1] = y/2;
-		p->vel[0] = 4;
-	    p->vel[1] = 0;
+		s->path = currentPath;
+		s->pos[0] = next_x(currentPath, 0);
+		s->pos[1] = next_y(currentPath, 0);
+		s->pos[2] = 0;
+		s->pathPoints = get_totalPathPoints(currentPath);
 	}
+
+	s->moveSpeed = speed;
+	s->checkpoint = 1;
 	nslime++;
 	return;
 }
@@ -242,23 +292,22 @@ void showSlime() {
 //adds velocity to slimes for movement. 
 //current position = intial position+velocity.
 //might add a timer element later(pos=pos+(time*vel))
-void moveSlime(int pathing, int xres, int yres)
+void moveSlime(int xres, int yres)
 {
-	if (nslime == 0 || npoint < 2)
-		return;
-
 	for (int i = 0; i < nslime; i++) {
 	
 		Unit *s;
         s = &slime[i];
+        int sp = s->moveSpeed;
 		//Check 1:pathing on 
 		//check 2: number of checkpoints has to be less then total number of 
 		//points in the path.
 		//check 3: only move to the next point if the slime is close enough to
 		//the point it is currently moving to. 
-		if (pathing && 
+		if (s->path == NULL && 
 			(s->checkpoint != npoint) && 
-			(s->pos[2] < 20)) {
+			(s->pos[2] < 20) &&
+			npoint > 1) {
 			
 			Vec v, p = {0};
 				             
@@ -269,12 +318,28 @@ void moveSlime(int pathing, int xres, int yres)
 			vecCopy(v, s->vel);
 			s->pos[2] = getDistance(s->pos, p);
 			s->checkpoint += 1;
+
+		} else if (s->checkpoint != s->pathPoints && 
+				   s->pos[2] < 20 &&
+				   s->path != NULL) {
+
+			Vec v, p = {0};
+				             
+			p[0] = next_x(s->path, s->checkpoint);
+			p[1] = next_y(s->path, s->checkpoint);
+			vecSub(p, s->pos, v);
+			vecNormalize(v);
+			vecCopy(v, s->vel);
+			s->pos[2] = getDistance(s->pos, p);
+			s->checkpoint += 1;
 		}
-		s->pos[0] += s->vel[0];
-		s->pos[1] += s->vel[1];
-		s->pos[2] -= 1;	
+
+
+		s->pos[0] += s->vel[0]*sp;
+		s->pos[1] += s->vel[1]*sp;
+		s->pos[2] -= 1*sp;	
 	}
-    
+
     for (int i = 0; i < nslime; i++) {
     	Unit *s;
         s = &slime[i];
@@ -283,7 +348,6 @@ void moveSlime(int pathing, int xres, int yres)
 		    deleteSlime(i);
 		}
     }
-
 }
 
 //deletes a single slime. if the slime is NOT the last one, overrites the slime that needs to
@@ -308,7 +372,7 @@ void deleteSlime(int s)
 void resetSlime()
 {
 	memset(slime, 0, sizeof(slime));
-	nslime = 0;
+	nslime = -1;
 }
 
 int getSlimeCount()
@@ -323,15 +387,108 @@ int getSlimeCount()
 //Possibly will be able to add the feature where users could
 //defin their own paths and simply restrict them to certain areas.
 
-//not used yet.
-void getPath(int level, int path)
-{}
+void initPaths(int ID)
+{	
+	/*
+	waterway[0][0] = 225;  
+	waterway[0][1] = 262; 
+	waterway[0][2] = 8;
+	
+	waterway[1][0] = 228;  
+	waterway[1][1] = 183; 
+	waterway[1][2] = 79.06;
+						
+	waterway[2][0] = 517;  
+	waterway[2][1] = 186; 
+	waterway[2][2] = 289.01;
+					
+	waterway[3][0] = 516;  
+	waterway[3][1] = 388; 
+	waterway[3][2] = 202.0;
+						
+	waterway[4][0] = 703;  
+	waterway[4][1] = 386; 
+	waterway[4][2] = 187.01;
+						
+	waterway[5][0] = 709;  
+	waterway[5][1] = 271; 
+	waterway[5][2] = 115.16;
+						
+	waterway[6][0] = 1114; 
+	waterway[6][1] = 261;
+	waterway[6][2] = 405.12;
+						
+	waterway[7][0] = 1115; 
+	waterway[7][1] = 15;
+	waterway[7][2] = 246.0;
+	*/
+	if (ID == 1) {
+
+		Path *p = &waterway;
+		p->npathPoints = 8;
+		p->pathPoints[0][0] = 225;  
+		p->pathPoints[0][1] = 262; 
+		
+		p->pathPoints[1][0] = 225;  
+		p->pathPoints[1][1] = 183; 
+							
+		p->pathPoints[2][0] = 517;  
+		p->pathPoints[2][1] = 183; 
+						
+		p->pathPoints[3][0] = 517;  
+		p->pathPoints[3][1] = 430; 
+							
+		p->pathPoints[4][0] = 703;  
+		p->pathPoints[4][1] = 430; 
+							
+		p->pathPoints[5][0] = 703;  
+		p->pathPoints[5][1] = 271; 
+							
+		p->pathPoints[6][0] = 1114; 
+		p->pathPoints[6][1] = 271;
+							
+		p->pathPoints[7][0] = 1114; 
+		p->pathPoints[7][1] = 15;
+	}	
+}
+
+//toggles custom pathing. Only the move slime function uses this variable
+void toggleCustomPathing(int onOff)
+{
+	customPathing = onOff; 
+}
+
+//this will dictate what path slimes will take on creation.
+void setPath(int ID)
+{
+	if (ID == 1) { currentPath = &waterway; }
+}
+
+//gets the specifed x cord from a path object
+//this is the first variable in a vec. (i.e. vert[*][0])
+float next_x(Path *path, int index) 
+{
+		return path->pathPoints[index][0];
+}
+
+//gets the specifed y cord from a path object
+//this is the second variable in a vec. (i.e. vert[*][1])
+float next_y(Path *path, int index) 
+{
+		return path->pathPoints[index][1];
+}
+
+int get_totalPathPoints(Path *path)
+{
+	return path->npathPoints;
+}
+
 
 //clears the pt array, resets the npoint counter.
 void resetPath()
 {
 	memset(pt, 0, sizeof(pt));
-	npoint = 0;
+	npoint = -1;
 }
 
 //saves the cords when the right mouse button is clicked.
@@ -339,9 +496,16 @@ void resetPath()
 void getCords(int x, int y, int yres) 
 {
     seen = 0;
-	pt[npoint].x = x;
-	pt[npoint].y = yres - y;
-	++npoint;
+
+	if (npoint == -1) {
+		pt[0].x = x;
+		pt[0].y = yres - y;
+		npoint = 1;
+	} else {
+		pt[npoint].x = x;
+		pt[npoint].y = yres - y;
+		++npoint;
+	}
 }
 
 //show cords currently saved in the pt[] array.
@@ -350,10 +514,21 @@ void getCords(int x, int y, int yres)
 //a new cord is added.
 void showCords()
 {
+	if (npoint < 0) { return; }
+
 	for (int i = 0; i < npoint; i++) {
-		if (!seen) {
+		if (!seen && customPathing) {
 			cout << "x cord " << i << " = " << pt[i].x << endl;
 			cout << "y cord " << i << " = " << pt[i].y << endl;
+			if (i != 0) {
+				Vec tmp, tmpTwo;
+				tmp[0] = pt[i-1].x;
+				tmp[1] = pt[i-1].y;
+				tmpTwo[0] = pt[i].x;
+				tmpTwo[1] = pt[i].y;
+				cout << "distance from " << i-1 << " to " << i << endl;
+				cout << " is = " << getDistance(tmp, tmpTwo) << endl << endl;
+			}
 		}
 	}
 	//controls when cords have been updated to display them.
