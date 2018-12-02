@@ -1,10 +1,12 @@
 class Frame {
 public: 
-    int frameSlime;
+    int fSlime;
+    int fTower;
     double delay;
 
     Frame() {
-        frameSlime = 0;
+        fSlime = 0;
+        fTower = 0;
         delay = 0.5;
     }
 };
@@ -15,6 +17,7 @@ public:
     double oobillion;
     struct timespec timeStart, timeEnd, timeCurrent;
     struct timespec slimeTimer;
+    struct timespec towerTimer;
     Timers() {
         physicsRate = 1.0 / 30.0;
         oobillion = 1.0 / 1e9;
