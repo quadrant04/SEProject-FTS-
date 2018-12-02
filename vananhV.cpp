@@ -27,7 +27,7 @@ using namespace std;
 
 //Image units[1] = {"./images/gslime.gif"};
 Image units[1] = {"./images/greenslimesprites.gif"};
-Image maps[1] = {"./images/firstMap.jpg"};
+Image maps[2] = {"./images/firstMap.jpg", "./images/FTSTitle.jpg"};
 
 Frame frame;
 Frame fdelay;
@@ -100,15 +100,15 @@ unsigned char *buildAlphaData(Image *img)
 
 // Initialize background
 //======================================================//
-void init_background(GLuint texid)
+void init_background(int i, GLuint texid)
 {
-    int w = maps[0].width;
-    int h = maps[0].height;
-    glBindTexture(GL_TEXTURE_2D, texid);
+    	int w = maps[i].width;
+    	int h = maps[i].height;
+    	glBindTexture(GL_TEXTURE_2D, texid);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
         glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-                GL_RGB, GL_UNSIGNED_BYTE, maps[0].data);
+                GL_RGB, GL_UNSIGNED_BYTE, maps[i].data);
 }
 //======================================================//
 // Show Background

@@ -63,8 +63,6 @@ extern void timeCopy(struct timespec *dest, struct timespec *source);
 //-----------------------------------------------------------------------------
 
 Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", "./images/vv.jpg"};
-//Image maps[1] = {"./images/firstMap.jpg"};
-/* Image units[1] = {"./images/greenslimesprites.gif"}; */
 class Global {
 public:
 	int xres, yres, showCredits, levelOne, spawnSlimeTest, pathingMode, 
@@ -75,6 +73,7 @@ public:
 	GLuint ivanPicTexture;
 	GLuint vvTexture;
 	GLuint mapOne;
+	GLuint title;
 	GLuint greenSlime;
 	Global() {
 		xres = 1250;
@@ -123,7 +122,7 @@ void render();
 
 //----VV-----------------------------------
 //extern void animatedSprites(void);
-extern void init_background(GLuint texid);
+extern void init_background(int i, GLuint texid);
 extern void show_background(int x, int y, GLuint texid);
 extern void physics_animation();
 
@@ -219,8 +218,10 @@ void init_opengl()
 	//end of credits------------------------------------------------------------
 	
 	//start of maps-------------------------------------------------------------
+	// Title
+	init_background(1, gl.title);
 	//level 1
-	init_background(gl.mapOne);
+	init_background(0, gl.mapOne);
 	//end of maps---------------------------------------------------------------
 
 	glViewport(0, 0, gl.xres, gl.yres);
@@ -400,7 +401,8 @@ void showMap()
 	int x = gl.xres;
 	int y = gl.yres;
 	glClear(GL_COLOR_BUFFER_BIT);
-	show_background(x, y, gl.mapOne); 
+	show_background(x, y, gl.mapOne);
+	//show_background(x, y, gl.title);
 }
 
 void render()
@@ -413,24 +415,25 @@ void render()
 	r.left = 10;
 	r.center = 0;
 	if (gl.showCredits) {
-            show_credits(r, 16);
+        show_credits(r, 16);
 	} else { 
-    	showMap();
-		showCount(r, 16);
-    	//jwc
-    	if (gl.spawnSlimeTest) {
-    		struct timespec st;
-			clock_gettime(CLOCK_REALTIME, &st);
-			double ts = timeDiff(&g.slimeTimer, &st);
+    		showMap();
+			showCount(r, 16);
+    		//jwc
+    		if (gl.spawnSlimeTest) {
+    			struct timespec st;
+				clock_gettime(CLOCK_REALTIME, &st);
+				double ts = timeDiff(&g.slimeTimer, &st);
 				if (ts > 3.0) {
 					timeCopy(&g.slimeTimer, &st);
 					createSlime();
 				}
-			showSlime();
-			moveSlime(gl.xres, gl.yres);
-			physics_animation();
-    	}
-    }
+				showSlime();
+				moveSlime(gl.xres, gl.yres);
+				physics_animation();
+    		}
+    	
+ 	}
 	
 	if (gl.spawnTowers) {
 		displayTowers();
