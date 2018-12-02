@@ -152,6 +152,8 @@ extern void showCount(Rect x, int y);
 //----Ryan---------------------------------
 extern void createTower(int x, int y);
 extern void displayTowers();
+extern void bulletPhysics();
+extern void bulletRender();
 //----All----------------------------------
 void show_credits(Rect x, int y); 	
 
@@ -356,6 +358,10 @@ int check_keys(XEvent *e)
 			createTower(1026, 198); 
 			createTower(177, 630);
 			break;
+			
+		case XK_space:
+			//reserved for bullet shooting
+			break;
 
 		//jwc
 		case XK_p:
@@ -377,7 +383,7 @@ int check_keys(XEvent *e)
 
 void physics()
 {
-
+	bulletPhysics();
 }
 void show_credits(Rect x, int y)
 {
@@ -430,9 +436,12 @@ void render()
 	r.bot = gl.yres - 20;
 	r.left = 10;
 	r.center = 0;
+	//TEMP LOCATION
+	bulletPhysics();
+	//TEMP LOCATION
 	if (gl.showCredits) {
 		show_credits(r, 16);
-	} else if (!(gl.showTitle)) { 
+	} else if (!(gl.showTitle)) {
 		showMap(1);
 		showCount(r, 16);
     	//jwc
@@ -448,10 +457,11 @@ void render()
 	  		moveSlime(gl.xres, gl.yres);
 	  		physics_animation();
         } 
-
-		if (gl.spawnTowers) {
-			displayTowers();
-		}
+	//ryanW
+	if (gl.spawnTowers) {
+		displayTowers();
+	}
+	
 				
         if (gl.showButtons && !(gl.showCredits)) {
           showButtonOptions(r, 16);
