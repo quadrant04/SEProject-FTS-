@@ -167,7 +167,6 @@ void bulletPhysics(int x, int y)
 				continue;
 			}
 			*/
-			//move the bullet
 	for (int i = 0; i < MAX_TOWERS; i++) {
 		Bullet *b = basicTower[i].barr[numBullets];
 		b->pos[0] += b->vel[0];
@@ -196,16 +195,14 @@ void shootBullets() {
 		if (numBullets < MAX_BULLETS) {			
 			//check how to get a tower item in this function
 			Tower *p;
-			//^^^^^^^^^^^^^^^^^
 			
 			for (int i = 0; i < MAX_TOWERS; i++) {
-				Bullet *b = basicTower[i].barr[numBullets];
+				Bullet *b = basicTower[i];
 				timeCopy(&b->time, &bt);
 
 				//check if p->pos is valid
 				b->pos[0] = p->pos[0];
 				b->pos[1] = p->pos[1];
-				//^^^^^^^^^^^^^^^^^
 
 				//force a bullet direction to 90 degrees
 				Flt rad = (90.0 / 360.0f) * 3.14 * 2.0;
