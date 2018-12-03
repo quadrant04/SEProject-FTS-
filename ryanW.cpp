@@ -149,7 +149,7 @@ Barr = new Bullet[MAX_BULLETS];
 
 //+++++++++++++START OF BULLET PHYSICS++++++++++++++//
 //Must be in physics() function call
-void bulletPhysics()
+void bulletPhysics(int x, int y)
 {
 	Flt d0,d1,dist;
 	//Update bullet positions
@@ -173,16 +173,16 @@ void bulletPhysics()
 		b->pos[1] += b->vel[1];
 		//Check for collision with window edges
 		if (b->pos[0] < 0.0) {
-			b->pos[0] += (float)gl.xres;
+			b->pos[0] += (float)x;
 		}
-		else if (b->pos[0] > (float)gl.xres) {
-			b->pos[0] -= (float)gl.xres;
+		else if (b->pos[0] > (float)x) {
+			b->pos[0] -= (float)x;
 		}
 		else if (b->pos[1] < 0.0) {
-			b->pos[1] += (float)gl.yres;
+			b->pos[1] += (float)y;
 		}
-		else if (b->pos[1] > (float)gl.yres) {
-			b->pos[1] -= (float)gl.yres;
+		else if (b->pos[1] > (float)y) {
+			b->pos[1] -= (float)y;
 		}
 		i++;
 	}
@@ -210,7 +210,7 @@ void bulletPhysics()
 				//^^^^^^^^^^^^^^^^^
 				
 				//force a bullet direction to 90 degrees
-				Flt rad = (90.0 / 360.0f) * PI * 2.0;
+				Flt rad = (90.0 / 360.0f) * 3.14 * 2.0;
 				//convert angle to a vector
 				Flt xdir = cos(rad);
 				Flt ydir = sin(rad);
