@@ -27,6 +27,7 @@ using namespace std;
 #include "fonts.h"
 #include "image.h"
 #include "jonathanC.h"
+#include "RyanW.h"
 #include "stdlib.h" /* malloc in VV file */
 
 //defined types
