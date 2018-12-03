@@ -382,7 +382,7 @@ int check_keys(XEvent *e)
 
 void physics()
 {
-	bulletPhysics();
+	bulletPhysics(gl.xres, gl.yres);
 }
 void show_credits(Rect x, int y)
 {
@@ -435,8 +435,8 @@ void render()
 	r.bot = gl.yres - 20;
 	r.left = 10;
 	r.center = 0;
-	//possible to put bulletPhysics() in level one render
-	bulletPhysics();
+	//possible to put bulletRender() in level one render
+	bulletRender();
 	if (gl.showCredits) {
 		show_credits(r, 16);
 	} else if (!(gl.showTitle)) {
