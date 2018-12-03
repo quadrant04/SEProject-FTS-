@@ -13,6 +13,7 @@
 #include <iostream>
 #include <cmath>
 #include <ctime>
+#include "RyanW.h"
 using namespace std;
 
 typedef float Flt;
