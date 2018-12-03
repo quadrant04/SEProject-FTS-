@@ -152,6 +152,7 @@ void displayTowers()
 void bulletPhysics(int x, int y)
 {
 	//Flt d0,d1,dist;
+	/*
 	struct timespec bt;
 	clock_gettime(CLOCK_REALTIME, &bt);
 	for (int i = 0; i < MAX_TOWERS; i++) {
@@ -165,6 +166,7 @@ void bulletPhysics(int x, int y)
 				numBullets--;
 				continue;
 			}
+			*/
 			//move the bullet
 			b->pos[0] += b->vel[0];
 			b->pos[1] += b->vel[1];
@@ -194,27 +196,29 @@ void shootBullets() {
 			//check how to get a tower item in this function
 			Tower *p;
 			//^^^^^^^^^^^^^^^^^
-		
-			Bullet *b = &barr[numBullets];
-			timeCopy(&b->time, &bt);
-				
-			//check if p->pos is valid
-			b->pos[0] = p->pos[0];
-			b->pos[1] = p->pos[1];
-			//^^^^^^^^^^^^^^^^^
-				
-			//force a bullet direction to 90 degrees
-			Flt rad = (90.0 / 360.0f) * 3.14 * 2.0;
-			Flt xdir = cos(rad);
-			Flt ydir = sin(rad);
-			b->pos[0] += xdir*20.0f;
-			b->pos[1] += ydir*20.0f;
-			b->vel[0] += xdir*6.0f + rnd()*0.1;
-			b->vel[1] += ydir*6.0f + rnd()*0.1;
-			b->color[0] = 1.0f;
-			b->color[1] = 1.0f;
-			b->color[2] = 1.0f;
-			numBullets++;
+			
+			for (int i = 0; i < MAX_TOWERS; i++) {
+				Bullet *b = basicTower[i].barr[numBullets];
+				timeCopy(&b->time, &bt);
+
+				//check if p->pos is valid
+				b->pos[0] = p->pos[0];
+				b->pos[1] = p->pos[1];
+				//^^^^^^^^^^^^^^^^^
+
+				//force a bullet direction to 90 degrees
+				Flt rad = (90.0 / 360.0f) * 3.14 * 2.0;
+				Flt xdir = cos(rad);
+				Flt ydir = sin(rad);
+				b->pos[0] += xdir*20.0f;
+				b->pos[1] += ydir*20.0f;
+				b->vel[0] += xdir*6.0f + rnd()*0.1;
+				b->vel[1] += ydir*6.0f + rnd()*0.1;
+				b->color[0] = 1.0f;
+				b->color[1] = 1.0f;
+				b->color[2] = 1.0f;
+				numBullets++;
+			}
 		}
 	}
 }
@@ -222,22 +226,24 @@ void shootBullets() {
 //+++++++++++++START OF BULLET RENDER++++++++++++++//
 //must be in render() function call
 void bulletRender() {
-	Bullet *b = &barr[0];
-	for (int i=0; i<numBullets; i++) {
-		glColor3f(1.0, 1.0, 1.0);
-		glBegin(GL_POINTS);
-			glVertex2f(b->pos[0],      b->pos[1]);
-			glVertex2f(b->pos[0]-1.0f, b->pos[1]);
-			glVertex2f(b->pos[0]+1.0f, b->pos[1]);
-			glVertex2f(b->pos[0],      b->pos[1]-1.0f);
-			glVertex2f(b->pos[0],      b->pos[1]+1.0f);
-			glColor3f(0.8, 0.8, 0.8);
-			glVertex2f(b->pos[0]-1.0f, b->pos[1]-1.0f);
-			glVertex2f(b->pos[0]-1.0f, b->pos[1]+1.0f);
-			glVertex2f(b->pos[0]+1.0f, b->pos[1]-1.0f);
-			glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
-		glEnd();
-		++b;
+	for (int i = 0; i < MAX_TOWERS; i++) {
+		Bullet *b = basicTower[i].barr[numBullets];
+		for (int i=0; i<numBullets; i++) {
+			glColor3f(1.0, 1.0, 1.0);
+			glBegin(GL_POINTS);
+				glVertex2f(b->pos[0],      b->pos[1]);
+				glVertex2f(b->pos[0]-1.0f, b->pos[1]);
+				glVertex2f(b->pos[0]+1.0f, b->pos[1]);
+				glVertex2f(b->pos[0],      b->pos[1]-1.0f);
+				glVertex2f(b->pos[0],      b->pos[1]+1.0f);
+				glColor3f(0.8, 0.8, 0.8);
+				glVertex2f(b->pos[0]-1.0f, b->pos[1]-1.0f);
+				glVertex2f(b->pos[0]-1.0f, b->pos[1]+1.0f);
+				glVertex2f(b->pos[0]+1.0f, b->pos[1]-1.0f);
+				glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
+			glEnd();
+			++b;
+		}
 	}
 }
 
