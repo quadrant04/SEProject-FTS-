@@ -58,6 +58,17 @@ void showRyanPicture(int x, int y, GLuint texid)
 }
 //+++++++++++++END OF CREDIT DISPLAY++++++++++++++//
 
+//+++++++++++++START OF BULLET CLASS ITEMS+++++++++++++++++//
+class Bullet {
+public:
+	Vec pos;
+	Vec vel;
+	float color[3];
+	struct timespec time;
+public:
+	Bullet() { }
+};
+
 ///+++++++++++++START OF TOWER CLASS ITEMS++++++++++++++//
 class Tower {
 public:
@@ -128,17 +139,6 @@ void displayTowers()
 }
 
 //+++++++++++++END OF TOWER CLASS ITEMS++++++++++++++//
-
-//+++++++++++++START OF BULLET CLASS ITEMS+++++++++++++++++//
-class Bullet {
-public:
-	Vec pos;
-	Vec vel;
-	float color[3];
-	struct timespec time;
-public:
-	Bullet() { }
-};
 
 //++++++++++++++BULLET ATTRIBUTES+++++++++++++++++//
 static int numBullets = 0;
