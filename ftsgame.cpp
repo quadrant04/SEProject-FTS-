@@ -50,7 +50,7 @@ const float TIMESLICE = 1.0f;
 const float GRAVITY = -0.2f;
 #define PI 3.141592653589793
 #define ALPHA 1
-const int MAX_BULLETS = 11;
+const int MAX_BULLETS = 20;
 const int MAX_SLIME = 100;
 const int MAX_TOWERS = 5;
 const Flt MINIMUM_ASTEROID_SIZE = 60.0;
@@ -69,7 +69,7 @@ Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", "
 class Global {
 public:
 	int xres, yres, showCredits, showTitle, levelOne, spawnSlimeTest, pathingMode, 
-	showButtons, showPoints, spawnTowers;
+	showButtons, showPoints, spawnTowers, shootBullets;
 	char keys[65536];
 	GLuint girTexture;
 	GLuint obTexture;
@@ -93,6 +93,7 @@ public:
 	showPoints = 0;
 	//RyanW
 	spawnTowers =0;
+	shootBullets =0;
 	}
 } gl;
 
@@ -149,7 +150,7 @@ extern void showCount(Rect x, int y);
 //----Ryan---------------------------------
 extern void createTower(int x, int y);
 extern void displayTowers();
-extern void bulletPhysics();
+extern void bulletPhysics(int x, int y);
 extern void bulletRender();
 extern void shootBullets();
 //----All----------------------------------
@@ -358,7 +359,7 @@ int check_keys(XEvent *e)
 			break;
 			
 		case XK_space:
-			//reserved for bullet shooting
+			gl.shootBullets ^= 1;
 			break;
 
 		//jwc
@@ -434,9 +435,8 @@ void render()
 	r.bot = gl.yres - 20;
 	r.left = 10;
 	r.center = 0;
-	//TEMP LOCATION
+	//possible to put bulletPhysics() in level one render
 	bulletPhysics();
-	//TEMP LOCATION
 	if (gl.showCredits) {
 		show_credits(r, 16);
 	} else if (!(gl.showTitle)) {
@@ -460,7 +460,10 @@ void render()
 		displayTowers();
 	}
 	
-				
+	if (gl.shootBullets) {
+		shootBullets();
+	}
+		
         if (gl.showButtons && !(gl.showCredits)) {
           showButtonOptions(r, 16);
         }
