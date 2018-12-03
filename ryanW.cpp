@@ -23,7 +23,8 @@ typedef float Vec[3];
 #define random(a) (rand()%(a))
 
 extern X11_wrapper x11;
-extern void displayTowers();
+extern void init_animatedTowers(float x, float y, GLuint texid);
+extern void show_animatedTowers(Tower *p);
 
 const double OOBILLION = 1.0 / 1e9;
 extern struct timespec timeStart, timeCurrent;
@@ -106,6 +107,7 @@ void createTower(int x, int y)
 {	
 	Tower *p; 
 	p = &basicTower[numTowers];
+	init_animatedTower(p);
 	int w, h;
 	w = towerList[0].width;
 	h = towerList[0].height;
@@ -129,6 +131,9 @@ void displayTowers()
     Tower *p;
     for (int i = 0; i < numTowers; i++) {
 	    p = &basicTower[i];
+	    float x = p->pos[0];
+	    float y = p->pos[1];
+	    show_animatedTower(x, y, p->tex);
 	    static int wid = 30;
 	    glColor3ub(255,255,255);
             glPushMatrix();
