@@ -36,6 +36,11 @@ static int numTowers = 0;
 static Tower basicTower[MAX_TOWERS];
 Image towerList[1] = {"./images/cannonanimated1kms.gif"};
 
+//++++++++++++++BULLET ATTRIBUTES+++++++++++++++++//
+static int numBullets = 0;
+const int MAX_BULLETS = 20;
+struct timespec bulletTimer;
+
 //+++++++++++++END OF STANDARD ITEMS++++++++++++++//
 
 //+++++++++++++START OF CREDIT DISPLAY++++++++++++++//
@@ -141,11 +146,6 @@ void displayTowers()
 }
 
 //+++++++++++++END OF TOWER CLASS ITEMS++++++++++++++//
-
-//++++++++++++++BULLET ATTRIBUTES+++++++++++++++++//
-static int numBullets = 0;
-const int MAX_BULLETS = 20;
-struct timespec bulletTimer;
 
 //+++++++++++++START OF BULLET PHYSICS++++++++++++++//
 //Must be in physics() function call
