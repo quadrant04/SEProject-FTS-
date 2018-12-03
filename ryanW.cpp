@@ -223,8 +223,8 @@ void shootBullets() {
 //+++++++++++++START OF BULLET RENDER++++++++++++++//
 //must be in render() function call
 void bulletRender() {
-	for (int i = 0; i < MAX_TOWERS; i++) {
-		Tower *b = basicTower[i].barr[numBullets];
+	/*for (int i = 0; i < MAX_TOWERS; i++) {
+		Bullet *b = basicTower[i].barr[numBullets];
 		for (int i=0; i<numBullets; i++) {
 			glColor3f(1.0, 1.0, 1.0);
 			glBegin(GL_POINTS);
@@ -240,6 +240,25 @@ void bulletRender() {
 				glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
 			glEnd();
 			++b;
+		}
+	}*/
+	
+	for (int i = 0; i < MAX_TOWERS; i++) {
+		for (int j = 0; j < numBullets; j++) {
+			Bullet *b = basicTower[i].barr[j];
+			glColor3f(1.0, 1.0, 1.0);
+			glBegin(GL_POINTS);
+			glVertex2f(b->pos[0],      b->pos[1]);
+			glVertex2f(b->pos[0]-1.0f, b->pos[1]);
+			glVertex2f(b->pos[0]+1.0f, b->pos[1]);
+			glVertex2f(b->pos[0],      b->pos[1]-1.0f);
+			glVertex2f(b->pos[0],      b->pos[1]+1.0f);
+			glColor3f(0.8, 0.8, 0.8);
+			glVertex2f(b->pos[0]-1.0f, b->pos[1]-1.0f);
+			glVertex2f(b->pos[0]-1.0f, b->pos[1]+1.0f);
+			glVertex2f(b->pos[0]+1.0f, b->pos[1]-1.0f);
+			glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
+			glEnd();
 		}
 	}
 }
