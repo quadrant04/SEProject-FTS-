@@ -142,6 +142,11 @@ public:
 	Bullet() { }
 };
 
+//++++++++++++++BULLET ATTRIBUTES+++++++++++++++++//
+static int numBullets = 0;
+const int MAX_BULLETS = 11;
+Barr = new Bullet[MAX_BULLETS];
+
 //+++++++++++++START OF BULLET PHYSICS++++++++++++++//
 //Must be in physics() function call
 void bulletPhysics()
