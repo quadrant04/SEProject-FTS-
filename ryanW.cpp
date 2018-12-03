@@ -124,10 +124,10 @@ numTowers++;
 void displayTowers() 
 {
     if (numTowers < 1)
-        return;
+	    return;
     Tower *p;
     for (int i = 0; i < numTowers; i++) {
-        p = &basicTower[i];
+	    p = &basicTower[i];
 	    static int wid = 30;
 	    glColor3ub(255,255,255);
             glPushMatrix();
@@ -168,7 +168,8 @@ void bulletPhysics(int x, int y)
 			}
 			*/
 	for (int i = 0; i < MAX_TOWERS; i++) {
-		Bullet *b = basicTower[i].barr[numBullets];
+		Bullet *b;
+		b = basicTower[i].barr[numBullets];
 		b->pos[0] += b->vel[0];
 		b->pos[1] += b->vel[1];
 		if (b->pos[0] < 0.0) {
@@ -191,12 +192,13 @@ void shootBullets() {
 	clock_gettime(CLOCK_REALTIME, &bt);
 	double ts = timeDiff(&bulletTimer, &bt);
 	if (ts > 0.5) {
+		timeCopy(&bulletTimer, &bt);
 		if (numBullets < MAX_BULLETS) {			
 			//check how to get a tower item in this function
 			Tower *p;
 			for (int i = 0; i < MAX_TOWERS; i++) {
-				Bullet *b = basicTower[i].barr[numBullets];
-				timeCopy(&bulletTimer, &bt);
+				Bullet *b;
+				b = basicTower[i].barr[numBullets];
 				timeCopy(b->time, &bt);
 
 				//check if p->pos is valid
@@ -223,29 +225,10 @@ void shootBullets() {
 //+++++++++++++START OF BULLET RENDER++++++++++++++//
 //must be in render() function call
 void bulletRender() {
-	/*for (int i = 0; i < MAX_TOWERS; i++) {
-		Bullet *b = basicTower[i].barr[numBullets];
-		for (int i=0; i<numBullets; i++) {
-			glColor3f(1.0, 1.0, 1.0);
-			glBegin(GL_POINTS);
-				glVertex2f(b->pos[0],      b->pos[1]);
-				glVertex2f(b->pos[0]-1.0f, b->pos[1]);
-				glVertex2f(b->pos[0]+1.0f, b->pos[1]);
-				glVertex2f(b->pos[0],      b->pos[1]-1.0f);
-				glVertex2f(b->pos[0],      b->pos[1]+1.0f);
-				glColor3f(0.8, 0.8, 0.8);
-				glVertex2f(b->pos[0]-1.0f, b->pos[1]-1.0f);
-				glVertex2f(b->pos[0]-1.0f, b->pos[1]+1.0f);
-				glVertex2f(b->pos[0]+1.0f, b->pos[1]-1.0f);
-				glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
-			glEnd();
-			++b;
-		}
-	}*/
-	
 	for (int i = 0; i < MAX_TOWERS; i++) {
+		Bullet *b;
+		b = basicTower[i].barr[numBullets];
 		for (int j = 0; j < numBullets; j++) {
-			Bullet *b = basicTower[i].barr[j];
 			glColor3f(1.0, 1.0, 1.0);
 			glBegin(GL_POINTS);
 			glVertex2f(b->pos[0],      b->pos[1]);
@@ -259,6 +242,7 @@ void bulletRender() {
 			glVertex2f(b->pos[0]+1.0f, b->pos[1]-1.0f);
 			glVertex2f(b->pos[0]+1.0f, b->pos[1]+1.0f);
 			glEnd();
+			++b;
 		}
 	}
 }
