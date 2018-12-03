@@ -155,69 +155,67 @@ void bulletPhysics(int x, int y)
 	//Update bullet positions
 	struct timespec bt;
 	clock_gettime(CLOCK_REALTIME, &bt);
-	int i=0;
-	while (i < numBullets) {
-		Bullet *b = &barr[i];
-		//Destroy bullets after 1.5 seconds
-		double ts = timeDiff(&b->time, &bt);
-		if (ts > 1.5) {
-			memcpy(&barr[i], &barr[numBullets-1],
-				sizeof(Bullet));
-			numBullets--;
-			continue;
-		}
-		//move the bullet
-		b->pos[0] += b->vel[0];
-		b->pos[1] += b->vel[1];
-		if (b->pos[0] < 0.0) {
-			b->pos[0] += (float)x;
-		}
-		else if (b->pos[0] > (float)x) {
-			b->pos[0] -= (float)x;
-		}
-		else if (b->pos[1] < 0.0) {
-			b->pos[1] += (float)y;
-		}
-		else if (b->pos[1] > (float)y) {
-			b->pos[1] -= (float)y;
-		}
-		i++;
-	}
-	
-	if (gl.keys[XK_space]) {
-		//.5 seconds between each bullet
-		struct timespec bt;
-		clock_gettime(CLOCK_REALTIME, &bt);
-		double ts = timeDiff(&bulletTimer, &bt);
-		if (ts > 0.5) {
-			timeCopy(&bulletTimer, &bt);
-			if (numBullets < MAX_BULLETS) {
-				
-				//check how to get a tower item in this function
-				Tower *p;
-				//^^^^^^^^^^^^^^^^^
-				
-				Bullet *b = &barr[numBullets];
-				timeCopy(&b->time, &bt);
-				
-				//check if p->pos is valid
-				b->pos[0] = p->pos[0];
-				b->pos[1] = p->pos[1];
-				//^^^^^^^^^^^^^^^^^
-				
-				//force a bullet direction to 90 degrees
-				Flt rad = (90.0 / 360.0f) * 3.14 * 2.0;
-				Flt xdir = cos(rad);
-				Flt ydir = sin(rad);
-				b->pos[0] += xdir*20.0f;
-				b->pos[1] += ydir*20.0f;
-				b->vel[0] += xdir*6.0f + rnd()*0.1;
-				b->vel[1] += ydir*6.0f + rnd()*0.1;
-				b->color[0] = 1.0f;
-				b->color[1] = 1.0f;
-				b->color[2] = 1.0f;
-				numBullets++;
+	for (int i = 0; i < MAX_TOWERS; i++) {
+		for (int j = 0; j < numBullets; j++)
+			Bullet *b = basicTower[i].barr[j];
+			//Destroy bullets after 1.5 seconds
+			double ts = timeDiff(&b->time, &bt);
+			if (ts > 1.5) {
+				memcpy(basicTower[i].barr[j], basicTower[i].barr[numBullets-1],
+					sizeof(Bullet));
+				numBullets--;
+				continue;
 			}
+			//move the bullet
+			b->pos[0] += b->vel[0];
+			b->pos[1] += b->vel[1];
+			if (b->pos[0] < 0.0) {
+				b->pos[0] += (float)x;
+			}
+			else if (b->pos[0] > (float)x) {
+				b->pos[0] -= (float)x;
+			}
+			else if (b->pos[1] < 0.0) {
+				b->pos[1] += (float)y;
+			}
+			else if (b->pos[1] > (float)y) {
+				b->pos[1] -= (float)y;
+			}
+		}
+	}
+}
+void shootBullets() {
+	//.5 seconds between each bullet
+	struct timespec bt;
+	clock_gettime(CLOCK_REALTIME, &bt);
+	double ts = timeDiff(&bulletTimer, &bt);
+	if (ts > 0.5) {
+		timeCopy(&bulletTimer, &bt);
+		if (numBullets < MAX_BULLETS) {			
+			//check how to get a tower item in this function
+			Tower *p;
+			//^^^^^^^^^^^^^^^^^
+		
+			Bullet *b = &barr[numBullets];
+			timeCopy(&b->time, &bt);
+				
+			//check if p->pos is valid
+			b->pos[0] = p->pos[0];
+			b->pos[1] = p->pos[1];
+			//^^^^^^^^^^^^^^^^^
+				
+			//force a bullet direction to 90 degrees
+			Flt rad = (90.0 / 360.0f) * 3.14 * 2.0;
+			Flt xdir = cos(rad);
+			Flt ydir = sin(rad);
+			b->pos[0] += xdir*20.0f;
+			b->pos[1] += ydir*20.0f;
+			b->vel[0] += xdir*6.0f + rnd()*0.1;
+			b->vel[1] += ydir*6.0f + rnd()*0.1;
+			b->color[0] = 1.0f;
+			b->color[1] = 1.0f;
+			b->color[2] = 1.0f;
+			numBullets++;
 		}
 	}
 }
