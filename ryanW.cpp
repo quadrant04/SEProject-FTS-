@@ -145,7 +145,8 @@ public:
 //++++++++++++++BULLET ATTRIBUTES+++++++++++++++++//
 static int numBullets = 0;
 const int MAX_BULLETS = 11;
-Barr = new Bullet[MAX_BULLETS];
+barr = new Bullet[MAX_BULLETS];
+struct timespec bulletTimer;
 
 //+++++++++++++START OF BULLET PHYSICS++++++++++++++//
 //Must be in physics() function call
@@ -156,15 +157,15 @@ void bulletPhysics(int x, int y)
 	struct timespec bt;
 	clock_gettime(CLOCK_REALTIME, &bt);
 	int i=0;
-	while (i < g.numbullets) {
-		Bullet *b = &g.barr[i];
+	while (i < numbullets) {
+		Bullet *b = &barr[i];
 		//Destroy bullets after 1.5 seconds
 		double ts = timeDiff(&b->time, &bt);
 		if (ts > 1.5) {
 			//delete the bullet
-			memcpy(&g.barr[i], &g.barr[g.numbullets-1],
+			memcpy(&barr[i], &barr[numbullets-1],
 				sizeof(Bullet));
-			g.numbullets--;
+			numbullets--;
 			//do not increment i
 			continue;
 		}
@@ -191,17 +192,17 @@ void bulletPhysics(int x, int y)
 		//.5 seconds between each bullet
 		struct timespec bt;
 		clock_gettime(CLOCK_REALTIME, &bt);
-		double ts = timeDiff(&g.bulletTimer, &bt);
+		double ts = timeDiff(&bulletTimer, &bt);
 		if (ts > 0.5) {
-			timeCopy(&g.bulletTimer, &bt);
-			if (g.numbullets < MAX_BULLETS) {
+			timeCopy(&bulletTimer, &bt);
+			if (numbullets < MAX_BULLETS) {
 				//shoot a bullet
 				
 				//check how to get a tower item in this function
 				Tower *p;
 				//^^^^^^^^^^^^^^^^^
 				
-				Bullet *b = &g.barr[g.nbullets];
+				Bullet *b = &barr[numbullets];
 				timeCopy(&b->time, &bt);
 				
 				//check if p->pos is valid
@@ -221,7 +222,7 @@ void bulletPhysics(int x, int y)
 				b->color[0] = 1.0f;
 				b->color[1] = 1.0f;
 				b->color[2] = 1.0f;
-				g.numbullets++;
+				numbullets++;
 			}
 		}
 	}
@@ -230,8 +231,8 @@ void bulletPhysics(int x, int y)
 //+++++++++++++START OF BULLET RENDER++++++++++++++//
 //must be in render() function call
 void bulletRender() {
-	Bullet *b = &g.barr[0];
-	for (int i=0; i<g.numbullets; i++) {
+	Bullet *b = &barr[0];
+	for (int i=0; i<numbullets; i++) {
 		glColor3f(1.0, 1.0, 1.0);
 		glBegin(GL_POINTS);
 			glVertex2f(b->pos[0],      b->pos[1]);
