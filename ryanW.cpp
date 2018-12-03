@@ -197,8 +197,8 @@ void shootBullets() {
 			Tower *p;
 			
 			for (int i = 0; i < MAX_TOWERS; i++) {
-				Bullet *b = basicTower[i];
-				timeCopy(&b->time, &bt);
+				Bullet *b = basicTower[i].barr[numBullets];
+				timeCopy(b->time, &bt);
 
 				//check if p->pos is valid
 				b->pos[0] = p->pos[0];
@@ -225,7 +225,7 @@ void shootBullets() {
 //must be in render() function call
 void bulletRender() {
 	for (int i = 0; i < MAX_TOWERS; i++) {
-		Bullet *b = basicTower[i].barr[numBullets];
+		*b = basicTower[i].barr[numBullets];
 		for (int i=0; i<numBullets; i++) {
 			glColor3f(1.0, 1.0, 1.0);
 			glBegin(GL_POINTS);
