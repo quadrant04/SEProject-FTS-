@@ -161,9 +161,9 @@ void bulletPhysics(int x, int y)
 		double ts = timeDiff(&b->time, &bt);
 		if (ts > 1.5) {
 			//delete the bullet
-			memcpy(&barr[i], &barr[numbullets-1],
+			memcpy(&barr[i], &barr[numBullets-1],
 				sizeof(Bullet));
-			numbullets--;
+			numBullets--;
 			//do not increment i
 			continue;
 		}
@@ -200,7 +200,7 @@ void bulletPhysics(int x, int y)
 				Tower *p;
 				//^^^^^^^^^^^^^^^^^
 				
-				Bullet *b = &barr[numbullets];
+				Bullet *b = &barr[numBullets];
 				timeCopy(&b->time, &bt);
 				
 				//check if p->pos is valid
@@ -220,7 +220,7 @@ void bulletPhysics(int x, int y)
 				b->color[0] = 1.0f;
 				b->color[1] = 1.0f;
 				b->color[2] = 1.0f;
-				numbullets++;
+				numBullets++;
 			}
 		}
 	}
@@ -230,7 +230,7 @@ void bulletPhysics(int x, int y)
 //must be in render() function call
 void bulletRender() {
 	Bullet *b = &barr[0];
-	for (int i=0; i<numbullets; i++) {
+	for (int i=0; i<numBullets; i++) {
 		glColor3f(1.0, 1.0, 1.0);
 		glBegin(GL_POINTS);
 			glVertex2f(b->pos[0],      b->pos[1]);
