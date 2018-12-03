@@ -155,7 +155,7 @@ void bulletPhysics(int x, int y)
 	struct timespec bt;
 	clock_gettime(CLOCK_REALTIME, &bt);
 	for (int i = 0; i < MAX_TOWERS; i++) {
-		for (int j = 0; j < numBullets; j++)
+		for (int j = 0; j < numBullets; j++) {
 			Bullet *b = basicTower[i].barr[j];
 			//Destroy bullets after 1.5 seconds
 			double ts = timeDiff(b->time, &bt);
