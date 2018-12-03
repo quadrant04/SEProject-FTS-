@@ -151,15 +151,14 @@ void displayTowers()
 //Must be in physics() function call
 void bulletPhysics(int x, int y)
 {
-	Flt d0,d1,dist;
-	//Update bullet positions
+	//Flt d0,d1,dist;
 	struct timespec bt;
 	clock_gettime(CLOCK_REALTIME, &bt);
 	for (int i = 0; i < MAX_TOWERS; i++) {
 		for (int j = 0; j < numBullets; j++)
 			Bullet *b = basicTower[i].barr[j];
 			//Destroy bullets after 1.5 seconds
-			double ts = timeDiff(&b->time, &bt);
+			double ts = timeDiff(b->time, &bt);
 			if (ts > 1.5) {
 				memcpy(basicTower[i].barr[j], basicTower[i].barr[numBullets-1],
 					sizeof(Bullet));
