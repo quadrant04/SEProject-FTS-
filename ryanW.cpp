@@ -168,20 +168,21 @@ void bulletPhysics(int x, int y)
 			}
 			*/
 			//move the bullet
-			b->pos[0] += b->vel[0];
-			b->pos[1] += b->vel[1];
-			if (b->pos[0] < 0.0) {
-				b->pos[0] += (float)x;
-			}
-			else if (b->pos[0] > (float)x) {
-				b->pos[0] -= (float)x;
-			}
-			else if (b->pos[1] < 0.0) {
-				b->pos[1] += (float)y;
-			}
-			else if (b->pos[1] > (float)y) {
-				b->pos[1] -= (float)y;
-			}
+	for (int i = 0; i < MAX_TOWERS; i++) {
+		Bullet *b = basicTower[i].barr[numBullets];
+		b->pos[0] += b->vel[0];
+		b->pos[1] += b->vel[1];
+		if (b->pos[0] < 0.0) {
+			b->pos[0] += (float)x;
+		}
+		else if (b->pos[0] > (float)x) {
+			b->pos[0] -= (float)x;
+		}
+		else if (b->pos[1] < 0.0) {
+			b->pos[1] += (float)y;
+		}
+		else if (b->pos[1] > (float)y) {
+			b->pos[1] -= (float)y;
 		}
 	}
 }
