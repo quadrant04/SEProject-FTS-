@@ -28,6 +28,14 @@ const double OOBILLION = 1.0 / 1e9;
 extern struct timespec timeStart, timeCurrent;
 extern double timeDiff(struct timespec *start, struct timespec *end);
 extern void timeCopy(struct timespec *dest, struct timespec *source);
+
+
+//+++++++++++++TOWER ATTRIBUTES++++++++++++++//
+const int MAX_TOWERS = 5;
+static int numTowers = 0;
+static Tower basicTower[MAX_TOWERS];
+Image towerList[1] = {"./images/cannonanimated1kms.gif"};
+
 //+++++++++++++END OF STANDARD ITEMS++++++++++++++//
 
 //+++++++++++++START OF CREDIT DISPLAY++++++++++++++//
@@ -77,21 +85,15 @@ public:
 	Vec pos;
 	Image *image;
 	Bullet *barr;
-	barr = new Bullet[MAX_BULLETS];
 	GLuint tex;
 	struct timespec time;
 	Tower() {
+		barr = new Bullet[MAX_BULLETS];
 		onoff = 0;
 		frame = 0;
 		image = NULL;
 	}
 };
-
-//+++++++++++++TOWER ATTRIBUTES++++++++++++++//
-const int MAX_TOWERS = 5;
-static int numTowers = 0;
-static Tower basicTower[MAX_TOWERS];
-Image towerList[1] = {"./images/cannonanimated1kms.gif"};
 
 //+++++++++++++TOWER CREATION++++++++++++++//
 void createTower(int x, int y)
