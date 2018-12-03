@@ -21,8 +21,6 @@ typedef float Vec[3];
 #define rnd() (((Flt)rand())/(Flt)RAND_MAX)
 #define random(a) (rand()%(a))
 
-const int MAX_BULLETS = 30;
-
 extern X11_wrapper x11;
 extern void displayTowers();
 
@@ -144,7 +142,7 @@ public:
 
 //++++++++++++++BULLET ATTRIBUTES+++++++++++++++++//
 static int numBullets = 0;
-const int MAX_BULLETS = 11;
+const int MAX_BULLETS = 20;
 barr = new Bullet[MAX_BULLETS];
 struct timespec bulletTimer;
 
@@ -157,7 +155,7 @@ void bulletPhysics(int x, int y)
 	struct timespec bt;
 	clock_gettime(CLOCK_REALTIME, &bt);
 	int i=0;
-	while (i < numbullets) {
+	while (i < numBullets) {
 		Bullet *b = &barr[i];
 		//Destroy bullets after 1.5 seconds
 		double ts = timeDiff(&b->time, &bt);
@@ -195,7 +193,7 @@ void bulletPhysics(int x, int y)
 		double ts = timeDiff(&bulletTimer, &bt);
 		if (ts > 0.5) {
 			timeCopy(&bulletTimer, &bt);
-			if (numbullets < MAX_BULLETS) {
+			if (numBullets < MAX_BULLETS) {
 				//shoot a bullet
 				
 				//check how to get a tower item in this function
