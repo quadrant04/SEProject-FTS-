@@ -65,6 +65,8 @@ public:
 	int frame;
 	Vec pos;
 	Image *image;
+	Bullet *barr;
+	barr = new Bullet[MAX_BULLETS];
 	GLuint tex;
 	struct timespec time;
 	Tower() {
@@ -141,8 +143,6 @@ public:
 //++++++++++++++BULLET ATTRIBUTES+++++++++++++++++//
 static int numBullets = 0;
 const int MAX_BULLETS = 20;
-Bullet *barr;
-barr = new Bullet[MAX_BULLETS];
 struct timespec bulletTimer;
 
 //+++++++++++++START OF BULLET PHYSICS++++++++++++++//
