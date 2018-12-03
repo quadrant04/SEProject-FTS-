@@ -151,6 +151,7 @@ extern void createTower(int x, int y);
 extern void displayTowers();
 extern void bulletPhysics();
 extern void bulletRender();
+extern void shootBullets();
 //----All----------------------------------
 void show_credits(Rect x, int y); 	
 
