@@ -24,7 +24,6 @@ typedef float Vec[3];
 extern X11_wrapper x11;
 extern void displayTowers();
 
-//Setup timers
 const double OOBILLION = 1.0 / 1e9;
 extern struct timespec timeStart, timeCurrent;
 extern double timeDiff(struct timespec *start, struct timespec *end);
@@ -91,7 +90,6 @@ void createTower(int x, int y)
 	h = towerList[0].height;
 	p->pos[0] = x;
 	p->pos[1] = y;
-	//create tower image
 	glGenTextures(1, &p->tex);
 	glBindTexture(GL_TEXTURE_2D, p->tex);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
@@ -160,17 +158,14 @@ void bulletPhysics(int x, int y)
 		//Destroy bullets after 1.5 seconds
 		double ts = timeDiff(&b->time, &bt);
 		if (ts > 1.5) {
-			//delete the bullet
 			memcpy(&barr[i], &barr[numBullets-1],
 				sizeof(Bullet));
 			numBullets--;
-			//do not increment i
 			continue;
 		}
 		//move the bullet
 		b->pos[0] += b->vel[0];
 		b->pos[1] += b->vel[1];
-		//Check for collision with window edges
 		if (b->pos[0] < 0.0) {
 			b->pos[0] += (float)x;
 		}
@@ -194,7 +189,6 @@ void bulletPhysics(int x, int y)
 		if (ts > 0.5) {
 			timeCopy(&bulletTimer, &bt);
 			if (numBullets < MAX_BULLETS) {
-				//shoot a bullet
 				
 				//check how to get a tower item in this function
 				Tower *p;
@@ -210,7 +204,6 @@ void bulletPhysics(int x, int y)
 				
 				//force a bullet direction to 90 degrees
 				Flt rad = (90.0 / 360.0f) * 3.14 * 2.0;
-				//convert angle to a vector
 				Flt xdir = cos(rad);
 				Flt ydir = sin(rad);
 				b->pos[0] += xdir*20.0f;
