@@ -191,13 +191,12 @@ void shootBullets() {
 	clock_gettime(CLOCK_REALTIME, &bt);
 	double ts = timeDiff(&bulletTimer, &bt);
 	if (ts > 0.5) {
-		timeCopy(&bulletTimer, &bt);
 		if (numBullets < MAX_BULLETS) {			
 			//check how to get a tower item in this function
 			Tower *p;
-			
 			for (int i = 0; i < MAX_TOWERS; i++) {
 				Bullet *b = basicTower[i].barr[numBullets];
+				timeCopy(&bulletTimer, &bt);
 				timeCopy(b->time, &bt);
 
 				//check if p->pos is valid
@@ -225,7 +224,7 @@ void shootBullets() {
 //must be in render() function call
 void bulletRender() {
 	for (int i = 0; i < MAX_TOWERS; i++) {
-		*b = basicTower[i].barr[numBullets];
+		Tower *b = basicTower[i].barr[numBullets];
 		for (int i=0; i<numBullets; i++) {
 			glColor3f(1.0, 1.0, 1.0);
 			glBegin(GL_POINTS);
