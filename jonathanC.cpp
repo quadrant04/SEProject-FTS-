@@ -232,7 +232,7 @@ void showSlime() {
 		float x = p->pos[0];
 		float y = p->pos[1];
 		//show_unit(x,y,p->tex);
-		show_animatedUnit(x,y,p->tex, p->frame);
+		show_animatedUnit(x,y,p->tex);
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
