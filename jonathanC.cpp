@@ -20,7 +20,7 @@ struct Point {
 };
 
 extern X11_wrapper x11;
-extern void show_animatedUnit(float x, float y, GLuint texid);
+extern void show_animatedUnit(float x, float y, GLuint texid, int slimeFrame, int slimeSize);
 extern void init_animatedUnit(Unit* p);
 
 /*
@@ -232,7 +232,8 @@ void showSlime() {
 		float x = p->pos[0];
 		float y = p->pos[1];
 		//show_unit(x,y,p->tex);
-		show_animatedUnit(x,y,p->tex);
+		int slimeSize = 35;
+		show_animatedUnit(x,y,p->tex,p->frame, slimeSize);
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
