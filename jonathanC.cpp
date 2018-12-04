@@ -20,7 +20,7 @@ struct Point {
 };
 
 extern X11_wrapper x11;
-extern void show_animatedUnit(float x, float y, GLuint texid, int frame);
+extern void show_animatedUnit(float x, float y, GLuint texid);
 extern void init_animatedUnit(Unit* p);
 
 /*
