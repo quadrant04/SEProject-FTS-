@@ -27,7 +27,7 @@ using namespace std;
 #include "fonts.h"
 #include "image.h"
 #include "jonathanC.h"
-#include 'RyanW.h"
+#include "RyanW.h"
 #include "stdlib.h" /* malloc in VV file */
 
 //defined types
@@ -376,8 +376,9 @@ int check_keys(XEvent *e)
 			createTower(177, 630);
 			break;
 			
-		case XK_s:
+		case XK_b:
 			gl.shootBullets ^= 1;
+			break;
 			
 		//jwc
 		case XK_p:
