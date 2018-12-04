@@ -473,7 +473,7 @@ void render()
 	//RyanW
 	if (gl.spawnTowers) {
 		displayTowers();
-		clearTowerArray();
+		//clearTowerArray();
 	}
 		
 	if (gl.shootBullets) {
