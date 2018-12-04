@@ -32,6 +32,7 @@ extern double timeDiff(struct timespec *start, struct timespec *end);
 extern void timeCopy(struct timespec *dest, struct timespec *source);
 
 //+++++++++++++TOWER ATTRIBUTES++++++++++++++//
+static Tower basicTower[MAX_TOWERS];
 const int MAX_TOWERS = 5;
 static int numTowers = 0;
 Image towerList[1] = {"./images/cannonanimated1kms.gif"};
@@ -100,7 +101,6 @@ public:
 	}
 };
 */
-static Tower basicTower[MAX_TOWERS];
 
 //+++++++++++++TOWER CREATION++++++++++++++//
 void createTower(int x, int y)
@@ -129,6 +129,12 @@ void displayTowers()
 	    show_animatedTower(x, y, p->tex);
      }
      glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void clearTowerArray()
+{
+	memset(basicTower, 0, sizeof(basicTower));
+	numTowers = 0;
 }
 
 //+++++++++++++END OF TOWER CLASS ITEMS++++++++++++++//
@@ -176,9 +182,9 @@ void shootBullets() {
 				b->pos[1] += ydir*20.0f;
 				b->vel[0] += xdir*6.0f + rnd()*0.1;
 				b->vel[1] += ydir*6.0f + rnd()*0.1;
-				b->color[0] = 23.0f;
-				b->color[1] = 23.0f;
-				b->color[2] = 23.0f;
+				b->color[0] = 1.0f;
+				b->color[1] = 1.0f;
+				b->color[2] = 1.0f;
 				b++;
 			}
 		}
