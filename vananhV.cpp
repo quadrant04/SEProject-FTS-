@@ -13,6 +13,7 @@
 #include "image.h" /* image header file */
 #include "jonathanC.h"
 #include "vananhV.h"
+#include "RyanW.h"
 
 #include "math.h"
 #include <GL/glx.h>
