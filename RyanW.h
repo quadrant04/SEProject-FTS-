@@ -11,7 +11,7 @@ public:
 	GLuint tex;
 	struct timespec time;
 	Tower() {
-		barr = new Bullet[MAX_BULLETS];
+		//barr = new Bullet[MAX_BULLETS];
 		onoff = 0;
 		frame = 0;
 		image = NULL;
