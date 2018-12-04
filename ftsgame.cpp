@@ -368,7 +368,6 @@ int check_keys(XEvent *e)
 		//RyanW
 		case XK_t:
 			gl.spawnTowers ^= 1;
-			clearTowerArray();
 			createTower(610, 315); 
 			createTower(610, 722); 
 			createTower(1080, 630); 
@@ -474,6 +473,7 @@ void render()
 	//RyanW
 	if (gl.spawnTowers) {
 		displayTowers();
+		clearTowerArray();
 	}
 		
 	if (gl.shootBullets) {
