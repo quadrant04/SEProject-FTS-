@@ -72,6 +72,7 @@ void showRyanPicture(int x, int y, GLuint texid)
 //+++++++++++++END OF CREDIT DISPLAY++++++++++++++//
 
 //+++++++++++++START OF BULLET CLASS ITEMS+++++++++++++++++//
+/*DEFINED IN HEADER FILE
 class Bullet {
 public:
 	Vec pos;
@@ -93,13 +94,13 @@ public:
 	GLuint tex;
 	struct timespec time;
 	Tower() {
-		//barr = new Bullet[MAX_BULLETS];
+		barr = new Bullet[MAX_BULLETS];
 		onoff = 0;
 		frame = 0;
 		image = NULL;
 	}
 };
-
+*/
 static Tower basicTower[MAX_TOWERS];
 
 //+++++++++++++TOWER CREATION++++++++++++++//
