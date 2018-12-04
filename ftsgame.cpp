@@ -484,17 +484,17 @@ void render()
 		shootBullets();
 	}
 
-		if (gl.spawnTowers) {
-			displayTowers();
-		}
+	if (gl.spawnTowers) {
+		displayTowers();
+	}
 	
-    //ic			
-    if (gl.showButtons && !(gl.showCredits)) {
-          showButtonOptions(r, x11.xres, gl.spawnSlimeTest, gl.pathingMode);
+	//ic			
+	if (gl.showButtons && !(gl.showCredits)) {
+	showButtonOptions(r, x11.xres, gl.spawnSlimeTest, gl.pathingMode);
         }
-
-    } else {
-	  showMap(0);
+	
+	} else {
+		showMap(0);
     }
 }
 
