@@ -13,7 +13,6 @@
 #include "image.h" /* image header file */
 #include "jonathanC.h"
 #include "vananhV.h"
-#include "RyanW.h"
 
 #include "math.h"
 #include <GL/glx.h>
@@ -26,7 +25,7 @@
 
 using namespace std;
 
-Image units[1] = {"./images/newgreenslimesprites.gif"};
+Image units[1] = {"./images/greenslimesprites.gif"};
 Image towers[1] = {"./images/cannonanimated1kms.gif"};
 Image maps[2] = {"./images/FTSTitle.jpg", "./images/firstMap.jpg"};
 
@@ -189,6 +188,21 @@ void show_unit(float x, float y, GLuint texid)
 // =========================================================
 
 // ============ Show Animated Units ========================
+extern int getSlimeCount();
+Unit* getSlime(int slime);
+
+void updateSlimeFrame()
+{
+
+    int nSlime = getSlimeCount();
+    for (int i = 0; i < nSlime; i++) {
+        Unit *p = getSlime(i);
+        if (p->frame >= 4) {
+            p->frame -= 4;
+        }
+        p->frame++;
+    }
+}
 
 void physics_animation()
 {
@@ -196,11 +210,9 @@ void physics_animation()
         timers.recordTime(&timers.timeCurrent);
         double timeSpan = timers.timeDiff(&timers.slimeTimer, &timers.timeCurrent);
         if (timeSpan > frame.delay) {
-        //advance
-            ++frame.fSlime;
-            if (frame.fSlime >= 8)
-                frame.fSlime -= 8;
-        timers.recordTime(&timers.slimeTimer);
+            //advance
+            updateSlimeFrame();
+            timers.recordTime(&timers.slimeTimer);
         }
     } else { // For Ryan's tower
         timers.recordTime(&timers.timeCurrent);
@@ -215,10 +227,10 @@ void physics_animation()
     }
 }
 
-void show_animatedUnit(float x, float y, GLuint texid)
+void show_animatedUnit(float x, float y, GLuint texid, int slimeFrame)
  {
     //static int wid = 40;
-    static int wid = 35; // Make the slimes smaller.
+    static int wid = 30; // Make the slimes smaller.
     glColor3ub(255,255,255);
     glPushMatrix();
     glBindTexture(GL_TEXTURE_2D, texid);
@@ -229,13 +241,13 @@ void show_animatedUnit(float x, float y, GLuint texid)
     glColor4ub(255,255,255,255);
     glTranslated(x, y, 0); // For JC Pathing
     glBegin(GL_QUADS);
-    float ix = frame.fSlime % 4;
+    float ix = slimeFrame % 2;
     //float fy;
     float fx = ix / 4.0;
     glTexCoord2f(fx, 1.0f); glVertex2i(-wid,-wid);
     glTexCoord2f(fx, 0.0f); glVertex2i(-wid, wid);
-    glTexCoord2f(fx+0.125, 0.0f); glVertex2i( wid, wid);
-    glTexCoord2f(fx+0.125, 1.0f); glVertex2i( wid,-wid);
+    glTexCoord2f(fx+0.25, 0.0f); glVertex2i( wid, wid);
+    glTexCoord2f(fx+0.25, 1.0f); glVertex2i( wid,-wid);
     
     // end of changing frames
     glEnd();
@@ -243,7 +255,7 @@ void show_animatedUnit(float x, float y, GLuint texid)
       
  }
  // ======================================================
-
+/*
 // ============ Display Tower ====================
 // Initialization & Building Alpha Image for Tower
 void init_animatedTower(Tower* p)
@@ -291,4 +303,4 @@ void show_animatedTower(float x, float y, GLuint texid)
     glPopMatrix();
       
  }
-
+*/

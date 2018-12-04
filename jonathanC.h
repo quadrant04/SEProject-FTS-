@@ -6,7 +6,7 @@ extern void initPaths(int ID);
 class Path {
 public:
 	int npathPoints;
-	Vec pathPoints[15];
+	Vec pathPoints[20];
 	int pathID;
 	Path(int p) {
 		pathID = p;
@@ -23,6 +23,7 @@ public:
 	Image *image;
 	Path *path;
 	GLuint tex;
+	int frame, size;
 	struct timespec time;
 	Unit() {
 		path = NULL;
@@ -31,6 +32,8 @@ public:
 		checkpoint = 1;
 		moveSpeed = 1;
 		health = 100;
+		frame = 0;
+		size = 1;
 	}
 };
 #endif
