@@ -476,10 +476,6 @@ void render()
 		//clearTowerArray();
 	}
 		
-	if (!gl.spawnTowers) {
-		clearTowerArray();
-	}
-		
 	if (gl.shootBullets) {
 		bulletRender();
 		shootBullets();
