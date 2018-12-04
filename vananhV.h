@@ -7,7 +7,7 @@ public:
     Frame() {
         fSlime = 0;
         fTower = 0;
-        delay = 0.5;
+        delay = 0.25;
     }
 };
 
