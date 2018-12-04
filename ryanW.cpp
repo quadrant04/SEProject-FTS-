@@ -132,8 +132,8 @@ void displayTowers()
 
 void clearTowerArray()
 {
-	memset(basicTower, 0, sizeof(basicTower));
-	numTowers = -1;
+	for (int i = 0; i < sizeof(basicTower); i++)
+		basicTower[i] = 0;
 }
 
 //+++++++++++++END OF TOWER CLASS ITEMS++++++++++++++//
