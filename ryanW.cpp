@@ -175,7 +175,7 @@ void bulletPhysics(int x, int y)
 			*/
 	for (int i = 0; i < MAX_TOWERS; i++) {
 		Bullet *b;
-		b = &basicTower[i].barr;
+		b = basicTower[i].barr;
 		b->pos[0] += b->vel[0];
 		b->pos[1] += b->vel[1];
 		if (b->pos[0] < 0.0) {
@@ -204,7 +204,7 @@ void shootBullets() {
 			Tower *p;
 			for (int i = 0; i < MAX_TOWERS; i++) {
 				Bullet *b;
-				b = &basicTower[i].barr;
+				b = basicTower[i].barr;
 				timeCopy(b->time, &bt);
 
 				//check if p->pos is valid
@@ -233,7 +233,7 @@ void shootBullets() {
 void bulletRender() {
 	for (int i = 0; i < MAX_TOWERS; i++) {
 		Bullet *b;
-		b = &basicTower[i].barr;
+		b = basicTower[i].barr;
 		for (int j = 0; j < numBullets; j++) {
 			glColor3f(1.0, 1.0, 1.0);
 			glBegin(GL_POINTS);
