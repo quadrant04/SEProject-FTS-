@@ -68,7 +68,7 @@ Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", "
 class Global {
 public:
 	int xres, yres, showCredits, showTitle, levelOne, spawnSlimeTest, pathingMode, 
-	showButtons, showPoints, spawnTowers, shootBullets; 
+	showButtons, showPoints, spawnTowers, towerInit, shootBullets; 
 	char keys[65536];
 	GLuint girTexture;
 	GLuint obTexture;
@@ -93,6 +93,7 @@ public:
 	//RyanW
 	spawnTowers = 0;
 	shootBullets = 0;
+	towerInit = 1;
 	}
 } gl;
 
@@ -448,11 +449,6 @@ void render()
 	r.bot = gl.yres - 20;
 	r.left = 10;
 	r.center = 0;
-	createTower(610, 315); 
-	createTower(610, 722); 
-	createTower(1080, 630); 
-	createTower(1026, 198); 
-	createTower(177, 630);
 	if (gl.showCredits) {
 		show_credits(r, 16);
 	} else if (!(gl.showTitle)) { 
@@ -472,6 +468,15 @@ void render()
 	  		physics_animation();
         } 
 	//RyanW
+	if (gl.towerInit) {
+		createTower(610, 315); 
+		createTower(610, 722); 
+		createTower(1080, 630); 
+		createTower(1026, 198); 
+		createTower(177, 630);
+		gl.towerInit = 0;
+	}
+		
 	if (gl.spawnTowers) {
 		displayTowers();
 	}
