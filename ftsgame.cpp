@@ -368,11 +368,6 @@ int check_keys(XEvent *e)
 		//RyanW
 		case XK_t:
 			gl.spawnTowers ^= 1;
-			createTower(610, 315); 
-			createTower(610, 722); 
-			createTower(1080, 630); 
-			createTower(1026, 198); 
-			createTower(177, 630);
 			break;
 			
 		case XK_b:
@@ -472,8 +467,17 @@ void render()
         } 
 	//RyanW
 	if (gl.spawnTowers) {
+		createTower(610, 315); 
+		createTower(610, 722); 
+		createTower(1080, 630); 
+		createTower(1026, 198); 
+		createTower(177, 630);
 		displayTowers();
 		//clearTowerArray();
+	}
+		
+	if (!gl.spawnTowers) {
+		clearTowerArray();
 	}
 		
 	if (gl.shootBullets) {
