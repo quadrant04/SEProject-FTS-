@@ -23,8 +23,8 @@ typedef float Vec[3];
 #define random(a) (rand()%(a))
 
 extern X11_wrapper x11;
-extern void init_animatedTowers(float x, float y, GLuint texid);
-extern void show_animatedTowers(Tower *p);
+extern void init_animatedTower(float x, float y, GLuint texid);
+extern void show_animatedTower(Tower *p);
 
 const double OOBILLION = 1.0 / 1e9;
 extern struct timespec timeStart, timeCurrent;
