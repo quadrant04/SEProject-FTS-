@@ -26,7 +26,7 @@
 
 using namespace std;
 
-Image units[2] = {"./images/newgreenslimesprites.gif", "./images/newfireslimesprites.gif"};
+Image units[2] = {"./images/newgreenslime.gif", "./images/newfireslimesprites.gif"};
 Image towers[1] = {"./images/cannonanimated1kms.gif"};
 Image maps[2] = {"./images/FTSTitle.jpg", "./images/firstMap.jpg"};
 
