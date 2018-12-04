@@ -27,6 +27,7 @@ using namespace std;
 #include "fonts.h"
 #include "image.h"
 #include "jonathanC.h"
+#include "RyanW.h"
 #include "stdlib.h" /* malloc in VV file */
 
 //defined types
@@ -49,7 +50,6 @@ const float TIMESLICE = 1.0f;
 const float GRAVITY = -0.2f;
 #define PI 3.141592653589793
 #define ALPHA 1
-const int MAX_BULLETS = 11;
 const int MAX_SLIME = 100;
 const int MAX_TOWERS = 5;
 const Flt MINIMUM_ASTEROID_SIZE = 60.0;
@@ -68,7 +68,7 @@ Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", "
 class Global {
 public:
 	int xres, yres, showCredits, showTitle, levelOne, spawnSlimeTest, pathingMode, 
-	showButtons, showPoints, spawnTowers;
+	showButtons, showPoints, spawnTowers, towerInit, shootBullets; 
 	char keys[65536];
 	GLuint girTexture;
 	GLuint obTexture;
@@ -91,7 +91,9 @@ public:
 	showButtons = 0;
 	showPoints = 0;
 	//RyanW
-	spawnTowers =0;
+	spawnTowers = 0;
+	shootBullets = 0;
+	towerInit = 1;
 	}
 } gl;
 
@@ -108,6 +110,7 @@ public:
 	}
 	~Game() {
 		extern void resetSlime();
+		extern void clearTowerArray();
 	}
 } g;
 
@@ -150,6 +153,10 @@ extern void showMenu(Rect x, int y);
 //----Ryan---------------------------------
 extern void createTower(int x, int y);
 extern void displayTowers();
+extern void clearTowerArray();
+extern void bulletPhysics(int x, int y);
+extern void shootBullets();
+extern void bulletRender();
 //----All----------------------------------
 void show_credits(Rect x, int y); 	
 
@@ -362,13 +369,12 @@ int check_keys(XEvent *e)
 		//RyanW
 		case XK_t:
 			gl.spawnTowers ^= 1;
-			createTower(610, 315); 
-			createTower(610, 722); 
-			createTower(1080, 630); 
-			createTower(1026, 198); 
-			createTower(177, 630);
 			break;
-
+			
+		case XK_b:
+			gl.shootBullets ^= 1;
+			break;
+			
 		//jwc
 		case XK_p:
 			gl.pathingMode ^= 1;
@@ -388,7 +394,7 @@ int check_keys(XEvent *e)
 
 void physics()
 {
-
+	bulletPhysics(gl.xres, gl.yres);
 }
 void show_credits(Rect x, int y)
 {
@@ -459,12 +465,31 @@ void render()
 	  		moveSlime(gl.xres, gl.yres);
 	  		physics_animation();
         } 
+	//RyanW
+	if (gl.towerInit) {
+		createTower(610, 315); 
+		createTower(610, 722); 
+		createTower(1080, 630); 
+		createTower(1026, 198); 
+		createTower(177, 630);
+		gl.towerInit = 0;
+	}
+		
+	if (gl.spawnTowers) {
+		displayTowers();
+	}
+		
+	if (gl.shootBullets) {
+		bulletRender();
+		shootBullets();
+	}
 
 		if (gl.spawnTowers) {
 			displayTowers();
 		}
-	//ic			
-        if (gl.showButtons && !(gl.showCredits)) {
+	
+    //ic			
+    if (gl.showButtons && !(gl.showCredits)) {
           showButtonOptions(r, x11.xres, gl.spawnSlimeTest, gl.pathingMode);
         }
 

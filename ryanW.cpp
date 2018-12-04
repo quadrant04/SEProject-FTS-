@@ -101,7 +101,6 @@ public:
 };
 */
 static Tower basicTower[MAX_TOWERS];
-
 //+++++++++++++TOWER CREATION++++++++++++++//
 void createTower(int x, int y)
 {	
@@ -129,6 +128,12 @@ void displayTowers()
 	    show_animatedTower(x, y, p->tex);
      }
      glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void clearTowerArray()
+{
+	memset(basicTower, 0, sizeof(basicTower));
+	numTowers = -1;
 }
 
 //+++++++++++++END OF TOWER CLASS ITEMS++++++++++++++//
