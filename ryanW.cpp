@@ -205,7 +205,7 @@ void shootBullets() {
 			for (int i = 0; i < MAX_TOWERS; i++) {
 				Bullet *b;
 				b = basicTower[i].barr;
-				timeCopy(b->time, &bt);
+				//timeCopy(b->time, &bt);
 
 				//check if p->pos is valid
 				b->pos[0] = p->pos[0];
