@@ -21,7 +21,7 @@ struct Point {
 
 extern X11_wrapper x11;
 extern void show_animatedUnit(float x, float y, GLuint texid, int slimeFrame, int slimeSize);
-extern void init_animatedUnit(Unit* p);
+extern void init_animatedUnit(int i, Unit* p);
 
 /*
 class Path {
@@ -195,7 +195,8 @@ void createSlime()
 	Unit *s; 
 	s = &slime[nslime];
 	//init_unit(p);
-	init_animatedUnit(s);
+	int i = rand() % 2;
+	init_animatedUnit(i, s);
 
 	if (customPathing) {
 		if (npoint > 0) {
@@ -232,7 +233,8 @@ void showSlime() {
 		float x = p->pos[0];
 		float y = p->pos[1];
 		//show_unit(x,y,p->tex);
-		int slimeSize = 35;
+		//int slimeSize = rand()%(45-35-1)+35;
+		int slimeSize = 30;
 		show_animatedUnit(x,y,p->tex,p->frame, slimeSize);
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);

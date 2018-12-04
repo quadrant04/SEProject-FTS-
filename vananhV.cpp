@@ -26,7 +26,7 @@
 
 using namespace std;
 
-Image units[1] = {"./images/newgreenslimesprites.gif"};
+Image units[2] = {"./images/newgreenslime.gif", "./images/newfireslimesprites.gif"};
 Image towers[1] = {"./images/cannonanimated1kms.gif"};
 Image maps[2] = {"./images/FTSTitle.jpg", "./images/firstMap.jpg"};
 
@@ -36,7 +36,7 @@ unsigned char *buildAlphaData(Image *img);
 void init_background(int i, GLuint texid);
 void show_background(int x, int y, GLuint textid);
 void init_unit(Unit* p);
-void init_animatedUnit(Unit* p);
+void init_animatedUnit(int i, Unit* p);
 void show_unit(float x, float y, GLuint texid);
 void physics_animation();
 void show_animatedUnit(float x, float y, GLuint texid, int slimeFrame, int slimeSize);
@@ -159,12 +159,12 @@ void init_unit(Unit* p)
 }
 
 // ================ Initializing Animated Unit ==========//
-void init_animatedUnit(Unit* p)
+void init_animatedUnit(int i, Unit* p)
 {
-    int w = units[0].width;
-    int h = units[0].height;
+    int w = units[i].width;
+    int h = units[i].height;
     //setup image for the unit.
-    unsigned char *slimeData = buildAlphaData(&units[0]);
+    unsigned char *slimeData = buildAlphaData(&units[i]);
 
     glGenTextures(1, &p->tex);
     glBindTexture(GL_TEXTURE_2D, p->tex);
