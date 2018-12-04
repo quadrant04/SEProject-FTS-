@@ -32,7 +32,6 @@ extern double timeDiff(struct timespec *start, struct timespec *end);
 extern void timeCopy(struct timespec *dest, struct timespec *source);
 
 //+++++++++++++TOWER ATTRIBUTES++++++++++++++//
-static Tower basicTower[MAX_TOWERS];
 const int MAX_TOWERS = 5;
 static int numTowers = 0;
 Image towerList[1] = {"./images/cannonanimated1kms.gif"};
@@ -101,7 +100,7 @@ public:
 	}
 };
 */
-
+static Tower basicTower[MAX_TOWERS];
 //+++++++++++++TOWER CREATION++++++++++++++//
 void createTower(int x, int y)
 {	
