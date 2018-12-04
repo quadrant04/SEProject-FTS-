@@ -201,8 +201,9 @@ void shootBullets() {
 		timeCopy(&bulletTimer, &bt);
 		if (numBullets < MAX_BULLETS) {			
 			//check how to get a tower item in this function
-			Tower *p;
+			//Tower *p;
 			for (int i = 0; i < MAX_TOWERS; i++) {
+				Tower *p;
 				Bullet *b;
 				b = basicTower[i].barr;
 				//timeCopy(b->time, &bt);
