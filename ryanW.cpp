@@ -108,7 +108,7 @@ void createTower(int x, int y)
 	Tower *p; 
 	p = &basicTower[numTowers];
 	init_animatedTower(p);
-	int w, h;
+	//int w, h;
 	//w = towerList[0].width;
 	//h = towerList[0].height;
 	p->pos[0] = x;
