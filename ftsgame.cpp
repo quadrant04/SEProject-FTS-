@@ -357,7 +357,7 @@ int check_keys(XEvent *e)
 			createTower(177, 630);
 			break;
 			
-		case XK_space:
+		case XK_s:
 			gl.shootBullets ^= 1;
 			break;
 
