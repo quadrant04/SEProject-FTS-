@@ -113,15 +113,6 @@ void createTower(int x, int y)
 	//h = towerList[0].height;
 	p->pos[0] = x;
 	p->pos[1] = y;
-	/*
-	glGenTextures(1, &p->tex);
-	glBindTexture(GL_TEXTURE_2D, p->tex);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-		     GL_RGB, GL_UNSIGNED_BYTE, towerList[0].data);
-	*/
-
 numTowers++;
 }
 
@@ -136,21 +127,6 @@ void displayTowers()
 	    float x = p->pos[0];
 	    float y = p->pos[1];
 	    show_animatedTower(x, y, p->tex);
-	    /*
-	    static int wid = 30;
-	    glColor3ub(255,255,255);
-            glPushMatrix();
-	    glBindTexture(GL_TEXTURE_2D, p->tex);
-	    glTranslated(p->pos[0], p->pos[1], 0);
-	    glBegin(GL_QUADS);
-	    glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
-	    glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
-	    glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
-	    glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
-           
-	    glEnd();
-	    glPopMatrix();
-	    */
      }
      glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -161,22 +137,6 @@ void displayTowers()
 //Must be in physics() function call
 void bulletPhysics(int x, int y)
 {
-	//Flt d0,d1,dist;
-	/*
-	struct timespec bt;
-	clock_gettime(CLOCK_REALTIME, &bt);
-	for (int i = 0; i < MAX_TOWERS; i++) {
-		for (int j = 0; j < numBullets; j++) {
-			Bullet *b = basicTower[i].barr[j];
-			//Destroy bullets after 1.5 seconds
-			double ts = timeDiff(b->time, &bt);
-			if (ts > 1.5) {
-				memcpy(basicTower[i].barr[j], basicTower[i].barr[numBullets-1],
-					sizeof(Bullet));
-				numBullets--;
-				continue;
-			}
-			*/
 	for (int i = 0; i < MAX_TOWERS; i++) {
 		Bullet *b;
 		b = basicTower[i].barr;
@@ -206,15 +166,8 @@ void shootBullets() {
 		if (numBullets < MAX_BULLETS) {			
 			//Tower *p;
 			for (int i = 0; i < MAX_TOWERS; i++) {
-				//Tower *p;
 				Bullet *b;
 				b = basicTower[i].barr;
-				//timeCopy(b->time, &bt);
-				/*
-				//check if p->pos is valid
-				b->pos[0] = p->pos[0];
-				b->pos[1] = p->pos[1];
-				*/
 				//force a bullet direction to 90 degrees
 				Flt rad = (90.0 / 360.0f) * 3.14 * 2.0;
 				Flt xdir = cos(rad);
