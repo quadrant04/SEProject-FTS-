@@ -1,6 +1,8 @@
 #ifndef _RYANW_H_
 #define _RYANW_H_
 
+const int MAX_BULLETS = 20;
+
 class Bullet {
 public:
 	Vec pos;
