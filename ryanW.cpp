@@ -132,9 +132,7 @@ void displayTowers()
 
 void clearTowerArray()
 {
-	for (int i = 0; i < MAX_TOWERS; i++) {
-		memset(basicTower[i], 0, sizeof(basicTower));
-	}
+	memset(basicTower, 0, sizeof(basicTower));
 	numTowers = -1;
 }
 
