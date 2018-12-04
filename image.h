@@ -74,7 +74,7 @@ public:
 };
 
 class X11_wrapper {
-private:
+public:
 	Display *dpy;
 	Window win;
 	GLXContext glc;
