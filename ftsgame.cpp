@@ -27,6 +27,7 @@ using namespace std;
 #include "fonts.h"
 #include "image.h"
 #include "jonathanC.h"
+#include "RyanW.h"
 #include "stdlib.h" /* malloc in VV file */
 
 //defined types
@@ -49,7 +50,6 @@ const float TIMESLICE = 1.0f;
 const float GRAVITY = -0.2f;
 #define PI 3.141592653589793
 #define ALPHA 1
-const int MAX_BULLETS = 11;
 const int MAX_SLIME = 100;
 const int MAX_TOWERS = 5;
 const Flt MINIMUM_ASTEROID_SIZE = 60.0;
@@ -68,7 +68,7 @@ Image credits[4] = {"./images/GIR.jpeg", "./images/ob.jpg", "./images/ic.jpg", "
 class Global {
 public:
 	int xres, yres, showCredits, showTitle, levelOne, spawnSlimeTest, pathingMode, 
-	showButtons, showPoints, spawnTowers;
+	showButtons, showPoints, spawnTowers, shootBullets;
 	char keys[65536];
 	GLuint girTexture;
 	GLuint obTexture;
@@ -92,6 +92,7 @@ public:
 	showPoints = 0;
 	//RyanW
 	spawnTowers =0;
+	shootBullets =0;
 	}
 } gl;
 
@@ -100,7 +101,6 @@ public:
 	//jwc
 	struct timespec slimeTimer;
 	int nslimes;
-	struct timespec bulletTimer;
 public:
 	Game() {
 		//jwc
@@ -149,6 +149,9 @@ extern void showCount(Rect x, int y);
 //----Ryan---------------------------------
 extern void createTower(int x, int y);
 extern void displayTowers();
+extern void bulletPhysics(int x, int y);
+extern void bulletRender();
+extern void shootBullets();
 //----All----------------------------------
 void show_credits(Rect x, int y); 	
 
@@ -353,6 +356,10 @@ int check_keys(XEvent *e)
 			createTower(1026, 198); 
 			createTower(177, 630);
 			break;
+			
+		case XK_s:
+			gl.shootBullets ^= 1;
+			break;
 
 		//jwc
 		case XK_p:
@@ -374,7 +381,7 @@ int check_keys(XEvent *e)
 
 void physics()
 {
-
+	bulletPhysics(gl.xres, gl.yres);
 }
 void show_credits(Rect x, int y)
 {
@@ -427,9 +434,11 @@ void render()
 	r.bot = gl.yres - 20;
 	r.left = 10;
 	r.center = 0;
+	//possible to put bulletRender() in level one render
+	bulletRender();
 	if (gl.showCredits) {
 		show_credits(r, 16);
-	} else if (!(gl.showTitle)) { 
+	} else if (!(gl.showTitle)) {
 		showMap(1);
 		showCount(r, 16);
     	//jwc
@@ -445,11 +454,15 @@ void render()
 	  		moveSlime(gl.xres, gl.yres);
 	  		physics_animation();
         } 
-
-		if (gl.spawnTowers) {
-			displayTowers();
-		}
-				
+	//ryanW
+	if (gl.spawnTowers) {
+		displayTowers();
+	}
+	
+	if (gl.shootBullets) {
+		shootBullets();
+	}
+		
         if (gl.showButtons && !(gl.showCredits)) {
           showButtonOptions(r, 16);
         }

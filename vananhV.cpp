@@ -13,6 +13,7 @@
 #include "image.h" /* image header file */
 #include "jonathanC.h"
 #include "vananhV.h"
+#include "RyanW.h"
 
 #include "math.h"
 #include <GL/glx.h>
@@ -242,7 +243,7 @@ void show_animatedUnit(float x, float y, GLuint texid)
       
  }
  // ======================================================
-/*
+
 // ============ Display Tower ====================
 // Initialization & Building Alpha Image for Tower
 void init_animatedTower(Tower* p)
@@ -290,4 +291,4 @@ void show_animatedTower(float x, float y, GLuint texid)
     glPopMatrix();
       
  }
-*/
+
