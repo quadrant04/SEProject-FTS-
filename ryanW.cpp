@@ -176,9 +176,9 @@ void shootBullets() {
 				b->pos[1] += ydir*20.0f;
 				b->vel[0] += xdir*6.0f + rnd()*0.1;
 				b->vel[1] += ydir*6.0f + rnd()*0.1;
-				b->color[0] = 1.0f;
-				b->color[1] = 1.0f;
-				b->color[2] = 1.0f;
+				b->color[0] = 23.0f;
+				b->color[1] = 23.0f;
+				b->color[2] = 23.0f;
 				b++;
 			}
 		}
