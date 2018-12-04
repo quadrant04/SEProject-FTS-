@@ -128,7 +128,7 @@ void showButtonOptions(Rect x, int xres, int slimeToggle, int pathing) {
   ggprint16(&x, 26, color, "^ - Increase Slime Speed");
   ggprint16(&x, 26, color, "v - Decrease Slime Speed");
   ggprint16(&x, 26, color, "R - Reset pathing of slimes");
-  ggprint16(&x, 26, color, "Q - Title Screen");
+  ggprint16(&x, 26, color, "N - Title Screen");
   ggprint16(&x, 26, color, "C - Credits");
   ggprint16(&x, 26, color, pathingONOFF);
   
@@ -254,4 +254,41 @@ void* levelMusic(void* arg)
   #endif
   
   pthread_exit(NULL);
-} 
+}
+
+/*
+int button (int x, int y)
+{
+    // New Game coordinates:
+    //  botLeft: x-498. y-436
+    //  topLeft: x-498, y-468
+    //  topRight: x-765, y-469
+    //  botRight: x-765, y-436
+
+    // Credit coordinates:
+    //  botLeft: x-524. y-317
+    //  topLeft: x-524, y-351
+    //  topRight: x-735, y-351
+    //  botRight: x-735, y-318
+
+   // Quit coordinates:
+    //  botLeft: x-573. y-205
+    //  topLeft: x-573, y-245
+    //  topRight: x-688, y-244
+    //  botRight: x-688, y-207
+
+  //new game
+
+}
+// use save x, save y in button()
+// int button(int x, int y)
+// if(x > leftmostx && x < rightmost x && y < topmosty && y > bottommost y)
+//   return 0;
+// g.titlenewgameButon()
+
+//check mouse
+// int button = 0
+//  if button == 1
+//  if button == 2
+//  if button == 3
+*/
