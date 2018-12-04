@@ -38,7 +38,6 @@ Image towerList[1] = {"./images/cannonanimated1kms.gif"};
 
 //++++++++++++++BULLET ATTRIBUTES+++++++++++++++++//
 static int numBullets = 0;
-const int MAX_BULLETS = 20;
 struct timespec bulletTimer;
 
 //+++++++++++++END OF STANDARD ITEMS++++++++++++++//
