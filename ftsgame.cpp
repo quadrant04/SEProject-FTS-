@@ -148,8 +148,8 @@ extern void toggleCustomPathing(int onOff);
 extern void setPath(int pathID);
 
 //----Ivan---------------------------------
-extern void showButtonOptions(Rect x, int y);
-extern void showCount(Rect x, int y);
+extern void showButtonOptions(Rect x, int y, int slimeToggle, int pathing);
+extern void showMenu(Rect x, int y);
 //----Ryan---------------------------------
 extern void createTower(int x, int y);
 extern void displayTowers();
@@ -308,7 +308,6 @@ int check_keys(XEvent *e)
 {
 	//keyboard input?
 	static int shift=0;
-	static char msg[25];	//ic
 	if (e->type != KeyPress && e->type != KeyRelease)
 		return 0;
 	int key = (XLookupKeysym(&e->xkey, 0) & 0x0000ffff);
@@ -380,7 +379,6 @@ int check_keys(XEvent *e)
 		case XK_p:
 			gl.pathingMode ^= 1;
 			toggleCustomPathing(gl.pathingMode);
-			sprintf(msg, "Pathing on"); //ic
 			break;
 		case XK_u:
 			gl.spawnSlimeTest ^= 1;
@@ -453,7 +451,7 @@ void render()
 		show_credits(r, 16);
 	} else if (!(gl.showTitle)) { 
 		showMap(1);
-		showCount(r, 16);
+		showMenu(r, 16);
     	//jwc
     	if (gl.spawnSlimeTest) {
     		struct timespec st;
@@ -485,9 +483,14 @@ void render()
 		bulletRender();
 		shootBullets();
 	}
-				
-        if (gl.showButtons && !(gl.showCredits)) {
-          showButtonOptions(r, 16);
+
+		if (gl.spawnTowers) {
+			displayTowers();
+		}
+	
+    //ic			
+    if (gl.showButtons && !(gl.showCredits)) {
+          showButtonOptions(r, x11.xres, gl.spawnSlimeTest, gl.pathingMode);
         }
 
     } else {
