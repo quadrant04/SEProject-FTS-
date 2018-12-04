@@ -7,9 +7,11 @@ public:
 	int frame;
 	Vec pos;
 	Image *image;
+	Bullet *barr;
 	GLuint tex;
 	struct timespec time;
 	Tower() {
+		barr = new Bullet[MAX_BULLETS];
 		onoff = 0;
 		frame = 0;
 		image = NULL;
