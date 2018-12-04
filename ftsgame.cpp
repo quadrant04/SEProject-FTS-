@@ -156,6 +156,11 @@ extern void clearTowerArray();
 extern void bulletPhysics(int x, int y);
 extern void shootBullets();
 extern void bulletRender();
+createTower(610, 315); 
+createTower(610, 722); 
+createTower(1080, 630); 
+createTower(1026, 198); 
+createTower(177, 630);
 //----All----------------------------------
 void show_credits(Rect x, int y); 	
 
@@ -369,13 +374,6 @@ int check_keys(XEvent *e)
 		//RyanW
 		case XK_t:
 			gl.spawnTowers ^= 1;
-			if (gl.spawnTowers == 1) {
-				createTower(610, 315); 
-				createTower(610, 722); 
-				createTower(1080, 630); 
-				createTower(1026, 198); 
-				createTower(177, 630);
-			}
 			break;
 			
 		case XK_b:
