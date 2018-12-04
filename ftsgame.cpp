@@ -156,11 +156,6 @@ extern void clearTowerArray();
 extern void bulletPhysics(int x, int y);
 extern void shootBullets();
 extern void bulletRender();
-createTower(610, 315); 
-createTower(610, 722); 
-createTower(1080, 630); 
-createTower(1026, 198); 
-createTower(177, 630);
 //----All----------------------------------
 void show_credits(Rect x, int y); 	
 
@@ -453,6 +448,11 @@ void render()
 	r.bot = gl.yres - 20;
 	r.left = 10;
 	r.center = 0;
+	createTower(610, 315); 
+	createTower(610, 722); 
+	createTower(1080, 630); 
+	createTower(1026, 198); 
+	createTower(177, 630);
 	if (gl.showCredits) {
 		show_credits(r, 16);
 	} else if (!(gl.showTitle)) { 
