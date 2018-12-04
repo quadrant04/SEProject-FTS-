@@ -109,6 +109,7 @@ public:
 	}
 	~Game() {
 		extern void resetSlime();
+		extern void clearTowerArray();
 	}
 } g;
 
@@ -374,10 +375,6 @@ int check_keys(XEvent *e)
 				createTower(1080, 630); 
 				createTower(1026, 198); 
 				createTower(177, 630);
-			}
-			
-			if (gl.spawnTowers == 0) {
-				clearTowerArray();
 			}
 			break;
 			
