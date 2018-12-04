@@ -202,7 +202,7 @@ void shootBullets() {
 		if (numBullets < MAX_BULLETS) {			
 			//Tower *p;
 			for (int i = 0; i < MAX_TOWERS; i++) {
-				Tower *p;
+				//Tower *p;
 				Bullet *b;
 				b = basicTower[i].barr;
 				//timeCopy(b->time, &bt);
