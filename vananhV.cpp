@@ -26,7 +26,7 @@
 
 using namespace std;
 
-Image units[1] = {"./images/greenslimesprites.gif"};
+Image units[1] = {"./images/newgreenslimesprites.gif"};
 Image towers[1] = {"./images/cannonanimated1kms.gif"};
 Image maps[2] = {"./images/FTSTitle.jpg", "./images/firstMap.jpg"};
 
@@ -198,8 +198,8 @@ void physics_animation()
         if (timeSpan > frame.delay) {
         //advance
             ++frame.fSlime;
-            if (frame.fSlime >= 4)
-                frame.fSlime -= 4;
+            if (frame.fSlime >= 8)
+                frame.fSlime -= 8;
         timers.recordTime(&timers.slimeTimer);
         }
     } else { // For Ryan's tower
@@ -218,7 +218,7 @@ void physics_animation()
 void show_animatedUnit(float x, float y, GLuint texid)
  {
     //static int wid = 40;
-    static int wid = 30; // Make the slimes smaller.
+    static int wid = 35; // Make the slimes smaller.
     glColor3ub(255,255,255);
     glPushMatrix();
     glBindTexture(GL_TEXTURE_2D, texid);
@@ -229,13 +229,13 @@ void show_animatedUnit(float x, float y, GLuint texid)
     glColor4ub(255,255,255,255);
     glTranslated(x, y, 0); // For JC Pathing
     glBegin(GL_QUADS);
-    float ix = frame.fSlime % 2;
+    float ix = frame.fSlime % 4;
     //float fy;
     float fx = ix / 4.0;
     glTexCoord2f(fx, 1.0f); glVertex2i(-wid,-wid);
     glTexCoord2f(fx, 0.0f); glVertex2i(-wid, wid);
-    glTexCoord2f(fx+0.25, 0.0f); glVertex2i( wid, wid);
-    glTexCoord2f(fx+0.25, 1.0f); glVertex2i( wid,-wid);
+    glTexCoord2f(fx+0.125, 0.0f); glVertex2i( wid, wid);
+    glTexCoord2f(fx+0.125, 1.0f); glVertex2i( wid,-wid);
     
     // end of changing frames
     glEnd();
