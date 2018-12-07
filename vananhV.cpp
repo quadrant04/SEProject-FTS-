@@ -41,7 +41,7 @@ void show_unit(float x, float y, GLuint texid);
 void physics_animation();
 void show_animatedUnit(float x, float y, GLuint texid, int slimeFrame, int slimeSize);
 void init_animatedTower(Tower* p);
-void show_animatedTower(float x, float y, GLuint texid);
+void show_animatedTower(Unit *p);
 
 extern int getSlimeCount();
 extern Unit* getSlime(int slime);
@@ -222,21 +222,22 @@ void physics_animation()
     }
 }
 
-void show_animatedUnit(float x, float y, GLuint texid, int slimeFrame, int slimeSize)
+void show_animatedUnit(Unit *p)
 {
+
     //static int wid = 40;
-    static int wid = slimeSize; // Adjust slime size if needed.
+    static int wid = p->size; // Adjust slime size if needed.
     glColor3ub(255,255,255);
     glPushMatrix();
-    glBindTexture(GL_TEXTURE_2D, texid);
+    glBindTexture(GL_TEXTURE_2D, p->tex);
 
     // changing frames
     glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.0f);
     glColor4ub(255,255,255,255);
-    glTranslated(x, y, 0); // For JC Pathing
+    glTranslated(p->pos[0], p->pos[1], 0); // For JC Pathing
     glBegin(GL_QUADS);
-    float ix = slimeFrame % 4;
+    float ix = p->frame % 4;
     //float fy;
     float fx = ix / 4.0;
     glTexCoord2f(fx, 1.0f); glVertex2i(-wid,-wid);

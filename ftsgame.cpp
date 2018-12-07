@@ -138,8 +138,6 @@ extern void createSlime();
 extern void showSlime();
 extern void moveSlime(int xres, int yres);
 extern void resetSlime();
-extern void increseSpeed();
-extern void decreaseSpeed();
 //pathing functions/variables
 extern void getCords(int x, int y, int yres);
 extern void showCords();
@@ -345,10 +343,8 @@ int check_keys(XEvent *e)
 			showCords();
 			break;
 		case XK_Up:
-			increseSpeed();
 			break;
 		case XK_Down:
-			decreaseSpeed();
 			break;
 		case XK_equal:
 			break;
