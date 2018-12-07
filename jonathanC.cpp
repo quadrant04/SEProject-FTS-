@@ -9,25 +9,34 @@ path: follow a path, set a path, custom pathing.
 #include <math.h>
 #include "image.h"
 #include <iostream>
-#include "jonathanC.h"
+//#include "jonathanC.h"
 using namespace std;
 
 typedef float Flt;
 typedef float Vec[3];
 
+void initPaths(int ID);
+float getDistance(Vec a, Vec b);
+void vecCopy(Vec a, Vec b);
+void vecSub(Vec a, Vec b, Vec c);
+void vecNormalize(Vec a);
+
 struct Point {
 	float x, y, dist;
 };
 
-extern X11_wrapper x11;
-extern void show_animatedUnit(float x, float y, GLuint texid, int slimeFrame, int slimeSize);
-extern void init_animatedUnit(int i, Unit* p);
+//------copy paste the section below section to jonathanC.h if updated---------
 
-/*
+enum {
+	TYPE_NORMAL = 0,
+	TPYE_FIRE,
+	TYPE_TANK
+};
+
 class Path {
 public:
 	int npathPoints;
-	Vec pathPoints[15];
+	Vec pathPoints[20];
 	int pathID;
 	Path(int p) {
 		pathID = p;
@@ -36,59 +45,14 @@ public:
 	
 };
 
-class Unit {
-public:
-	int checkpoint, health, moveSpeed, pathPoints;
-	Vec pos;
-	Vec vel;
-	Image *image;
-	Path *path;
-	GLuint tex;
-	int frame, size;
-	struct timespec time;
-	Unit() {
-		path = NULL;
-		pathPoints = 1;
-		image = NULL;
-		checkpoint = 1;
-		moveSpeed = 1;
-		health = 100;
-		frame = 0;
-		size = 1;
-	}
-};
-*/
-
-Path waterway(1), bridge(2), lakeview(3);
-//----vector functions----
-void vecCopy(Vec a, Vec b);
-void vecSub(Vec a, Vec b, Vec c);
-void vecNormalize(Vec a);
-float getDistance(Vec a, Vec b);
-
-//----------------------------------slime stuff-----
-const int MAX_SLIME = 40;
-static int nslime = -1;
-static Unit slime[MAX_SLIME];
-static int speed = 1;
+static Path waterway(1), bridge(2), lakeview(3);
 static Path *currentPath = &waterway;
-
-void createSlime();
-void moveSlime(int xres, int yres);
-void deleteSlime(int);
-void resetSlime();
-void showSlime();
-int getSlimeCount();
-void increseSpeed();
-
-//----------------------------------pathing stuff---
 const int MAX_POINTS = 100;
 static Point pt[MAX_POINTS];
 static int npoint = -1;
 static int customPathing = 0;
 
 int getPointCount();
-void initPaths(int ID);
 void toggleCustomPathing(int onOff);
 void setPath(int pathID);
 float next_x(Path *path, int index);
@@ -98,9 +62,93 @@ void resetPath();
 void getCords(int x, int y, int yres);
 void showCords();
 
-//----------------vector functions-------------------------------------
+class Unit {
+public:
+	int checkpoint, baseHealth, health, baseMoveSpeed, moveSpeed, pathPoints;
+	int type;
+	Vec pos;
+	Vec vel;
+	Image *image;
+	Path *path;
+	GLuint tex;
+	int frame, size;
+	struct timespec time;
+public:
+	Unit() {
+		type = TYPE_NORMAL;
+		path = NULL;
+		pathPoints = 1;
+		image = NULL;
+		checkpoint = 1;
+		moveSpeed = 1;
+		health = 100;
+		frame = 0;
+		size = 1;
+	}
 
-//normalizes a given vector.
+	void setType(int typeID)
+	{
+		if (typeID == 0) {
+			type = TYPE_NORMAL;
+			baseHealth = 100;
+			baseMoveSpeed = 2;
+			size = 35;
+		}
+
+		if (typeID == 1) {
+			type = TPYE_FIRE;
+			baseHealth = 50;
+			baseMoveSpeed = 3;
+			size = 30;
+		}
+
+		if (typeID == 2) {
+			type = TYPE_TANK;
+			baseHealth = 200;
+			baseMoveSpeed = 1;
+			size = 50;
+		}
+	}
+
+	void setHealth(int bonus)
+	{
+		health = baseHealth + (baseHealth * bonus);
+	}
+
+	void setSpeed(int bonus)
+	{
+		moveSpeed = baseMoveSpeed + (baseMoveSpeed * bonus);
+	}
+
+	void takeDamage(int dmg)
+	{
+		health -= dmg;
+	}
+
+	void setupSlime(int typeID, int healthBonus, int moveBonus)
+	{
+		setType(typeID);
+		setHealth(healthBonus);
+		setSpeed(moveBonus);
+	}
+};
+//---------------------------end copy/paste--------------------------
+
+extern void show_animatedUnit(Unit *p);
+extern void init_animatedUnit(int i, Unit* p);
+const int MAX_SLIME = 40;
+static int nslime = -1;
+static Unit slime[MAX_SLIME];
+
+void createSlime();
+void moveSlime(int xres, int yres);
+void deleteSlime(int);
+void resetSlime();
+void showSlime();
+int getSlimeCount();
+void increseSpeed();
+
+//----------------vector functions-------------------------------------
 void vecNormalize(Vec a) 
 {
 	float dist = getDistance(a, a);
@@ -108,8 +156,6 @@ void vecNormalize(Vec a)
 	a[1] /= dist;
 }
 
-//subtracts two vectors and puts the result in a third vector.
-//(a-b=c)
 void vecSub(Vec a, Vec b, Vec c)
 {
 	c[0] = a[0] - b[0];
@@ -117,7 +163,6 @@ void vecSub(Vec a, Vec b, Vec c)
 	c[2] = a[2] - b[2];
 }
 
-//copies a given vector into another vector(destination, source)
 void vecCopy(Vec a, Vec b) 
 {
 	b[0] = a[0];
@@ -125,7 +170,6 @@ void vecCopy(Vec a, Vec b)
 	b[2] = a[2];
 }
 
-//finds distance between two vectors
 float getDistance(Vec a, Vec b)
 {
 	//check for same vector.
@@ -144,6 +188,10 @@ float getDistance(Vec a, Vec b)
 void jonathanC(Rect x, int y)
 {
 	ggprint8b(&x, y, 0x00ff0000, "Jonathan Crawford");
+	ggprint8b(&x, y, 0x00ff0000, "-----------------"); 
+	ggprint8b(&x, y, 0x00ff0000, "Slime functionality");
+	ggprint8b(&x, y, 0x00ff0000, "Pathing");
+	ggprint8b(&x, y, 0x00ff0000, "Game flow and logic");
 }
 
 //Display an image to the screen
@@ -176,49 +224,48 @@ void showJonathanPicture(int x, int y, GLuint textid)
 
 //----------------------------slime functions----------------------------
 
-//speed new slimes up.
-void increseSpeed()
+int spawnSlime(Unit *p)
 {
-	speed += 1;
-}
-
-//slow new slimes down.
-void decreaseSpeed()
-{	
-	if (speed > 1)
-		speed -= 1;
+	return 0;
 }
 
 //adds a slime to the array of slimes. 
 void createSlime()
 {	
-	Unit *s; 
-	s = &slime[nslime];
-	//init_unit(p);
-	int i = rand() % 2;
-	init_animatedUnit(i, s);
+	Unit *p; 
+	p = &slime[nslime];
+	float healthBonus = 0;
+	float moveBonus = 0;
+	int done = 0;
+	int slimeType = rand() % 2;
 
 	if (customPathing) {
 		if (npoint > 0) {
-			s->path = NULL;
-			s->pos[0] = pt[0].x;
-			s->pos[1] = pt[0].y;
-			s->pos[2] = 0;
-			s->pathPoints = 0;
+			init_animatedUnit(slimeType, p);
+			p->path = NULL;
+			p->pos[0] = pt[0].x;
+			p->pos[1] = pt[0].y;
+			p->pos[2] = 0;
+			p->pathPoints = 0;
+			p->checkpoint = 1;
 			nslime++;
+			done = 1;
 		}
 	} else {
-		s->path = currentPath;
-		s->pos[0] = next_x(currentPath, 0);
-		s->pos[1] = next_y(currentPath, 0);
-		s->pos[2] = 0;
-		s->pathPoints = get_totalPathPoints(currentPath);
+		init_animatedUnit(slimeType, p);
+		p->path = currentPath;
+		p->pos[0] = next_x(currentPath, 0);
+		p->pos[1] = next_y(currentPath, 0);
+		p->pos[2] = 0;
+		p->pathPoints = get_totalPathPoints(currentPath);
+		p->checkpoint = 1;
 		nslime++;
+		done = 1;
 	}
 
-	s->moveSpeed = speed;
-	s->checkpoint = 1;
-	return;
+	if (done) {
+		p->setupSlime(slimeType, healthBonus, moveBonus);
+	}
 }
 
 //Steps through an array to display all currently generated slimes.
@@ -227,15 +274,9 @@ void showSlime() {
 		return;
 
 	Unit *p;
-
 	for (int i = 0; i < nslime; i++) {
 		p = &slime[i];
-		float x = p->pos[0];
-		float y = p->pos[1];
-		//show_unit(x,y,p->tex);
-		//int slimeSize = rand()%(45-35-1)+35;
-		int slimeSize = 30;
-		show_animatedUnit(x,y,p->tex,p->frame, slimeSize);
+		show_animatedUnit(p);
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -472,7 +513,6 @@ float next_y(Path *path, int index)
 	return path->pathPoints[index][1];
 }
 
-//returns how many points a path has
 int get_totalPathPoints(Path *path)
 {
 	return path->npathPoints;
@@ -521,7 +561,6 @@ void showCords()
 	}
 }
 
-//returns total number of points in point array. used as extern.
 int getPointCount()
 {
 	return npoint;
